@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 BASE='https://bear2u.github.io/Story-daily-viewer/'
 escape=html.escape
 
-def shell(title,description,body,prefix='',canonical=''):
+def shell(title,description,body,prefix='',canonical='',cover='assets/posts/generative-agents/cover.webp'):
     return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="{escape(description,quote=True)}">
@@ -16,7 +16,7 @@ def shell(title,description,body,prefix='',canonical=''):
 <meta property="og:title" content="{escape(title,quote=True)}">
 <meta property="og:description" content="{escape(description,quote=True)}">
 <meta property="og:type" content="article">
-<meta property="og:image" content="{BASE}assets/posts/generative-agents/cover.webp">
+<meta property="og:image" content="{BASE}{cover}">
 <title>{escape(title)} · Story Daily</title>
 <link rel="canonical" href="{BASE}{canonical}">
 <link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml">
@@ -50,13 +50,14 @@ def article(post):
     chapters=post['chapters']
     toc=''.join(f'<a href="#part-{i+1}">{escape(label)}</a>' for i,label in enumerate(chapters))
     tags=''.join(f'<span class="pill">{escape(t)}</span>' for t in post['tags'])
+    attribution = f'<a href="../{escape(post["attribution_url"],quote=True)}">그림 출처·이용 조건 ↗</a>' if post.get('attribution_url') else ''
     body=f'''<div class="reading-progress" aria-hidden="true"></div>
 <main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta">{tags}<span>·</span><time datetime="{post['date']}">{post['date'].replace('-','. ')}</time><span>·</span><span>{post['reading_minutes']}분 읽기</span></div>
 <h1>{escape(post['title'])}</h1><p class="lead">{escape(post['excerpt'])}</p>
 <div class="article-details"><strong>{escape(post['paper_title'])}</strong><br>{escape(post['authors'])} · {escape(post['paper_year'])} · {escape(post['venue'])}<br>원문 그림과 함께 읽는 {count}파트 해설 · 판본 및 출처 확인: {post['verified_date']}</div></div>
-<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p>{toc}</aside><article class="article-body">{parts}<div class="article-end"><div class="source-links"><a href="{post['source_url']}" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/{post['slug']}.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p>{toc}</aside><article class="article-body">{parts}<div class="article-end"><div class="source-links">{attribution}<a href="{post['source_url']}" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/{post['slug']}.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
 <button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>'''
-    return shell(post['title'],post['excerpt'],body,'../',f"posts/{post['slug']}.html")
+    return shell(post['title'],post['excerpt'],body,'../',f"posts/{post['slug']}.html",post['cover'])
 
 def homepage(posts):
     p=posts[0]
@@ -69,11 +70,11 @@ def homepage(posts):
     body=f'''<main class="page" id="main"><section class="intro"><div><div class="eyebrow">THE DAILY CURIOSITY</div><h1>매일 한 편,<br><span>호기심을 깨우는</span> 이야기.</h1><p>재미있는 논문을 원문 그림과 함께 읽습니다.<br>낯선 연구가 익숙한 이야기로 이어지는 곳.</p></div><div class="issue-count"><strong>{len(posts):02d}</strong>편의 발견이 쌓였어요</div></section>
 <a class="feature" href="posts/{p['slug']}.html"><div class="feature-art"><span class="image-label">INSIDE THE PAPER</span><img src="{p['cover']}" alt="{escape(p['cover_alt'],quote=True)}" fetchpriority="high"></div><div class="feature-copy"><div class="meta"><span class="pill">최근 이야기</span><time datetime="{p['date']}">{p['date'].replace('-','. ')}</time><span>· {p['reading_minutes']}분 읽기</span></div><h2>{escape(p['title'])}</h2><p class="excerpt">{escape(p['excerpt'])}</p><span class="read-link">이야기 읽기 <span aria-hidden="true">⟶</span></span></div></a>
 <section class="archive" id="archive"><div class="archive-top"><h2 class="archive-title">모아 둔 이야기 <span style="color:var(--muted);font-size:14px;font-weight:400" data-visible-count>{len(posts)}</span></h2><label class="search-box"><span aria-hidden="true">⌕</span><input type="search" placeholder="제목, 논문, 주제 검색" aria-label="글 검색" data-search></label></div><div class="filters" aria-label="주제 필터">{filters}</div><div class="story-grid">{''.join(cards)}</div><div class="empty" data-empty role="status" hidden>검색 결과가 없어요.<br>다른 키워드로 찾아보세요.<button type="button" data-reset>전체 글 보기</button></div></section></main>'''
-    return shell('매일 한 편의 발견','재미있는 논문과 이야기를 원문 그림과 함께 읽는 Story Daily.',body)
+    return shell('매일 한 편의 발견','재미있는 논문과 이야기를 원문 그림과 함께 읽는 Story Daily.',body,cover=p['cover'])
 
 def main():
     posts=[json.loads(p.read_text()) for p in (ROOT/'content').glob('*.json')]
-    posts.sort(key=lambda p:(p['date'],p['slug']),reverse=True)
+    posts.sort(key=lambda p:(p.get('published_at',p['date']),p['slug']),reverse=True)
     if not posts: raise SystemExit('No posts found')
     (ROOT/'posts').mkdir(exist_ok=True)
     for post in posts:

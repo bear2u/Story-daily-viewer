@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>자기 코드를 고친 AI는 더 좋은 개발자가 됐을까</title>
+<style>
+/* Swipe-through view of part screenshots. White page, no chrome:
+   tap left/right third, swipe, or use arrow keys. */
+:root { color-scheme: light; --bg: #ffffff; --focus: #1d5bd6; }
+html, body { margin: 0; background: var(--bg); }
+.stage {
+  display: flex; justify-content: center;
+  padding-block: 16px 48px; padding-inline: 16px; box-sizing: border-box;
+}
+.shot {
+  display: block; width: min(430px, 100%); height: auto;
+  user-select: none; -webkit-user-drag: none;
+}
+.nav {
+  position: fixed; top: 0; bottom: 0; width: 30%;
+  border: 0; padding: 0; margin: 0; background: transparent;
+}
+.nav.prev { left: 0; cursor: w-resize; }
+.nav.next { right: 0; cursor: e-resize; }
+.nav:focus-visible { outline: 2px solid var(--focus); outline-offset: -4px; }
+</style>
+</head>
+<body>
+<main class="stage"><img class="shot" id="shot" alt=""></main>
+<button class="nav prev" id="prev" type="button" aria-label="이전 장"></button>
+<button class="nav next" id="next" type="button" aria-label="다음 장"></button>
+<script>
+(() => {
+  const SHOTS = [{"src": "../assets/cards/darwin-godel-machine/01.webp", "alt": "논문 정보"}, {"src": "../assets/cards/darwin-godel-machine/02.webp", "alt": "원문과 출처"}, {"src": "../assets/cards/darwin-godel-machine/03.webp", "alt": "자기 코드도 고치게 하면"}, {"src": "../assets/cards/darwin-godel-machine/04.webp", "alt": "증명에서 시험으로"}, {"src": "../assets/cards/darwin-godel-machine/05.webp", "alt": "설계 보관소 ADAS"}, {"src": "../assets/cards/darwin-godel-machine/06.webp", "alt": "다시 만난 연구자들"}, {"src": "../assets/cards/darwin-godel-machine/07.webp", "alt": "고정된 기반 모델"}, {"src": "../assets/cards/darwin-godel-machine/08.webp", "alt": "빈 패치부터 거르기"}, {"src": "../assets/cards/darwin-godel-machine/09.webp", "alt": "진단과 자기 수정"}, {"src": "../assets/cards/darwin-godel-machine/10.webp", "alt": "어떤 버전을 남길까"}, {"src": "../assets/cards/darwin-godel-machine/11.webp", "alt": "성적이 떨어진 조상"}, {"src": "../assets/cards/darwin-godel-machine/12.webp", "alt": "시험과 모델 조건"}, {"src": "../assets/cards/darwin-godel-machine/13.webp", "alt": "20%에서 50%의 범위"}, {"src": "../assets/cards/darwin-godel-machine/14.webp", "alt": "구성 요소를 뺀 비교"}, {"src": "../assets/cards/darwin-godel-machine/15.webp", "alt": "다른 시험으로 옮기기"}, {"src": "../assets/cards/darwin-godel-machine/16.webp", "alt": "2주와 2만 2천 달러"}, {"src": "../assets/cards/darwin-godel-machine/17.webp", "alt": "진단에 들어간 정답 테스트"}, {"src": "../assets/cards/darwin-godel-machine/18.webp", "alt": "실행을 글로 흉내 낸 AI"}, {"src": "../assets/cards/darwin-godel-machine/19.webp", "alt": "만점의 검사 표식 삭제"}, {"src": "../assets/cards/darwin-godel-machine/20.webp", "alt": "즉석 도구 Live-SWE-agent"}, {"src": "../assets/cards/darwin-godel-machine/21.webp", "alt": "수정 절차도 고치는 Hyperagents"}, {"src": "../assets/cards/darwin-godel-machine/22.webp", "alt": "처음 질문의 답"}, {"src": "../assets/cards/darwin-godel-machine/23.webp", "alt": "지금과 세 줄 요약"}];
+  const img = document.getElementById('shot');
+  const readHash = () => {
+    const n = parseInt(location.hash.slice(1), 10);
+    return Number.isFinite(n) ? Math.min(Math.max(n - 1, 0), SHOTS.length - 1) : 0;
+  };
+  let idx = readHash();
+  const preload = (i) => { if (SHOTS[i]) { const p = new Image(); p.src = SHOTS[i].src; } };
+  const show = (i) => {
+    idx = Math.min(Math.max(i, 0), SHOTS.length - 1);
+    img.src = SHOTS[idx].src;
+    img.alt = SHOTS[idx].alt;
+    try { history.replaceState(null, '', '#' + (idx + 1)); } catch { /* sandboxed frame */ }
+    window.scrollTo({ top: 0 });
+    preload(idx + 1); preload(idx - 1);
+  };
+  document.getElementById('prev').addEventListener('click', () => show(idx - 1));
+  document.getElementById('next').addEventListener('click', () => show(idx + 1));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'j') { e.preventDefault(); show(idx + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'k') { e.preventDefault(); show(idx - 1); }
+  });
+  let x0 = null, y0 = null;
+  document.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(idx + (dx < 0 ? 1 : -1));
+    x0 = y0 = null;
+  });
+  show(idx);
+})();
+</script>
+<footer style="padding:20px;text-align:center;font-size:12px"><a href="../posts/darwin-godel-machine.html">게시글로 읽기</a> · <a href="../assets/posts/darwin-godel-machine/ATTRIBUTION.txt">그림 출처·CC BY 4.0</a></footer></body>
+</html>

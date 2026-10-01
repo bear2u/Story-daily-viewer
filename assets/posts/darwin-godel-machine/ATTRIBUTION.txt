@@ -1,0 +1,9 @@
+# 그림 출처와 이용 조건
+확인일 2026-10-02. 아래 원문 네 편의 arXiv 라이선스 링크에서 Creative Commons Attribution 4.0 International (CC BY 4.0)을 확인함. 라이선스: https://creativecommons.org/licenses/by/4.0/ . 해설은 원 저자들의 승인을 뜻하지 않음.
+
+- Jenny Zhang, Shengran Hu, Cong Lu, Robert Lange, Jeff Clune. Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents. 2505.22954v3. https://arxiv.org/pdf/2505.22954v3 . 제목부 p1, Figure1–4, Table1·3, p2·30·32·37·69·71 원문 인용. 변경: 설명할 부분의 사각형 크롭, Figure3 패널 분리, Figure4 중앙 패널 분리, 표시 크기 조정. 데이터 및 글자 변경 없음.
+- Shengran Hu, Cong Lu, Jeff Clune. Automated Design of Agentic Systems. 2408.08435v2. https://arxiv.org/pdf/2408.08435v2 . Figure1, 여백 크롭 및 표시 크기 조정.
+- Chunqiu Steven Xia, Zhe Wang, Yan Yang, Yuxiang Wei, Lingming Zhang. Live-SWE-agent: Can Software Engineering Agents Self-Evolve on the Fly? 2511.13646v3. https://arxiv.org/pdf/2511.13646v3 . Figure2, 여백 크롭 및 표시 크기 조정.
+- Jenny Zhang, Bingchen Zhao, Wannan Yang, Jakob N. Foerster, Jeff Clune, Minqi Jiang, Sam Devlin, Tatiana Shavrina. Hyperagents. 2603.19461v1. https://arxiv.org/pdf/2603.19461v1 . Figure1, 여백 크롭 및 표시 크기 조정.
+
+한글 폰트: Noto Sans KR, SIL Open Font License 1.1. 묶음에 FONT-LICENSE.txt 포함.
