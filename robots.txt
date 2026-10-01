@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bear2u.github.io/Story-daily-viewer/sitemap.xml

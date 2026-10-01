@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 주민 25명에게 파티를 맡겨 봤음</title>
+<style>
+/* Swipe-through view of part screenshots. White page, no chrome:
+   tap left/right third, swipe, or use arrow keys. */
+:root { color-scheme: light; --bg: #ffffff; --focus: #1d5bd6; }
+html, body { margin: 0; background: var(--bg); }
+.stage {
+  display: flex; justify-content: center;
+  padding-block: 16px 48px; padding-inline: 16px; box-sizing: border-box;
+}
+.shot {
+  display: block; width: min(430px, 100%); height: auto;
+  user-select: none; -webkit-user-drag: none;
+}
+.nav {
+  position: fixed; top: 0; bottom: 0; width: 30%;
+  border: 0; padding: 0; margin: 0; background: transparent;
+}
+.nav.prev { left: 0; cursor: w-resize; }
+.nav.next { right: 0; cursor: e-resize; }
+.nav:focus-visible { outline: 2px solid var(--focus); outline-offset: -4px; }
+</style>
+</head>
+<body><a href="../posts/generative-agents.html" style="position:fixed;left:16px;top:12px;z-index:20;color:#444;font:12px sans-serif;text-decoration:none;background:white;padding:8px 12px;border-radius:8px">← 해설로 돌아가기</a>
+<main class="stage"><img class="shot" id="shot" alt=""></main>
+<button class="nav prev" id="prev" type="button" aria-label="이전 장"></button>
+<button class="nav next" id="next" type="button" aria-label="다음 장"></button>
+<script>
+(() => {
+  const SHOTS = [{"src": "../assets/cards/generative-agents/01.webp", "alt": "AI 주민 25명에게 파티를 맡겨 봤음"}, {"src": "../assets/cards/generative-agents/02.webp", "alt": "파티 전에 점심부터 봐야 함."}, {"src": "../assets/cards/generative-agents/03.webp", "alt": "이 설계가 갑자기 나온 건 아님."}, {"src": "../assets/cards/generative-agents/04.webp", "alt": "그 이어지는 경험을 다룬 게"}, {"src": "../assets/cards/generative-agents/05.webp", "alt": "그 기억을 전부 매번 읽힐 수는 없음."}, {"src": "../assets/cards/generative-agents/06.webp", "alt": "검색이 잘돼도 기록만 있으면"}, {"src": "../assets/cards/generative-agents/07.webp", "alt": "성찰이 생겼어도 점심 문제는 남음."}, {"src": "../assets/cards/generative-agents/08.webp", "alt": "그 계획을 화면에서 움직이게 해야 함."}, {"src": "../assets/cards/generative-agents/09.webp", "alt": "이렇게 만든 마을에 파티를 넣음."}, {"src": "../assets/cards/generative-agents/10.webp", "alt": "초대가 퍼졌다고 전부 오지는 않음."}, {"src": "../assets/cards/generative-agents/11.webp", "alt": "이 누락을 봤다면 영상만으론 부족함."}, {"src": "../assets/cards/generative-agents/12.webp", "alt": "이 점수에서 읽어야 할 조건이 있음."}, {"src": "../assets/cards/generative-agents/13.webp", "alt": "그런 제한을 빼도 기억 오류는 남음."}, {"src": "../assets/cards/generative-agents/14.webp", "alt": "그런 오류까지 포함한 마을은 비쌌음."}, {"src": "../assets/cards/generative-agents/15.webp", "alt": "그 후속 연구는 그럴듯함에서"}, {"src": "../assets/cards/generative-agents/16.webp", "alt": "사회적 목표를 이루는지와"}, {"src": "../assets/cards/generative-agents/17.webp", "alt": "이제 처음 파티 질문으로 돌아감."}, {"src": "../assets/cards/generative-agents/18.webp", "alt": "그 파티를 다시 만드는 재료는 공개돼 있음."}, {"src": "../assets/cards/generative-agents/19.webp", "alt": "출처"}];
+  const img = document.getElementById('shot');
+  const readHash = () => {
+    const n = parseInt(location.hash.slice(1), 10);
+    return Number.isFinite(n) ? Math.min(Math.max(n - 1, 0), SHOTS.length - 1) : 0;
+  };
+  let idx = readHash();
+  const preload = (i) => { if (SHOTS[i]) { const p = new Image(); p.src = SHOTS[i].src; } };
+  const show = (i) => {
+    idx = Math.min(Math.max(i, 0), SHOTS.length - 1);
+    img.src = SHOTS[idx].src;
+    img.alt = SHOTS[idx].alt;
+    try { history.replaceState(null, '', '#' + (idx + 1)); } catch { /* sandboxed frame */ }
+    window.scrollTo({ top: 0 });
+    preload(idx + 1); preload(idx - 1);
+  };
+  document.getElementById('prev').addEventListener('click', () => show(idx - 1));
+  document.getElementById('next').addEventListener('click', () => show(idx + 1));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'j') { e.preventDefault(); show(idx + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'k') { e.preventDefault(); show(idx - 1); }
+  });
+  let x0 = null, y0 = null;
+  document.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(idx + (dx < 0 ? 1 : -1));
+    x0 = y0 = null;
+  });
+  show(idx);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "generative-agents",
+    "title": "AI 주민 25명에게 파티를 맡겨 봤음",
+    "excerpt": "카페 주인에게 파티를 열고 싶다는 설정을 줬음. 초대는 퍼졌고, 약속도 생겼음. 그런데 가고 싶다는 주민들이 모두 오지는 않았음.",
+    "date": "2026-10-02",
+    "verified_date": "2026-10-01",
+    "reading_minutes": 12,
+    "tags": [
+      "AI 에이전트",
+      "게임",
+      "사회 시뮬레이션"
+    ],
+    "cover": "assets/posts/generative-agents/cover.webp",
+    "cover_alt": "Generative Agents 논문의 Smallville 마을과 AI 주민들, Figure 1",
+    "markdown": "generative-agents.md",
+    "paper_title": "Generative Agents: Interactive Simulacra of Human Behavior",
+    "paper_year": "2023",
+    "venue": "UIST 2023",
+    "authors": "Joon Sung Park 외",
+    "source_url": "https://arxiv.org/abs/2304.03442v2",
+    "chapters": [
+      "마을에 던진 파티 질문",
+      "점심을 세 번 먹는 주민",
+      "이 설계가 나온 배경",
+      "기억·성찰·계획",
+      "필요한 기억 고르기",
+      "공통점을 알아내는 성찰",
+      "하루의 계획을 쪼개기",
+      "게임 화면에서 움직이기",
+      "초대와 장식과 동행",
+      "초대받은 12명, 참석한 5명",
+      "사람이 평가한 그럴듯함",
+      "평가가 말해 주는 범위",
+      "기억 오류와 지나친 협조",
+      "마을을 돌리는 데 든 비용",
+      "SOTOPIA의 다른 질문",
+      "실제 개인을 예측한 연구",
+      "처음 파티 질문의 답",
+      "지금과 남은 과제",
+      "원문과 출처"
+    ]
+  }
+]
