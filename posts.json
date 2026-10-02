@@ -45,7 +45,9 @@
       "처음 질문의 답",
       "지금과 세 줄 요약"
     ],
-    "attribution_url": "assets/posts/darwin-godel-machine/ATTRIBUTION.txt"
+    "attribution_url": "assets/posts/darwin-godel-machine/ATTRIBUTION.txt",
+    "youtube_id": "skS_Lh2zu_4",
+    "youtube_title": "AI가 자기 코드를 고쳤다 | 다윈 괴델 머신과 만점의 함정"
   },
   {
     "slug": "generative-agents",
@@ -87,6 +89,8 @@
       "처음 파티 질문의 답",
       "지금과 남은 과제",
       "원문과 출처"
-    ]
+    ],
+    "youtube_id": "jRR1FiYcZ0I",
+    "youtube_title": "AI 주민 25명에게 파티를 맡겼더니… 12명 중 5명만 왔다 | Generative Agents"
   }
 ]

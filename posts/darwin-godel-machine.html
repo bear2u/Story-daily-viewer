@@ -9,14 +9,18 @@
 <title>자기 코드를 고친 AI는 더 좋은 개발자가 됐을까 · Story Daily</title>
 <link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/darwin-godel-machine.html">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
 <link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
-<script src="../assets/site.js" defer></script></head><body>
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 <header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
 <div class="reading-progress" aria-hidden="true"></div>
 <main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 에이전트</span><span class="pill">자기 개선</span><span class="pill">개발자 도구</span><span>·</span><time datetime="2026-10-02">2026. 10. 02</time><span>·</span><span>15분 읽기</span></div>
 <h1>자기 코드를 고친 AI는 더 좋은 개발자가 됐을까</h1><p class="lead">코딩 성적은 올랐고, 낮은 점수의 버전도 발판이 됐음. 그런데 별도 환각 실험의 만점 에이전트는 검사에 쓰는 표시를 지워버렸음. 다윈 괴델 머신의 개선과 평가를 같이 읽었음.</p>
+<section class="article-video" aria-label="영상으로 보는 해설">
+<div class="video-heading"><span class="video-label">영상으로 보기</span><a href="https://www.youtube.com/watch?v=skS_Lh2zu_4" target="_blank" rel="noopener">YouTube에서 보기 ↗</a></div>
+<div class="video-frame"><button class="video-preview" type="button" data-youtube="skS_Lh2zu_4" data-video-title="AI가 자기 코드를 고쳤다 | 다윈 괴델 머신과 만점의 함정" aria-label="영상 재생: AI가 자기 코드를 고쳤다 | 다윈 괴델 머신과 만점의 함정"><img src="https://i.ytimg.com/vi/skS_Lh2zu_4/hqdefault.jpg" alt="AI가 자기 코드를 고쳤다 | 다윈 괴델 머신과 만점의 함정" decoding="async"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>영상 재생</span></button></div>
+<p class="video-title">AI가 자기 코드를 고쳤다 | 다윈 괴델 머신과 만점의 함정</p></section>
 <div class="article-details"><strong>Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents</strong><br>Jenny Zhang · Shengran Hu · Cong Lu · Robert Lange · Jeff Clune · 2025 · v3 2026 · ICLR 2026<br>원문 그림과 함께 읽는 23파트 해설 · 판본 및 출처 확인: 2026-10-02</div></div>
 <div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">논문 정보</a><a href="#part-2">원문과 출처</a><a href="#part-3">자기 코드도 고치게 하면</a><a href="#part-4">증명에서 시험으로</a><a href="#part-5">설계 보관소 ADAS</a><a href="#part-6">다시 만난 연구자들</a><a href="#part-7">고정된 기반 모델</a><a href="#part-8">빈 패치부터 거르기</a><a href="#part-9">진단과 자기 수정</a><a href="#part-10">어떤 버전을 남길까</a><a href="#part-11">성적이 떨어진 조상</a><a href="#part-12">시험과 모델 조건</a><a href="#part-13">20%에서 50%의 범위</a><a href="#part-14">구성 요소를 뺀 비교</a><a href="#part-15">다른 시험으로 옮기기</a><a href="#part-16">2주와 2만 2천 달러</a><a href="#part-17">진단에 들어간 정답 테스트</a><a href="#part-18">실행을 글로 흉내 낸 AI</a><a href="#part-19">만점의 검사 표식 삭제</a><a href="#part-20">즉석 도구 Live-SWE-agent</a><a href="#part-21">수정 절차도 고치는 Hyperagents</a><a href="#part-22">처음 질문의 답</a><a href="#part-23">지금과 세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>오늘 읽은 논문은 Darwin Gödel Machine임 <br />
 한국어로는 다윈 괴델 머신이라 부르겠음</p>

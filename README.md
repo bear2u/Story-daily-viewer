@@ -33,3 +33,7 @@ python3 -m http.server 8000
 ## 콘텐츠 출처
 
 첫 글은 *Generative Agents: Interactive Simulacra of Human Behavior*, Park 외, UIST 2023, arXiv:2304.03442v2를 해설합니다. 관련 선행 및 후속 연구는 본문의 출처에 연결했습니다. 논문 그림과 연구 결과의 권리는 각 원 저자에게 있으며, 이 저장소는 원 논문에 새로운 재사용 라이선스를 부여하지 않습니다. 출처와 연구 조건을 유지해 주세요.
+
+## 글에 YouTube 영상 연결
+
+`content/<slug>.json`에 `youtube_id`와 선택 항목 `youtube_title`을 넣으면 글 제목 아래에 영상 미리보기가 표시됩니다. `youtube_id`는 YouTube 주소의 11자리 영상 ID입니다. 방문자가 재생 버튼을 누르면 사이트 안에서 플레이어가 열립니다. 영상이 없는 글에는 영상 영역이 표시되지 않습니다.

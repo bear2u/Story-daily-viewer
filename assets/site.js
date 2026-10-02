@@ -60,3 +60,17 @@ if ('IntersectionObserver' in window && anchors.length) {
   }, {rootMargin:'-12% 0px -65% 0px'});
   document.querySelectorAll('.part[id]').forEach(part => observer.observe(part));
 }
+
+// Load the YouTube player only after the visitor presses Play.
+document.querySelectorAll('[data-youtube]').forEach(button => button.addEventListener('click', () => {
+  const videoId = button.dataset.youtube;
+  if (!/^[A-Za-z0-9_-]{11}$/.test(videoId)) return;
+  const player = document.createElement('iframe');
+  player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`;
+  player.title = `${button.dataset.videoTitle} · YouTube 영상`;
+  player.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
+  player.allowFullscreen = true;
+  player.referrerPolicy = 'strict-origin-when-cross-origin';
+  button.replaceWith(player);
+  player.focus();
+}));

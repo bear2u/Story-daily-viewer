@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build a plain HTML blog from content/*.json and matching Markdown files."""
 from pathlib import Path
-import json,re,html,sys,datetime
+import json,re,html,sys,datetime,hashlib
 import markdown
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -9,6 +9,8 @@ BASE='https://bear2u.github.io/Story-daily-viewer/'
 escape=html.escape
 
 def shell(title,description,body,prefix='',canonical='',cover='assets/posts/generative-agents/cover.webp'):
+    css_version=hashlib.sha256((ROOT/'assets/site.css').read_bytes()).hexdigest()[:10]
+    js_version=hashlib.sha256((ROOT/'assets/site.js').read_bytes()).hexdigest()[:10]
     return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="{escape(description,quote=True)}">
@@ -20,9 +22,9 @@ def shell(title,description,body,prefix='',canonical='',cover='assets/posts/gene
 <title>{escape(title)} · Story Daily</title>
 <link rel="canonical" href="{BASE}{canonical}">
 <link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="{prefix}assets/site.css">
+<link rel="stylesheet" href="{prefix}assets/site.css?v={css_version}">
 <link rel="alternate" type="application/rss+xml" title="Story Daily" href="{prefix}feed.xml">
-<script src="{prefix}assets/site.js" defer></script></head><body>
+<script src="{prefix}assets/site.js?v={js_version}" defer></script></head><body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 <header class="site-header"><div class="header-inner"><a class="brand" href="{prefix}index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="{prefix}index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
 {body}
@@ -45,6 +47,18 @@ def render_parts(post):
         blocks.append(f'<section class="part" id="part-{i+1}">{rendered}</section>')
     return '\n'.join(blocks),len(parts)
 
+def video_preview(post):
+    video_id=post.get('youtube_id')
+    if not video_id:
+        return ''
+    if not re.fullmatch(r'[A-Za-z0-9_-]{11}',video_id):
+        raise ValueError(f"Invalid YouTube video ID in {post['slug']}")
+    title=escape(post.get('youtube_title') or post['title'],quote=True)
+    return f'''<section class="article-video" aria-label="영상으로 보는 해설">
+<div class="video-heading"><span class="video-label">영상으로 보기</span><a href="https://www.youtube.com/watch?v={video_id}" target="_blank" rel="noopener">YouTube에서 보기 ↗</a></div>
+<div class="video-frame"><button class="video-preview" type="button" data-youtube="{video_id}" data-video-title="{title}" aria-label="영상 재생: {title}"><img src="https://i.ytimg.com/vi/{video_id}/hqdefault.jpg" alt="{title}" decoding="async"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>영상 재생</span></button></div>
+<p class="video-title">{title}</p></section>'''
+
 def article(post):
     parts,count=render_parts(post)
     chapters=post['chapters']
@@ -54,6 +68,7 @@ def article(post):
     body=f'''<div class="reading-progress" aria-hidden="true"></div>
 <main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta">{tags}<span>·</span><time datetime="{post['date']}">{post['date'].replace('-','. ')}</time><span>·</span><span>{post['reading_minutes']}분 읽기</span></div>
 <h1>{escape(post['title'])}</h1><p class="lead">{escape(post['excerpt'])}</p>
+{video_preview(post)}
 <div class="article-details"><strong>{escape(post['paper_title'])}</strong><br>{escape(post['authors'])} · {escape(post['paper_year'])} · {escape(post['venue'])}<br>원문 그림과 함께 읽는 {count}파트 해설 · 판본 및 출처 확인: {post['verified_date']}</div></div>
 <div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p>{toc}</aside><article class="article-body">{parts}<div class="article-end"><div class="source-links">{attribution}<a href="{post['source_url']}" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/{post['slug']}.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
 <button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>'''
