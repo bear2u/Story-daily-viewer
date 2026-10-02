@@ -54,9 +54,11 @@ def video_preview(post):
     if not re.fullmatch(r'[A-Za-z0-9_-]{11}',video_id):
         raise ValueError(f"Invalid YouTube video ID in {post['slug']}")
     title=escape(post.get('youtube_title') or post['title'],quote=True)
+    thumbnail=f'assets/youtube/{video_id}.jpg'
+    thumbnail_url=f'../{thumbnail}' if (ROOT/thumbnail).is_file() else f'https://img.youtube.com/vi/{video_id}/hqdefault.jpg'
     return f'''<section class="article-video" aria-label="영상으로 보는 해설">
 <div class="video-heading"><span class="video-label">영상으로 보기</span><a href="https://www.youtube.com/watch?v={video_id}" target="_blank" rel="noopener">YouTube에서 보기 ↗</a></div>
-<div class="video-frame"><button class="video-preview" type="button" data-youtube="{video_id}" data-video-title="{title}" aria-label="영상 재생: {title}"><img src="https://i.ytimg.com/vi/{video_id}/hqdefault.jpg" alt="{title}" decoding="async"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>영상 재생</span></button></div>
+<div class="video-frame"><button class="video-preview" type="button" data-youtube="{video_id}" data-video-title="{title}" aria-label="영상 재생: {title}"><img src="{thumbnail_url}" alt="{title}" decoding="async"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>영상 재생</span></button></div>
 <p class="video-title">{title}</p></section>'''
 
 def article(post):
