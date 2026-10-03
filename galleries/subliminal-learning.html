@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>숫자만 배운 AI가 스승의 취향까지 따라간 이유</title>
+<style>
+/* Swipe-through view of part screenshots. White page, no chrome:
+   tap left/right third, swipe, or use arrow keys. */
+:root { color-scheme: light; --bg: #ffffff; --focus: #1d5bd6; }
+html, body { margin: 0; background: var(--bg); }
+.stage {
+  display: flex; justify-content: center;
+  padding-block: 16px 48px; padding-inline: 16px; box-sizing: border-box;
+}
+.shot {
+  display: block; width: min(430px, 100%); height: auto;
+  user-select: none; -webkit-user-drag: none;
+}
+.nav {
+  position: fixed; top: 0; bottom: 0; width: 30%;
+  border: 0; padding: 0; margin: 0; background: transparent;
+}
+.nav.prev { left: 0; cursor: w-resize; }
+.nav.next { right: 0; cursor: e-resize; }
+.nav:focus-visible { outline: 2px solid var(--focus); outline-offset: -4px; }
+</style>
+</head>
+<body>
+<main class="stage"><img class="shot" id="shot" alt=""></main>
+<button class="nav prev" id="prev" type="button" aria-label="이전 장"></button>
+<button class="nav next" id="next" type="button" aria-label="다음 장"></button>
+<script>
+(() => {
+  const SHOTS = [{"src": "../assets/posts/subliminal-learning/cards/01.webp", "alt": "숫자만 배운 AI가 스승의 취향까지 따라간 이유"}, {"src": "../assets/posts/subliminal-learning/cards/02.webp", "alt": "그 빨간 분기를 조사한 논문임."}, {"src": "../assets/posts/subliminal-learning/cards/03.webp", "alt": "그 분기 연구의 배경을 보려면"}, {"src": "../assets/posts/subliminal-learning/cards/04.webp", "alt": "출력한 답만 준 실험이 2025년에 나옴."}, {"src": "../assets/posts/subliminal-learning/cards/05.webp", "alt": "그 전작을 새 팀이 다시 뜯어봤음."}, {"src": "../assets/posts/subliminal-learning/cards/06.webp", "alt": "전달 지점을 찾으려면 비교 조건을 맞춰야 함."}, {"src": "../assets/posts/subliminal-learning/cards/07.webp", "alt": "남은 신호를 설명하는 가설 중 하나는"}, {"src": "../assets/posts/subliminal-learning/cards/08.webp", "alt": "확률 낮은 후보가 나오지 않게"}, {"src": "../assets/posts/subliminal-learning/cards/09.webp", "alt": "남은 전달을 찾으려고 스승 둘을 비교함."}, {"src": "../assets/posts/subliminal-learning/cards/10.webp", "alt": "그 분기만 배운 결과가 아래 비교임."}, {"src": "../assets/posts/subliminal-learning/cards/11.webp", "alt": "이 대조를 숫자 고유의 암호로 읽으면 어긋남."}, {"src": "../assets/posts/subliminal-learning/cards/12.webp", "alt": "신호를 받아들이는 층은 앞쪽이 중요했음."}, {"src": "../assets/posts/subliminal-learning/cards/13.webp", "alt": "앞쪽을 고정한 실험도 부록에 있음."}, {"src": "../assets/posts/subliminal-learning/cards/14.webp", "alt": "입력 문구는 바꾸고 숫자와 답은 그대로 둠."}, {"src": "../assets/posts/subliminal-learning/cards/15.webp", "alt": "오른쪽의 과제 성능은 보통 기대하는"}, {"src": "../assets/posts/subliminal-learning/cards/16.webp", "alt": "스승을 섞으니 전달 신호가 약해지기도 함."}, {"src": "../assets/posts/subliminal-learning/cards/17.webp", "alt": "취향 밖의 성향은 평가법부터 달랐음."}, {"src": "../assets/posts/subliminal-learning/cards/18.webp", "alt": "후속 연구는 다시 쓰기를 출력 문장에 적용함."}, {"src": "../assets/posts/subliminal-learning/cards/19.webp", "alt": "표면 뒤의 내부 변화도 조사한 후속작이 나옴."}, {"src": "../assets/posts/subliminal-learning/cards/20.webp", "alt": "보편 법칙을 경계할 이유가 최근 기록에도 있음."}, {"src": "../assets/posts/subliminal-learning/cards/21.webp", "alt": "처음 숫자 장면에서 학생이 배운 것은"}, {"src": "../assets/posts/subliminal-learning/cards/22.webp", "alt": "그 실험을 따라가 볼 코드도 공개돼 있음."}];
+  const img = document.getElementById('shot');
+  const readHash = () => {
+    const n = parseInt(location.hash.slice(1), 10);
+    return Number.isFinite(n) ? Math.min(Math.max(n - 1, 0), SHOTS.length - 1) : 0;
+  };
+  let idx = readHash();
+  const preload = (i) => { if (SHOTS[i]) { const p = new Image(); p.src = SHOTS[i].src; } };
+  const show = (i) => {
+    idx = Math.min(Math.max(i, 0), SHOTS.length - 1);
+    img.src = SHOTS[idx].src;
+    img.alt = SHOTS[idx].alt;
+    try { history.replaceState(null, '', '#' + (idx + 1)); } catch { /* sandboxed frame */ }
+    window.scrollTo({ top: 0 });
+    preload(idx + 1); preload(idx - 1);
+  };
+  document.getElementById('prev').addEventListener('click', () => show(idx - 1));
+  document.getElementById('next').addEventListener('click', () => show(idx + 1));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'j') { e.preventDefault(); show(idx + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'k') { e.preventDefault(); show(idx - 1); }
+  });
+  let x0 = null, y0 = null;
+  document.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(idx + (dx < 0 ? 1 : -1));
+    x0 = y0 = null;
+  });
+  show(idx);
+})();
+</script>
+</body>
+</html>

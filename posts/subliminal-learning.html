@@ -1,0 +1,358 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="동물 이름이 없는 숫자 답안만 학습했는데, 학생 AI의 동물 응답이 스승 쪽으로 기울었음. 이번 연구는 전체의 약 4.7%·13.2%인 분기 토큰, 앞쪽 층과 입력 문맥을 바꿔 그 전달을 추적함. 전달과 억제 효과는 모델·동물·평가 조건마다 달랐음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="숫자만 배운 AI가 스승의 취향까지 따라간 이유">
+<meta property="og:description" content="동물 이름이 없는 숫자 답안만 학습했는데, 학생 AI의 동물 응답이 스승 쪽으로 기울었음. 이번 연구는 전체의 약 4.7%·13.2%인 분기 토큰, 앞쪽 층과 입력 문맥을 바꿔 그 전달을 추적함. 전달과 억제 효과는 모델·동물·평가 조건마다 달랐음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/subliminal-learning/fig1_p2.webp">
+<title>숫자만 배운 AI가 스승의 취향까지 따라간 이유 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/subliminal-learning.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 학습</span><span class="pill">AI 안전</span><span class="pill">해석 가능성</span><span>·</span><time datetime="2026-10-04">2026. 10. 04</time><span>·</span><span>18분 읽기</span></div>
+<h1>숫자만 배운 AI가 스승의 취향까지 따라간 이유</h1><p class="lead">동물 이름이 없는 숫자 답안만 학습했는데, 학생 AI의 동물 응답이 스승 쪽으로 기울었음. 이번 연구는 전체의 약 4.7%·13.2%인 분기 토큰, 앞쪽 층과 입력 문맥을 바꿔 그 전달을 추적함. 전달과 억제 효과는 모델·동물·평가 조건마다 달랐음.</p>
+
+<div class="article-details"><strong>Towards Understanding Subliminal Learning: When and How Hidden Biases Transfer</strong><br>Simon Schrodi · Elias Kempf · Fazl Barez · Thomas Brox · 2025 / ICLR 2026 · ICLR 2026 심사 논문 · arXiv v2 2026-03-05 · 2026-10-04 확인<br>원문 그림과 함께 읽는 22파트 해설 · 판본 및 출처 확인: 2026-10-04</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">숫자만 배운 AI의 취향</a><a href="#part-2">이번 논문의 정보</a><a href="#part-3">답보다 확률도 배움</a><a href="#part-4">부엉이 지시가 없는 데이터</a><a href="#part-5">전작 저자와 새 연구팀</a><a href="#part-6">무엇을 어떻게 학습했나</a><a href="#part-7">숫자와 취향이 얽혔나</a><a href="#part-8">가설을 제거해도 남는 전달</a><a href="#part-9">같은 문맥에서 갈리는 예측</a><a href="#part-10">4.7%를 학습하는 비교</a><a href="#part-11">숫자 고유의 암호는 아님</a><a href="#part-12">앞쪽 한 층만 바꿔도</a><a href="#part-13">앞쪽 층을 고정하면</a><a href="#part-14">답을 놔두고 입력을 바꿈</a><a href="#part-15">유지됐다는 성능의 범위</a><a href="#part-16">스승을 섞은 결과와 예외</a><a href="#part-17">취향 밖의 부정렬 실험</a><a href="#part-18">출력 재표현은 다른 실험</a><a href="#part-19">학생 안에 남은 활성 방향</a><a href="#part-20">최근 반박 논문의 수정 공지</a><a href="#part-21">처음 질문에 돌아오면</a><a href="#part-22">지금과 세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>AI에게 숫자 목록만 가르쳤음.<br />
+학습 답안에는 고양이도 부엉이도 없음.<br />
+그런데 나중에 좋아하는 동물을 묻자<br />
+스승이 좋아하던 동물을 더 자주 답함. </p>
+<p>스승의 취향이 숫자 어디에 남은 걸까.<br />
+숫자의 뜻부터 찾으면 풀리는 문제일까.<br />
+이번 연구는 스승 둘을 나란히 놓고<br />
+어느 지점에서 답이 갈리는지 봤음. </p>
+<p>아래 가운데 빨간 예측이 갈리는 곳을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 숫자 생성과 취향 전달, 분기 토큰 비교 (Figure 1)"><img src="../assets/posts/subliminal-learning/fig1_p2.webp" alt="숫자 생성과 취향 전달, 분기 토큰 비교 (Figure 1)" loading="lazy" decoding="async"></button><figcaption>숫자 생성과 취향 전달, 분기 토큰 비교 (Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>그 빨간 분기를 조사한 논문임.</p>
+<p><strong>Towards Understanding Subliminal Learning:</strong><br />
+<strong>When and How Hidden Biases Transfer</strong> </p>
+<p>Simon Schrodi·Elias Kempf와<br />
+Fazl Barez·Thomas Brox의 연구임. <br />
+최초 공개는 2025-09-28임.<br />
+읽은 판본은 2026-03-05의 v2임.<br />
+부록까지 39쪽 전체를 확인했음. </p>
+<p>2026-10-04 확인 기준<br />
+ICLR 2026 공식 논문집에 실린 심사 논문임. </p>
+<p>논문 제목 아래의 저자·소속 표기를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 제목과 저자·소속 정보 (원문 첫 페이지)"><img src="../assets/posts/subliminal-learning/q_authors.webp" alt="제목과 저자·소속 정보 (원문 첫 페이지)" loading="lazy" decoding="async"></button><figcaption>제목과 저자·소속 정보 (원문 첫 페이지)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2509.23886v2">원문 PDF</a><br />
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2509.23886v2">arXiv</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2509.23886">DOI</a></p></section>
+<section class="part" id="part-3"><p>그 분기 연구의 배경을 보려면<br />
+숫자에 취향이 남는 얘기 전에<br />
+스승 답을 배운다는 뜻부터 볼 필요가 있음.</p>
+<p>2015년 Hinton·Vinyals·Dean은<br />
+큰 모델의 지식을 작은 모델로 옮기는<br />
+증류 방법을 다뤘음. </p>
+<p>쉽게 말하면<br />
+스승이 어떤 답을 골랐는지 배움.<br />
+정확히는 그 논문에서<br />
+여러 답에 매긴 확률분포도 학습 표적으로 씀. </p>
+<p>정답 밖에 붙은 작은 확률에도<br />
+스승의 구별 방식이 담길 수 있기 때문임. <br />
+아래는 증류 논문의 제목과 저자임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 증류 전작의 제목과 연구진 (Hinton 외 2015, 첫 페이지)"><img src="../assets/posts/subliminal-learning/prior_hinton.webp" alt="증류 전작의 제목과 연구진 (Hinton 외 2015, 첫 페이지)" loading="lazy" decoding="async"></button><figcaption>증류 전작의 제목과 연구진 (Hinton 외 2015, 첫 페이지)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그럼 확률표를 안 주고<br />
+출력한 답만 줘도 뜻밖의 것이 옮겨갈까.</p></section>
+<section class="part" id="part-4"><p>출력한 답만 준 실험이 2025년에 나옴.<br />
+Cloud·Le 등 여덟 명의 잠재 학습 연구임. </p>
+<p>스승에게 특정 동물을 좋아하라고 지시함.<br />
+그 스승이 만든 숫자 목록을 걸러<br />
+동물 이름이 없는 학습 답안을 만듦.<br />
+학생은 그 숫자 답안을 학습함.<br />
+이 과정에서 모델에 저장된 수치가 바뀜. </p>
+<p>배운 뒤 동물 질문에 대한 응답 빈도가 바뀜.<br />
+여기서 취향은 감정이 생겼다는 뜻이 아님.<br />
+좋아하는 동물을 묻는 질문에서<br />
+특정 단어를 더 자주 출력했다는 뜻임. </p>
+<p>대화창에 숫자를 붙이는 것과도 구별해야 함.<br />
+전작의 GPT-4.1 nano 문맥 학습 실험은<br />
+같은 효과를 재현하지 못했음. <br />
+숫자 예시에서 학생에게 넘어간 것을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 숫자를 학습한 학생의 부엉이 응답 증가 (Cloud 외 2025, Figure 1)"><img src="../assets/posts/subliminal-learning/prior_cloud.webp" alt="숫자를 학습한 학생의 부엉이 응답 증가 (Cloud 외 2025, Figure 1)" loading="lazy" decoding="async"></button><figcaption>숫자를 학습한 학생의 부엉이 응답 증가 (Cloud 외 2025, Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-5"><p>그 전작을 새 팀이 다시 뜯어봤음.</p>
+<p>이번 논문 기준으로<br />
+Schrodi·Kempf·Brox는 프라이부르크대 소속임.<br />
+Barez는 옥스퍼드대·WhiteBox·Martian을 표기함.<br />
+Schrodi와 Kempf는 공동 기여로 명시됨. </p>
+<p>전작과 이번 논문의 저자 목록은 겹치지 않음.<br />
+대신 감사의 글에는<br />
+전작의 Cloud·Chua·Betley가 나옴.<br />
+논문 토론에 감사한다고 적음. </p>
+<p>같은 현상을 이어 조사한 관계는 확인됨.<br />
+이 팀은 전달이 생기는 지점을 좁혔음. </p>
+<p>감사의 글에 나온 전작 저자 이름을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전작 연구자와의 토론 감사 (원문 감사의 글)"><img src="../assets/posts/subliminal-learning/q_thanks.webp" alt="전작 연구자와의 토론 감사 (원문 감사의 글)" loading="lazy" decoding="async"></button><figcaption>전작 연구자와의 토론 감사 (원문 감사의 글)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>전달 지점을 찾으려면 비교 조건을 맞춰야 함.</p>
+<p>주 실험은 Qwen2.5-7B-Instruct와<br />
+Gemma 3-4B-it로 진행함.<br />
+학생과 스승은 같은 기반 모델에서 출발함. </p>
+<p>스승의 동물 취향은 시스템 지시로 넣음.<br />
+학생은 기본 시스템 지시로 숫자 답안을 배움.<br />
+동물 취향 지시 자체는 학생 학습 입력에 없음. </p>
+<p>숫자·허용 구분자 등으로 된 답만 남김.<br />
+각 설정에서 1만 쌍을 10에포크 학습함. <br />
+전체 층의 지정 가중치에<br />
+랭크 8 LoRA를 붙이고 Adam으로 학습함.<br />
+가중치는 모델이 배워 저장한 수치임.<br />
+LoRA는 원래 수치를 고정하고<br />
+작은 보정 행렬을 더해 그쪽만 학습함. </p>
+<p>무작위 조건을 정하는 시드를 다섯 번 바꿔<br />
+그 결과를 평균냄.<br />
+동물 질문별 200응답에서<br />
+목표 동물 단어가 나온 비율을 봄. <br />
+숫자의 의미 말고 어떤 신호가 남았을까.</p></section>
+<section class="part" id="part-7"><p>남은 신호를 설명하는 가설 중 하나는<br />
+숫자와 동물 토큰의 얽힘이었음. </p>
+<p>가령 부엉이 답을 더 선호하게 만들면<br />
+관련 없어 보이는 숫자의 확률도 바뀔 수 있음.<br />
+학생이 그 숫자를 더 잘 예측하게 배우다가<br />
+부엉이 응답도 늘릴 수 있다는 설명임. </p>
+<p>스승은 여러 후보 중 답을 샘플링함.<br />
+많은 샘플에서 후보가 등장한 빈도를 보면<br />
+스승이 각 후보에 준 확률을 추정할 수 있음.<br />
+이것을 통계적 분포 누출로 설명한 가설임. </p>
+<p>이번 팀은 그 가설이 반드시 필요한지 물었음.<br />
+확률 낮은 후보가 나오지 않게 하면 어떨까.</p></section>
+<section class="part" id="part-8"><p>확률 낮은 후보가 나오지 않게<br />
+스승이 매번 최고 확률 토큰만 고르게 함.<br />
+이 선택 방식이 greedy decoding임. </p>
+<p>그래도 일부 취향 전달이 남았음.<br />
+Qwen의 고양이와 Gemma의 부엉이 등이 해당함.<br />
+Qwen의 개는 기존 샘플링보다 전달이 나타남. </p>
+<p>얽힘이 강한 상위 50개 숫자를 포함한<br />
+학습 샘플도 제외해봤음.<br />
+그 조건에서도 일부 취향은 전달됨. </p>
+<p>모든 종류의 얽힘을 없앤 실험은 아님.<br />
+검사한 전역 얽힘·분포 누출 가설이<br />
+전달의 필수조건은 아니라는 결과임. <br />
+아래 빨간 막대와 갈색 막대가 남은 곳을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 샘플링과 상위 얽힘 숫자 제외 조건의 취향 전달 (Figure 2)"><img src="../assets/posts/subliminal-learning/fig2_p4.webp" alt="샘플링과 상위 얽힘 숫자 제외 조건의 취향 전달 (Figure 2)" loading="lazy" decoding="async"></button><figcaption>샘플링과 상위 얽힘 숫자 제외 조건의 취향 전달 (Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>남은 전달을 찾으려고 스승 둘을 비교함.<br />
+고양이를 좋아하는 스승과<br />
+부엉이를 좋아하는 스승을 준비함. </p>
+<p>앞에서 본 숫자 문맥을 똑같이 넣음.<br />
+한쪽은 다음 숫자 조각을 이렇게 고르고<br />
+다른 쪽은 다른 조각을 고르는 위치가 있음.<br />
+그 위치의 토큰이 분기 토큰임. </p>
+<p>토큰은 모델이 다루는 출력 조각임.<br />
+이 실험 모델의 여러 자리 숫자는<br />
+한 자리씩 나뉘어 생성됨. </p>
+<p>정확히는 고양이 스승이 만든 답안의<br />
+같은 앞 문맥을 두 스승에게 넣고<br />
+최고 확률 예측이 다른 위치를 식별함. </p>
+<p>가운데 그림의 빨간 예측 두 쌍을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 같은 접두 문맥에서 취향별 스승의 예측이 갈리는 위치 (Figure 1)"><img src="../assets/posts/subliminal-learning/fig1_p2.webp" alt="같은 접두 문맥에서 취향별 스승의 예측이 갈리는 위치 (Figure 1)" loading="lazy" decoding="async"></button><figcaption>같은 접두 문맥에서 취향별 스승의 예측이 갈리는 위치 (Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그 분기만 배웠을 때도 취향이 옮겨갈까.</p></section>
+<section class="part" id="part-10"><p>그 분기만 배운 결과가 아래 비교임.</p>
+<p>숫자 답안은 두 조건 모두 그대로 둠.<br />
+한쪽은 분기 토큰 위치의 오차만 줄임.<br />
+다른 쪽은 분기를 뺀 나머지 오차만 줄임. </p>
+<p>쉽게 말하면<br />
+같은 답안에서 틀린 예측을 고칠<br />
+위치를 고른 셈임.<br />
+정확히는 학습 손실 계산을 마스킹했고<br />
+마스킹한 토큰도 앞 문맥으로 남겼음. </p>
+<p>온도 샘플 데이터에서 분기 비율은<br />
+Qwen 약 4.7%, Gemma 약 13.2%였음. <br />
+그 일부만 학습해도 보통 전달이 유지·증폭됨.<br />
+분기를 손실에서 빼면 보통 전달이 크게 줄었음.<br />
+다만 모든 동물에서 똑같진 않았음. </p>
+<p>분홍·연두와 회색·하늘색 막대를 비교하면 됨.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 분기만 학습하는 조건과 분기를 제외한 조건의 대조 (Figure 3)"><img src="../assets/posts/subliminal-learning/fig3_p5.webp" alt="분기만 학습하는 조건과 분기를 제외한 조건의 대조 (Figure 3)" loading="lazy" decoding="async"></button><figcaption>분기만 학습하는 조건과 분기를 제외한 조건의 대조 (Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>이 대조를 숫자 고유의 암호로 읽으면 어긋남.</p>
+<p>분기는 특정 숫자 자체의 꼬리표가 아님.<br />
+앞 문맥과 스승의 취향을 같이 놓고<br />
+다음 예측이 갈리는지를 계산한 위치임. </p>
+<p>4.7%도 모든 실험의 고정 비율이 아님.<br />
+greedy 데이터에선 Qwen 약 7.5%,<br />
+Gemma 약 18.3%였음. </p>
+<p>표의 마지막 평균 열을 보면 차이가 보임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델과 생성 방식별 분기 토큰 비율 (Table 1)"><img src="../assets/posts/subliminal-learning/tab1_p17.webp" alt="모델과 생성 방식별 분기 토큰 비율 (Table 1)" loading="lazy" decoding="async"></button><figcaption>모델과 생성 방식별 분기 토큰 비율 (Table 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>왜 이런 분기가 취향을 학습시키는지<br />
+논문은 수학적 직관도 제시함.<br />
+하지만 강한 가정에 기대는 설명이며<br />
+정식 증명으로 부르면 안 된다고 명시함. <br />
+원문도 아래처럼 직관이라고 선을 그음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 정식 증명으로 읽지 말라는 설명 (원문 부록 C)"><img src="../assets/posts/subliminal-learning/q_intuition.webp" alt="정식 증명으로 읽지 말라는 설명 (원문 부록 C)" loading="lazy" decoding="async"></button><figcaption>정식 증명으로 읽지 말라는 설명 (원문 부록 C)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그 신호를 받아들이는 층도 따로 찾았음.</p></section>
+<section class="part" id="part-12"><p>신호를 받아들이는 층은 앞쪽이 중요했음.<br />
+층은 계산이 차례로 통과하는 처리 단계임.</p>
+<p>연구진은 취향만 다른 문맥의<br />
+내부 활성값을 바꿨을 때의 영향을 조사함.<br />
+활성값은 모델 층마다 나오는 중간 계산 결과임.<br />
+계산을 줄이는 근사 방법으로<br />
+중요한 층을 찾은 다음 실제 학습으로 확인함. </p>
+<p>전체 층을 학습해야 전달될 것 같지만<br />
+0층 또는 7층에만 LoRA를 학습해도<br />
+취향이 옮겨갔음. </p>
+<p>14·21·27층과 Gemma의 33층만<br />
+학습한 조건은 전달이 미미했음. </p>
+<p>앞쪽 층 막대와 뒤쪽 층 막대를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 단일 층 LoRA 학습과 취향 전달 (Figure 5)"><img src="../assets/posts/subliminal-learning/fig5_p6.webp" alt="단일 층 LoRA 학습과 취향 전달 (Figure 5)" loading="lazy" decoding="async"></button><figcaption>단일 층 LoRA 학습과 취향 전달 (Figure 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그럼 앞쪽을 고정하면 전달을 줄일 수 있을까.</p></section>
+<section class="part" id="part-13"><p>앞쪽을 고정한 실험도 부록에 있음.</p>
+<p>Qwen에서 앞 10개 이상 층을<br />
+학습하지 않게 두자<br />
+이 숫자 학습 설정에선<br />
+전달이 거의 사라졌음. </p>
+<p>Qwen의 훈련 데이터 숫자 재현 성능은<br />
+상당 범위의 동결에서 유지됐음.<br />
+하지만 처음 보는 숫자 목록의 성능을<br />
+전반적으로 올렸다는 결과는 아님. </p>
+<p>다음에는 가중치 대신 입력 문구를 바꿔봄.</p>
+<p>아래에서 동결 층 수가 늘어난 막대를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 앞쪽 층을 동결했을 때의 취향 전달 (Figure 39)"><img src="../assets/posts/subliminal-learning/fig39_p37.webp" alt="앞쪽 층을 동결했을 때의 취향 전달 (Figure 39)" loading="lazy" decoding="async"></button><figcaption>앞쪽 층을 동결했을 때의 취향 전달 (Figure 39)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-14"><p>입력 문구는 바꾸고 숫자와 답은 그대로 둠.</p>
+<p>숫자를 보라는 말을<br />
+의미가 같은 다른 표현으로 고침.<br />
+학생이 배우는 완성 숫자 목록은 유지함. </p>
+<p>이 작은 문맥 변화만으로도<br />
+취향 전달이 보통 줄었음.<br />
+Qwen에서는 편향된 스승 자신에게<br />
+문구를 다시 쓰게 해도 보통 줄어듦. </p>
+<p>Gemma는 같은 시도를 할 때<br />
+취향을 문구에 드러내는 문제가 생겨<br />
+동일한 조건을 확보하지 못했음. </p>
+<p>그림에서 오른쪽에 있으면서<br />
+세로 위치가 낮은 점을 찾아보면 됨.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 입력 재표현과 답안 섞기가 과제 성능·취향 전달에 미치는 영향 (Figure 6)"><img src="../assets/posts/subliminal-learning/fig6_p7.webp" alt="입력 재표현과 답안 섞기가 과제 성능·취향 전달에 미치는 영향 (Figure 6)" loading="lazy" decoding="async"></button><figcaption>입력 재표현과 답안 섞기가 과제 성능·취향 전달에 미치는 영향 (Figure 6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그 오른쪽을 무슨 성능으로 쟀는지도 봐야 함.</p></section>
+<section class="part" id="part-15"><p>오른쪽의 과제 성능은 보통 기대하는<br />
+일반 지능 점수와 다름.</p>
+<p>Figure 6과 27은 훈련 데이터에서<br />
+숫자 토큰을 재현하는 성능을 쟀음.<br />
+모르는 문제를 푸는 능력 전체를<br />
+유지했다는 근거로 쓰면 안 됨. </p>
+<p>재표현은 전달을 항상 없애지도 않음.<br />
+Gemma의 펭귄 취향은<br />
+오히려 전달이 강해진 예외가 있음. </p>
+<p>부록 아래쪽 penguin 패널을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 추가 동물의 재표현 결과와 Gemma 펭귄 예외 (Figure 27)"><img src="../assets/posts/subliminal-learning/fig27_p26.webp" alt="추가 동물의 재표현 결과와 Gemma 펭귄 예외 (Figure 27)" loading="lazy" decoding="async"></button><figcaption>추가 동물의 재표현 결과와 Gemma 펭귄 예외 (Figure 27)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이 억제 효과를 다른 설정의<br />
+안전 보장으로 넓힐 수는 없음. <br />
+입력 말고 스승을 섞는 방법도 시험함.</p></section>
+<section class="part" id="part-16"><p>스승을 섞으니 전달 신호가 약해지기도 함.</p>
+<p>Qwen 본문 실험에서<br />
+무편향 스승 데이터 10%를 섞으면 크게 줄고<br />
+25%에선 거의 사라졌음. </p>
+<p>같은 취향을 가진 Qwen·Gemma 스승의<br />
+데이터를 섞은 조건도 시험함.<br />
+일부 동물은 줄었지만 차이가 있었음. </p>
+<p>Gemma 스승의 독수리 취향이<br />
+Qwen 학생에게 전달된 사례가 있음.<br />
+반대 방향의 펭귄 사례도 보고됨. </p>
+<p>같은 기반 모델로 시작한다는 주 실험 조건을<br />
+다른 모델이면 전달 불가능하다는<br />
+보장으로 바꾸면 안 됨. <br />
+아래 오른쪽 eagle은 왼쪽 끝에도 남아 있음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 무편향 교사 혼합과 다른 모델 교사 혼합 (Figure 7)"><img src="../assets/posts/subliminal-learning/fig7_p8.webp" alt="무편향 교사 혼합과 다른 모델 교사 혼합 (Figure 7)" loading="lazy" decoding="async"></button><figcaption>무편향 교사 혼합과 다른 모델 교사 혼합 (Figure 7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>취향 밖의 성향도 같은 식으로 살펴봤음.</p></section>
+<section class="part" id="part-17"><p>취향 밖의 성향은 평가법부터 달랐음.</p>
+<p>위험한 금융 조언으로 미세조정된<br />
+Qwen 7B 스승이 숫자 답안을 만듦.<br />
+여기서는 성향이 시스템 지시가 아니라<br />
+스승의 가중치에 들어 있음. </p>
+<p>학생의 답변은 Gemma 3-27B-it가 판정함.<br />
+사람에게 해로운 답변인지와<br />
+질문에 맞는 이해 가능한 답변인지를 채점함.<br />
+정렬 점수 30 미만을 부정렬로 분류했고<br />
+일관성 점수 50 미만 답변은 제외함.<br />
+평가 질문에는 짧게 답하라는 접미어를 붙임. </p>
+<p>분기만 학습해도 부정렬 응답이 늘고<br />
+분기를 손실에서 빼면 줄어드는 패턴이 나옴. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 부정렬 스승 데이터의 분기 손실 비교 (Figure 8)"><img src="../assets/posts/subliminal-learning/fig8_clean.webp" alt="부정렬 스승 데이터의 분기 손실 비교 (Figure 8)" loading="lazy" decoding="async"></button><figcaption>부정렬 스승 데이터의 분기 손실 비교 (Figure 8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>별도의 Qwen 32B 수학 답안 실험은<br />
+필터 문턱을 더 높이면 전달이 안 나왔음.<br />
+자동 판정과 필터 조건까지 포함한 결과임. <br />
+앞에서 바꾼 입력 문구에도 후속 연구가 이어짐.</p></section>
+<section class="part" id="part-18"><p>후속 연구는 다시 쓰기를 출력 문장에 적용함.<br />
+Gisler·He·Qiu의 2026-03-10 논문임. </p>
+<p>이번 논문은 학생의 입력 문구를 바꿈.<br />
+후속 논문은 문맥을 고정하고<br />
+스승이 다시 쓴 출력 문장을 학습시킴.</p>
+<p>GPT-4.1 nano 학생·스승을 사용함.<br />
+돌고래를 싫어하는 내용도 뜻을 유지해 다시 씀.<br />
+그 답안을 배운 학생은 중립 스승 조건보다<br />
+돌고래 응답률이 18.1%p 더 높았음. </p>
+<p>아래 CD는 취향과 반대인 문장 조건임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 무관한 문장과 부정적 문장의 재표현 학습 결과 (Gisler 외 2026, Figure 2)"><img src="../assets/posts/subliminal-learning/next_paraphrase.webp" alt="무관한 문장과 부정적 문장의 재표현 학습 결과 (Gisler 외 2026, Figure 2)" loading="lazy" decoding="async"></button><figcaption>무관한 문장과 부정적 문장의 재표현 학습 결과 (Gisler 외 2026, Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>동물 취향 실험이고 미세한 의미 차이를<br />
+완전히 배제하진 못했다고 명시함. <br />
+그럼 모델 내부에는 어떤 변화가 남을까.</p></section>
+<section class="part" id="part-19"><p>표면 뒤의 내부 변화도 조사한 후속작이 나옴.<br />
+Blank·Bhatia 등 다섯 명의<br />
+2026-05-31 최초 공개 연구임.<br />
+확인한 판본은 2026-06-10 v3 프리프린트임. </p>
+<p>내부 활성값에 특정 방향의 벡터를 더하면<br />
+모델의 출력 행동이 바뀔 수 있음.<br />
+이 연구는 스승의 취향 지시가 만든 방향과<br />
+숫자를 학습한 학생의 방향을 비교함. </p>
+<p>Qwen 7B·Gemma 4B 실험에서<br />
+스승과 학생의 변화가<br />
+비슷한 방향을 가리키는 결과를 보고함. <br />
+학생의 해당 성분을 기준 모델 성분으로 바꾸자<br />
+저자들은 취향에 맞는 행동이<br />
+50% 이상 줄었다고 보고함.<br />
+스승 쪽 방향을 제거해 만든 데이터에선<br />
+전달 효과가 거의 사라졌음. </p>
+<p>기준 모델에 방향을 더한 조건과<br />
+학생의 해당 성분을 바꾼 조건을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 학생 내부 활성 방향에 대한 개입 실험 (Blank 외 2026, Figure 3)"><img src="../assets/posts/subliminal-learning/next_steering.webp" alt="학생 내부 활성 방향에 대한 개입 실험 (Blank 외 2026, Figure 3)" loading="lazy" decoding="async"></button><figcaption>학생 내부 활성 방향에 대한 개입 실험 (Blank 외 2026, Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이 설명도 확정된 보편 법칙으로 읽진 않아야 함.</p></section>
+<section class="part" id="part-20"><p>보편 법칙을 경계할 이유가 최근 기록에도 있음.</p>
+<p>2026-10-04 기준으로<br />
+LoRA Artifact라는 반박 논문에는<br />
+2026-09-08 v2 저자 공지가 붙어 있음. </p>
+<p>저자들은 후속 연구에서<br />
+자신들의 일부 핵심 주장이 틀린 것으로 밝혀져<br />
+대폭 수정본을 준비 중이라고 알림. </p>
+<p>어느 세부 주장이 뒤집혔는지는<br />
+그 공지만으로 정할 수 없음.<br />
+그래서 LoRA에서만 일어난다거나<br />
+전체 미세조정이면 사라진다는 말을<br />
+이 글의 확정 결론으로 쓰지 않았음. </p>
+<p>처음 숫자 장면으로 돌아가 보자.</p></section>
+<section class="part" id="part-21"><p>처음 숫자 장면에서 학생이 배운 것은<br />
+동물 이름이 적힌 설명문이 아니었음. </p>
+<p>같은 문맥에서 스승의 취향에 따라<br />
+드물게 달라진 예측을 맞추며<br />
+취향 응답도 바뀌는 현상이 관찰됨. </p>
+<p>이번 논문은 그 분기를 손실에서<br />
+살리고 빼는 비교로 중요성을 확인했음.<br />
+내부 앞쪽 층과 문맥 조건도 영향을 줬음. </p>
+<p>이 증거는 숫자의 숨은 뜻을 독해했다는<br />
+설명을 요구하지 않음.<br />
+그렇다고 모든 전달 경로를<br />
+완전히 설명했다고 말할 근거도 없음. </p>
+<p>AI가 만든 답안을 학습 자료로 쓸 때<br />
+내용이 말끔한지와 학습 뒤 행동이 어떤지는<br />
+따로 확인할 필요가 있다는 시사점이 남음.</p></section>
+<section class="part" id="part-22"><p>그 실험을 따라가 볼 코드도 공개돼 있음.<br />
+2026-10-04 기준 이번 연구는<br />
+ICLR 2026 논문집과 공식 코드에서 읽을 수 있음. </p>
+<p>숫자 답안에는 끝까지 동물 이름이 없었음.<br />
+내용 필터를 통과했다는 사실만으로<br />
+학습 뒤의 취향 변화까지 판정할 순 없었음. </p>
+<p>다만 실험은 정형화된 숫자 과제 중심임.<br />
+다른 모델·새 문맥·현실 학습 자료에서<br />
+얼마나 전달되는지는 더 확인해야 함. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lmb-freiburg/divergence-tokens">공식 코드</a><br />
+<a target="_blank" rel="noopener" href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/b51b50262b492dd89bb9cd3105a46702-Abstract-Conference.html">심사 논문집</a><br />
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2507.14805">전작</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2603.09517">출력 재표현 후속작</a><br />
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2606.00995v3">활성 방향 후속작</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2606.00831v2">수정 공지가 붙은 반박</a></p>
+<p>3줄 요약<br />
+숫자를 학습한 AI는 특정 조건에서<br />
+스승의 취향도 따라갔음. <br />
+이번 연구는 희소한 분기 토큰과<br />
+앞쪽 층·문맥의 영향을 확인했음. <br />
+취향 전달의 범위와 방어 효과는<br />
+모델·데이터·평가 조건마다 재검증해야 함.</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/subliminal-learning/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2509.23886v2" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/subliminal-learning.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

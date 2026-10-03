@@ -1,0 +1,35 @@
+그림 출처와 이용 조건 · 2026-10-04 확인
+
+주 논문: Schrodi, Kempf, Barez, Brox.
+Towards Understanding Subliminal Learning: When and How Hidden Biases Transfer.
+arXiv2509.23886v2 (2026-03-05); ICLR2026.
+https://arxiv.org/abs/2509.23886v2
+https://doi.org/10.48550/arXiv.2509.23886
+fig1_p2, fig2_p4, fig3_p5, tab1_p17, fig5_p6, fig6_p7, fig7_p8,
+fig8_clean, fig27_p26, fig39_p37: 원문 Figure1/2/3/5/6/7/8/27/39와 Table1.
+q_authors: 원문1쪽 제목·저자·소속.
+q_thanks: 원문10쪽 감사의 글에서 전작 저자 세 명에 대한 토론 감사.
+q_intuition: 원문15쪽 AppendixC의 14단어 문장. 원문 두 줄의 동일 글자를 수직 재배치했으며 문장을 다시 쓰거나 바꾸지 않음.
+
+전작·후속작:
+prior_hinton: Hinton, Vinyals, Dean, Distilling the Knowledge in a Neural Network,
+arXiv1503.02531v1, 첫 페이지 제목·저자.
+https://arxiv.org/abs/1503.02531v1
+prior_cloud: Cloud et al., Subliminal Learning: Language Models Transmit Behavioral Traits via Hidden Signals in Data,
+arXiv2507.14805v1, Figure1.
+https://arxiv.org/abs/2507.14805v1
+next_paraphrase: Gisler, He, Qiu, You Didn't Have to Say It like That:
+Subliminal Learning from Faithful Paraphrases, arXiv2603.09517v1, Figure2.
+https://arxiv.org/abs/2603.09517v1
+next_steering: Blank, Bhatia, Rajamanoharan, Conmy, Nanda,
+Subliminal Learning Is Steering Vector Distillation, arXiv2606.00995v3, Figure3.
+https://arxiv.org/abs/2606.00995v3
+
+모든 논문 그림·문장 인용의 권리는 각 원저자/권리자에게 있음.
+해설에서 해당 연구 결과를 설명하기 위한 제한된 인용으로 출처와 함께 수록함.
+크롭, 해상도 조정 및 WebP 변환 외에 그래프의 데이터나 라벨을 변경하지 않음.
+주 논문의 arXiv non-exclusive distribution license는 arXiv에 대한 배포 허락임.
+이를 제3자에게 부여된 CC 재사용 허락으로 해석하지 않음.
+https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html
+원문 전체 PDF는 이 공개 저장소에 재배포하지 않음.
+다른 용도나 범위로 그림을 재사용할 경우 원저자의 이용 조건을 별도로 확인해야 함.
