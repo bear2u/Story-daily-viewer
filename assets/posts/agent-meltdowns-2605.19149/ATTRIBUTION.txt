@@ -1,0 +1,17 @@
+Agent Meltdowns — Story Daily attribution / reuse note
+Verified: 2026-10-03
+
+Primary paper:
+Rishi Jha, Harold Triedman, Arkaprabha Bhattacharya, Vitaly Shmatikov.
+"Agent Meltdowns: The Road to Hell Is Paved with Helpful Agents."
+arXiv:2605.19149v1 (submitted 2026-05-18)
+https://arxiv.org/abs/2605.19149v1
+DOI: https://doi.org/10.48550/arXiv.2605.19149
+
+License check:
+The arXiv record links to arXiv's non-exclusive license to distribute.
+That license grants distribution rights to arXiv and was not treated here as a general CC-style republication license.
+
+Therefore the public Story Daily version does NOT reproduce the paper figures/screenshots.
+Figure captions and commentary are retained, with links back to the source paper.
+The cover.svg is an original Story Daily typographic graphic created for this post.
