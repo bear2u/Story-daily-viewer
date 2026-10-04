@@ -1,0 +1,317 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="질문을 한 번에 주는 대신 단서를 나눠 말하면 무엇이 달라질까? 검색이 성공한 대화만 비교해도 답변 성적이 떨어졌음. 단서를 다시 모아 주는 효과는 검색기마다 달랐고, 반복이 오히려 악화시킨 경우도 있었음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="정답 문서를 찾은 AI가 대화하다가 틀린 이유">
+<meta property="og:description" content="질문을 한 번에 주는 대신 단서를 나눠 말하면 무엇이 달라질까? 검색이 성공한 대화만 비교해도 답변 성적이 떨어졌음. 단서를 다시 모아 주는 효과는 검색기마다 달랐고, 반복이 오히려 악화시킨 경우도 있었음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/rag-lost-in-conversation/fig1_p4.webp">
+<title>정답 문서를 찾은 AI가 대화하다가 틀린 이유 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/rag-lost-in-conversation.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">대화형 AI</span><span class="pill">RAG</span><span class="pill">에이전트 평가</span><span>·</span><time datetime="2026-10-04">2026. 10. 04</time><span>·</span><span>19분 읽기</span></div>
+<h1>정답 문서를 찾은 AI가 대화하다가 틀린 이유</h1><p class="lead">질문을 한 번에 주는 대신 단서를 나눠 말하면 무엇이 달라질까? 검색이 성공한 대화만 비교해도 답변 성적이 떨어졌음. 단서를 다시 모아 주는 효과는 검색기마다 달랐고, 반복이 오히려 악화시킨 경우도 있었음.</p>
+
+<div class="article-details"><strong>Lost in Conversation or Lost in Translation? Diagnosing Multi-Turn Degradation in RAG</strong><br>Pranav Handa · Ariful Azad (논문 당시 Texas A&amp;M University) · 2026 · arXiv v1 · 2026-09-29 공개 · 프리프린트, 심사 통과 미확인<br>원문 그림과 함께 읽는 24파트 해설 · 판본 및 출처 확인: 2026-10-04</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">정답문서두개,AI는다른날짜선택</a><a href="#part-2">날짜예시를따라간이번논문</a><a href="#part-3">검색한뒤답하는RAG가나옴</a><a href="#part-4">문단끼리도연결할수있음</a><a href="#part-5">연결잘해도대화는별도시험</a><a href="#part-6">같은문제를나눠준전작</a><a href="#part-7">같은정보인지먼저확인</a><a href="#part-8">표현과턴을가르는중간조건</a><a href="#part-9">검색창과답변창의입력차이</a><a href="#part-10">앞의틀린날짜는최종채점어떻게</a><a href="#part-11">답변성적평균은얼마나</a><a href="#part-12">단일턴최고검색기의손실</a><a href="#part-13">하락전부를턴탓할수없음</a><a href="#part-14">반복검색으로문서회수회복</a><a href="#part-15">근거를모두찾은짝만봐도</a><a href="#part-16">평균하락뒤실행간차이</a><a href="#part-17">단서를다시주면회복할까</a><a href="#part-18">세방법회복과BM25예외</a><a href="#part-19">계획에이전트붙였을때비용</a><a href="#part-20">채점이표현차이에예민한가</a><a href="#part-21">같은문제의차이는왜중요</a><a href="#part-22">이결과의짧은대화와예산범위</a><a href="#part-23">처음문서와날짜질문에답</a><a href="#part-24">2026-10-04확인상태와남은재현</a></aside><article class="article-body"><section class="part" id="part-1"><p>검색한 문서에 정답이 들어 있으면<br />
+대화형 AI도 제대로 답할까?</p>
+<p>논문 속 AI는 방송 시작일을 찾고 있었음. <br />
+검색 결과에는 뉴욕판과 애틀랜타판이 함께 나옴. <br />
+둘의 날짜를 답변 본문에 써 놓고도<br />
+마지막 답에는 뉴욕판 날짜를 골랐음. </p>
+<p>아직 사용자는 도시를 알려주지 않았음. <br />
+단서를 더 주면 이 날짜도 고쳐질까?</p>
+<p>아래 맨 끝의 날짜를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 두 후보를 설명하고 뉴욕판 날짜를 최종 답으로 선택한 대화 (Figure 11)"><img src="../assets/posts/rag-lost-in-conversation/fig11_early.webp" alt="두 후보를 설명하고 뉴욕판 날짜를 최종 답으로 선택한 대화 (Figure 11)" loading="lazy" decoding="async"></button><figcaption>두 후보를 설명하고 뉴욕판 날짜를 최종 답으로 선택한 대화 (Figure 11)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>이 날짜 선택을 더 큰 실험으로 살핀 논문임.</p>
+<p>Pranav Handa와 Ariful Azad가 썼고<br />
+논문 당시 소속은 텍사스 A&amp;M대임. <br />
+최초 공개일은 2026-09-29임. <br />
+읽은 판본은 arXiv v1, 전체 35쪽임. </p>
+<p>2026-10-04 확인 기준 프리프린트임. <br />
+공식 심사 통과나 게재처는 확인하지 못했음. <br />
+DOI도 arXiv 화면에서는 등록 대기로 표시됨. </p>
+<p>원제와 저자란은 아래에 있음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문 제목과 텍사스 A&amp;M대 저자란 (원문 p.1)"><img src="../assets/posts/rag-lost-in-conversation/header.webp" alt="논문 제목과 텍사스 A&amp;M대 저자란 (원문 p.1)" loading="lazy" decoding="async"></button><figcaption>논문 제목과 텍사스 A&amp;M대 저자란 (원문 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2609.36700v1">원문 PDF</a><br />
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2609.36700v1">arXiv 기록</a><br />
+<a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2609.36700">DOI 안내</a></p></section>
+<section class="part" id="part-3"><p>그 날짜를 고르기 전에 AI가 하는 일부터 보셈.</p>
+<p>질문을 검색기에 보내고<br />
+찾은 문서를 읽어 답을 만드는 방식임. <br />
+이런 구조를 검색 증강 생성, RAG라고 부름. </p>
+<p>쉽게 말하면<br />
+외부 자료를 찾아 읽은 뒤 답하게 만드는 것임. <br />
+정확히는 2020년 Lewis 등의 RAG 연구가<br />
+생성 모델과 위키피디아 검색 인덱스를 결합했음. <br />
+그 모델은 검색과 생성을 함께 미세조정했음. </p>
+<p>아래 왼쪽은 검색기, 오른쪽은 생성 모델임.<br />
+현재 모든 RAG가 이 학습법을 그대로 쓰는 건 아님. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 검색 인덱스와 생성 모델을 결합하는 구조 (Lewis 외 2020, Figure 1)"><img src="../assets/posts/rag-lost-in-conversation/prior_rag.webp" alt="검색 인덱스와 생성 모델을 결합하는 구조 (Lewis 외 2020, Figure 1)" loading="lazy" decoding="async"></button><figcaption>검색 인덱스와 생성 모델을 결합하는 구조 (Lewis 외 2020, Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-4"><p>검색 문서끼리 연결해야 하는 질문도 있음.</p>
+<p>어떤 교수가 어느 대학에 있는지 한 문단에 있고<br />
+그 교수의 연구 분야는 다른 문단에 있다면<br />
+두 문단의 같은 사람을 연결해야 답할 수 있음. </p>
+<p>2024년 HippoRAG는 이런 연결을 다뤘음. <br />
+오하이오주립대와 스탠퍼드 연구진이 참여했음. <br />
+쉽게 말하면 개체 사이의 관계를 따라 검색함. <br />
+정확히는 지식 그래프와 개인화 PageRank로<br />
+관련성을 퍼뜨려 근거 문단을 고름. </p>
+<p>아래 교수와 연구 분야가 이어지는 부분을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 문단 사이의 정보를 연결하는 검색 예시 (Gutiérrez 외 2024, Figure 1)"><img src="../assets/posts/rag-lost-in-conversation/prior_hippo.webp" alt="문단 사이의 정보를 연결하는 검색 예시 (Gutiérrez 외 2024, Figure 1)" loading="lazy" decoding="async"></button><figcaption>문단 사이의 정보를 연결하는 검색 예시 (Gutiérrez 외 2024, Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-5"><p>그 연결 능력도 대화에서는 따로 시험해야 함.</p>
+<p>2025년 CORAL은 대화형 RAG를 평가했음. <br />
+문단 검색과 응답 생성뿐 아니라<br />
+응답의 인용 표시도 함께 다뤘음. <br />
+주제 전환과 자유로운 답변도 평가에 넣었음. </p>
+<p>그러면 대화 시험은 이미 있었던 셈임. <br />
+이번 연구는 다른 비교를 추가함.<br />
+같은 질문을 한 번에 줄 때와<br />
+여러 번 나눠 줄 때를 짝지어 비교함. </p>
+<p>아래 제목의 Multi-turn을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 대화형 검색·응답·인용을 평가한 선행 연구 (Cheng 외 2025, 제목부)"><img src="../assets/posts/rag-lost-in-conversation/prior_coral.webp" alt="대화형 검색·응답·인용을 평가한 선행 연구 (Cheng 외 2025, 제목부)" loading="lazy" decoding="async"></button><figcaption>대화형 검색·응답·인용을 평가한 선행 연구 (Cheng 외 2025, 제목부)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>같은 질문을 나눠 주는 방식에도 전작이 있음.</p>
+<p>2025-05-09 공개된 Laban 등의 연구임. <br />
+Microsoft Research와 Salesforce Research의<br />
+연구자들이 참여했음. <br />
+하나의 완성된 요구를 작은 단서들로 나누고<br />
+대화 중에 조금씩 알려주는 실험을 만들었음. </p>
+<p>그 전작은 검색 없는 생성 작업을 살폈음. <br />
+이번 텍사스 A&amp;M대 연구는<br />
+매 턴 검색을 넣는 질문 응답으로 확장했음. <br />
+저자 명단은 서로 겹치지 않음. </p>
+<p>아래 전작의 저자와 소속을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 요구 정보를 턴마다 나눠 주는 선행 연구 (Laban 외 2025, 제목부)"><img src="../assets/posts/rag-lost-in-conversation/prior_laban.webp" alt="요구 정보를 턴마다 나눠 주는 선행 연구 (Laban 외 2025, 제목부)" loading="lazy" decoding="async"></button><figcaption>요구 정보를 턴마다 나눠 주는 선행 연구 (Laban 외 2025, 제목부)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-7"><p>그 확장에서도 같은 질문인지부터 확인해야 함.</p>
+<p>이번에는 원천 데이터셋 세 가지를 사용했음. <br />
+HotpotQA, 2WikiMultiHopQA, MuSiQue임. <br />
+MuSiQue를 추론 단계 수에 따라 나눠<br />
+평가 묶음은 다섯 개가 됐음. <br />
+각 묶음 150문제, 총 750문제임. </p>
+<p>단서를 나누면서 정답을 새로 알려주면 안 됨. <br />
+원래 관계를 빼거나 다른 사실을 더해도 안 됨. <br />
+연구진은 모든 단서 묶음을 직접 검토했음. <br />
+추론 관계에 맞춰 단서를 주는 순서도 정했음. </p>
+<p>아래는 단서 묶음의 사용자 턴 수임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 평가 묶음별 단서 수와 대화 길이 (Figure 3)"><img src="../assets/posts/rag-lost-in-conversation/fig3_p17.webp" alt="평가 묶음별 단서 수와 대화 길이 (Figure 3)" loading="lazy" decoding="async"></button><figcaption>평가 묶음별 단서 수와 대화 길이 (Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>같은 단서를 어떻게 전달하느냐를 바꾼 것임.</p>
+<p>FULL은 원래 완성된 질문을 한 번에 줌. <br />
+CONCAT은 나눈 단서를 한 메시지에 모아 줌. <br />
+SHARDED는 그 단서를 턴마다 하나씩 줌. </p>
+<p>쉽게 말하면<br />
+단서를 모은 버전이 중간 비교 대상임. <br />
+정확히는 FULL과 CONCAT의 차이로<br />
+질문 표현 변경에 따른 손실을 살핌. <br />
+CONCAT과 SHARDED로는 턴 분산을 살핌. <br />
+후자에는 검색과 답변 기회 증가도 함께 들어감. </p>
+<p>아래 처음 세 줄을 비교하면 됨.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 원래 질문·단서 모음·턴별 단서의 입력 조건 (Table 1)"><img src="../assets/posts/rag-lost-in-conversation/tab1_p5.webp" alt="원래 질문·단서 모음·턴별 단서의 입력 조건 (Table 1)" loading="lazy" decoding="async"></button><figcaption>원래 질문·단서 모음·턴별 단서의 입력 조건 (Table 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>턴마다 검색창에 무엇을 넣는지도 달랐음.</p>
+<p>CURRENT는 최신 사용자 발화만 검색함. <br />
+HISTORY는 지금까지 사용자 발화를 이어 검색함. </p>
+<p>쉽게 말하면<br />
+“그 지역에서 방송함”만 찾을지<br />
+앞에서 말한 방송 이름까지 함께 찾을지의 차이임. <br />
+정확히는 답변 모델이 받는 이력은 다름.<br />
+두 조건 모두 AI 답변까지 포함한 대화 이력을 받음. <br />
+CURRENT라고 AI의 앞 대화를 지운 건 아님. <br />
+모의 사용자와 답변 유형 분류는 GPT-4o-mini가 맡음. </p>
+<p>아래 가운데 검색 입력과 오른쪽 답변 입력을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 검색 정책과 답변 모델의 대화 입력을 구분한 실험 (Figure 1)"><img src="../assets/posts/rag-lost-in-conversation/fig1_p4.webp" alt="검색 정책과 답변 모델의 대화 입력을 구분한 실험 (Figure 1)" loading="lazy" decoding="async"></button><figcaption>검색 정책과 답변 모델의 대화 입력을 구분한 실험 (Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-10"><p>그럼 앞의 틀린 날짜는 어떻게 채점됐을까?</p>
+<p>예시의 AI는 마지막 단서를 받고<br />
+애틀랜타판 날짜로 답을 바꿨음. <br />
+이 한 대화는 실제로 회복한 예시임. </p>
+<p>채점은 한 대화의 가장 높은 시도 점수를 씀. <br />
+이 방식을 BEST라고 부름. <br />
+정답과 토큰이 얼마나 겹치는지 F1로 재고<br />
+그중 최고점을 대화 점수로 고름. <br />
+답변 시도가 없으면 0점임. <br />
+앞서 틀렸어도 뒤에서 맞히면 좋은 점수를 받음. </p>
+<p>아래 마지막 날짜가 바뀐 부분을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 추가 단서 뒤 애틀랜타판 날짜에 도달한 대화 (Figure 11)"><img src="../assets/posts/rag-lost-in-conversation/fig11_final.webp" alt="추가 단서 뒤 애틀랜타판 날짜에 도달한 대화 (Figure 11)" loading="lazy" decoding="async"></button><figcaption>추가 단서 뒤 애틀랜타판 날짜에 도달한 대화 (Figure 11)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>그렇게 회복 기회를 줘도 평균 성적은 떨어졌음.</p>
+<p>연구 전체 규모는 150만 모의 대화임. <br />
+기본 비교는 모델 10개와 검색기 7종임. <br />
+검색 없는 대조군도 따로 넣었음. </p>
+<p>검색기와 모델, 다섯 평가 묶음 평균에서<br />
+HISTORY의 F1은 5.1점 낮아졌음. <br />
+FULL 대비 상대 하락률은 11.7%임. <br />
+CURRENT는 7.1점, 상대 16.3% 하락임. <br />
+이 비율은 F1 하락률임.<br />
+정답률이 그만큼 %p 내려갔다는 뜻은 아님. </p>
+<p>아래 Mean 행과 맨 오른쪽 두 열을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 같은 질문의 단일 턴과 분할 대화 답변 성적 (Table 2)"><img src="../assets/posts/rag-lost-in-conversation/tab2_p6.webp" alt="같은 질문의 단일 턴과 분할 대화 답변 성적 (Table 2)" loading="lazy" decoding="async"></button><figcaption>같은 질문의 단일 턴과 분할 대화 답변 성적 (Table 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-12"><p>평균 성적이 높은 검색기도 손실을 피하지 못했음.</p>
+<p>HippoRAG2는 FULL 평균 50.6점으로<br />
+이 기본 비교에서 가장 높은 검색기였음. <br />
+그런데 HISTORY에서 6.8점 낮아졌음. <br />
+절대 하락 폭도 가장 컸음. <br />
+분할 대화 점수 43.8로 여전히 최고였음. </p>
+<p>모델 쪽의 예외는 Gemma-4-31B임.<br />
+평균 점수는 44.3에서 43.6으로 바뀌어<br />
+HISTORY 손실이 0.7점뿐이었음. <br />
+작은 평균 손실이면 실행마다도 안정적일까?</p>
+<p>아래 Gemma 행의 P와 U를 함께 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델과 검색기별 평균·상위 성적·실행 간 차이 (Table 8)"><img src="../assets/posts/rag-lost-in-conversation/tab8_p23.webp" alt="모델과 검색기별 평균·상위 성적·실행 간 차이 (Table 8)" loading="lazy" decoding="async"></button><figcaption>모델과 검색기별 평균·상위 성적·실행 간 차이 (Table 8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-13"><p>이 손실을 전부 대화 턴 탓으로 돌릴 수는 없음.</p>
+<p>HISTORY의 BM25는 단서를 한 메시지에 모았을 때<br />
+이미 FULL보다 11.7점 낮아졌음. <br />
+턴마다 나눠 주자 거기서 5.2점 회복했음. <br />
+최종 손실은 6.5점임. </p>
+<p>앞의 전체 상대 하락률 11.7%와<br />
+이 BM25의 11.7점은 다른 수치임. </p>
+<p>표현 변경 손실이 작은 세 방법은<br />
+검색 전에 개체나 키워드를 추출했음. <br />
+연구진은 이 전처리가 도움이 됐을 수 있다고 봄. <br />
+전처리만 바꾼 인과 실험까지 한 건 아님. </p>
+<p>아래 BM25 행의 왼쪽 Mean과 오른쪽 Mean을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 표현 변경 손실과 턴 분산 효과를 나눈 비교 (Table 3)"><img src="../assets/posts/rag-lost-in-conversation/tab3_p8.webp" alt="표현 변경 손실과 턴 분산 효과를 나눈 비교 (Table 3)" loading="lazy" decoding="async"></button><figcaption>표현 변경 손실과 턴 분산 효과를 나눈 비교 (Table 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-14"><p>반복 검색은 놓친 문서를 뒤에서 찾기도 했음.</p>
+<p>쉽게 말하면<br />
+처음 검색에 빠진 근거가 다음 검색에 잡힘. <br />
+정확히는 매 턴 상위 5개 문단을 합친 뒤<br />
+정답 근거 중 얼마나 찾았는지 재는 방식임. <br />
+이 누적 회수율은 최종 검색 한 번과 다름. </p>
+<p>HippoRAG2의 CURRENT 누적 회수율은<br />
+74.8로, FULL의 70.7보다 높았음. <br />
+그런데 답변 F1은 FULL보다 9.9점 낮았음. <br />
+검색 기회가 늘어 근거를 더 찾았어도<br />
+답변 성적은 같이 회복되지 않았음. </p>
+<p>아래 HippoRAG2의 FULL과 cumulative를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 단일 검색과 모든 턴 누적 검색의 근거 회수율 (Table 4)"><img src="../assets/posts/rag-lost-in-conversation/tab4_p9.webp" alt="단일 검색과 모든 턴 누적 검색의 근거 회수율 (Table 4)" loading="lazy" decoding="async"></button><figcaption>단일 검색과 모든 턴 누적 검색의 근거 회수율 (Table 4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-15"><p>근거를 모두 찾은 대화끼리만 비교해도 남았음.</p>
+<p>양쪽 조건 모두 정답 근거를 전부 검색한<br />
+HISTORY 대화 짝만 따로 골랐음. <br />
+조건을 만족한 짝은 54,876개임. <br />
+RAPTOR를 뺀 검색기 여섯 개의 비교임. <br />
+대상 225,000개 짝 중 24.4%에 해당함. </p>
+<p>이 짝에서도 F1은 73.7에서 62.1로 떨어짐. <br />
+차이는 11.6점임. <br />
+짝을 맞춘 부트스트랩 95% 신뢰구간은<br />
+9.9~13.4점이었음. </p>
+<p>정답 근거 옆에 방해 문단도 남아 있었음. <br />
+모든 대화를 대표하는 표본으로 읽으면 안 됨. <br />
+아래는 그 조건과 수치가 적힌 문단임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 근거를 모두 검색한 대화 짝의 답변 점수 차이 (원문 부록 B.4)"><img src="../assets/posts/rag-lost-in-conversation/q_complete.webp" alt="근거를 모두 검색한 대화 짝의 답변 점수 차이 (원문 부록 B.4)" loading="lazy" decoding="async"></button><figcaption>근거를 모두 검색한 대화 짝의 답변 점수 차이 (원문 부록 B.4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-16"><p>이 평균 차이 뒤에는 실행 간 차이가 있었음.</p>
+<p>같은 문제를 다섯 번 실행하고<br />
+90분위 점수에서 10분위 점수를 뺐음. <br />
+쉽게 말하면 좋은 실행과 나쁜 실행의 벌어짐임. <br />
+정확히는 다섯 점수를 선형 보간한<br />
+두 분위값의 차이 U를 비교한 것임. </p>
+<p>HISTORY 평균 U는 13.4에서 19.7로 커졌음. <br />
+논문의 “불안정성 47% 증가”가 이 수치임. <br />
+오답률 47% 증가와는 다름. <br />
+상위 추정 점수는 1.9점만 낮아졌음. <br />
+Gemma도 평균은 버텼지만 U는 7.6→15.0이었음. </p>
+<p>아래 With retrieval의 아래쪽 점수를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 검색 결합에서는 낮은 성적 쪽이 더 떨어진 분포 (Figure 8a)"><img src="../assets/posts/rag-lost-in-conversation/fig8a_clean.webp" alt="검색 결합에서는 낮은 성적 쪽이 더 떨어진 분포 (Figure 8a)" loading="lazy" decoding="async"></button><figcaption>검색 결합에서는 낮은 성적 쪽이 더 떨어진 분포 (Figure 8a)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-17"><p>그럼 단서를 다시 말해 주면 평균 성적도 회복될까?</p>
+<p>RECAP은 마지막에 모든 단서를 모아 한 번 더 줌. <br />
+SNOWBALL은 매 턴 앞의 단서를 함께 반복함. </p>
+<p>쉽게 말하면<br />
+답하기 전에 이미 말한 조건을 다시 보게 함. <br />
+정확히는 검색기에 들어가는 문장도 바뀜. <br />
+CURRENT라도 최신 발화 안에<br />
+누적 단서가 모두 들어가게 됨. </p>
+<p>RECAP은 마지막 턴을 알아야 하는 제약이 있음. <br />
+SNOWBALL은 중간부터 계속 적용할 수 있음. <br />
+아래 마지막 두 줄의 반복되는 상자를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 마지막 재제시와 매 턴 누적 단서 반복 조건 (Table 1)"><img src="../assets/posts/rag-lost-in-conversation/tab1_p5.webp" alt="마지막 재제시와 매 턴 누적 단서 반복 조건 (Table 1)" loading="lazy" decoding="async"></button><figcaption>마지막 재제시와 매 턴 누적 단서 반복 조건 (Table 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-18"><p>단서를 다시 말해 주자 세 방법은 크게 회복했음.</p>
+<p>보완 실험은 모델 세 개로 수행했음. <br />
+CURRENT의 RECAP에서<br />
+HippoRAG, LightRAG, ToG-2는<br />
+FULL과의 격차를 92~123% 회복했음. </p>
+<p>그래프의 100%는 정답률 100%가 아님.<br />
+처음 FULL 점수에 돌아왔다는 기준선임. </p>
+<p>나머지 검색기는 7~39% 회복에 그쳤음. <br />
+BM25의 CURRENT SNOWBALL은 -33%였음. <br />
+단서를 반복했더니 일반 분할 대화보다 악화됨. <br />
+반복 문장이 검색에도 잘 먹혀야 했음. </p>
+<p>아래 BM25의 왼쪽 막대와 파란 막대를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 검색 방식에 따라 달라진 단서 반복의 회복 효과 (Figure 5)"><img src="../assets/posts/rag-lost-in-conversation/fig5_clean.webp" alt="검색 방식에 따라 달라진 단서 반복의 회복 효과 (Figure 5)" loading="lazy" decoding="async"></button><figcaption>검색 방식에 따라 달라진 단서 반복의 회복 효과 (Figure 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-19"><p>검색에도 잘 먹히게 계획 에이전트를 붙이면?</p>
+<p>Plan-on-Graph는 작은 목표를 세우고<br />
+그래프 탐색 중 기억과 재검토를 사용함. <br />
+보완 비교는 오픈 모델 여덟 개로 수행했음. </p>
+<p>HISTORY에서 점수는 33.4와 31.3임. <br />
+단일 턴과 분할 대화의 차이는 작았음. <br />
+그런데 둘 다 높은 절대 성적은 아니었음. </p>
+<p>분할 대화 한 번의 검색용 LLM 호출은<br />
+평균 47.5회였음. ToG-2는 6.9회임. <br />
+적은 성능 하락만 보고 효율적이라고 고를 수 없음. </p>
+<p>아래 PoG 행의 짧은 막대들을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 계획형 그래프 검색과 다른 검색기의 절대 답변 성적 (Figure 7)"><img src="../assets/posts/rag-lost-in-conversation/fig7_p21.webp" alt="계획형 그래프 검색과 다른 검색기의 절대 답변 성적 (Figure 7)" loading="lazy" decoding="async"></button><figcaption>계획형 그래프 검색과 다른 검색기의 절대 답변 성적 (Figure 7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-20"><p>이 성적 차이가 채점 방식 때문에 생겼을까?</p>
+<p>같은 뜻을 다른 단어로 답하면<br />
+토큰 겹침 기반 F1이 낮아질 수 있음. <br />
+그래서 모델 세 개의 답변을<br />
+의미가 맞는지 판정하는 LLM으로 다시 채점했음. <br />
+판정 모델은 GPT-4o-mini였음. </p>
+<p>HISTORY의 평균 차이는<br />
+토큰 F1에서는 4.1점, 의미 판정에서는 3.8점임. <br />
+표현 차이만 허용해도 하락이 사라지지 않았음. <br />
+판정 LLM에도 편향이 있을 수 있어<br />
+연구진은 보강 확인으로 취급했음. </p>
+<p>아래 Mean 행의 두 Gap을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 토큰 겹침과 의미 정답 판정의 비교 (Table 10)"><img src="../assets/posts/rag-lost-in-conversation/tab10_clean.webp" alt="토큰 겹침과 의미 정답 판정의 비교 (Table 10)" loading="lazy" decoding="async"></button><figcaption>토큰 겹침과 의미 정답 판정의 비교 (Table 10)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-21"><p>이 차이를 실제 앱으로 가져갈 때 조건이 붙음.</p>
+<p>이번 비교는 원래 답이 정해진 질문에서<br />
+필요한 정보를 조금씩 주는 실험임. <br />
+중간에 사용자의 목표가 바뀌는 상황 전체를<br />
+측정한 건 아님. </p>
+<p>FULL과 CONCAT은 검색 입력도 달라지고<br />
+답변 모델의 입력도 함께 달라짐. <br />
+SHARDED에서는 검색 기회도 늘어남. <br />
+손실을 나눠 본 결과를<br />
+각 내부 원인의 확정 기여율로 읽으면 안 됨. </p>
+<p>문서를 찾았는지와 답을 맞혔는지는<br />
+이 조건 안에서도 서로 다른 측정이었음.</p></section>
+<section class="part" id="part-22"><p>이 조건의 대화 길이는 생각보다 짧았음.</p>
+<p>단서 묶음은 대체로 2~5턴임. <br />
+수백 턴이 쌓인 장기 기억 시험이 아님. <br />
+영어 단답형 질문과 고정 코퍼스를 사용했음. <br />
+한국어 학습 코치나 자유 웹검색의 하락률을<br />
+같은 숫자로 예측할 근거는 없음. </p>
+<p>모델별 답변 예산도 완전히 같지 않았음. <br />
+기본은 1,000토큰이지만<br />
+두 모델에는 10,000토큰 한도를 적용했음. <br />
+모델 순위를 크기 하나의 효과로 읽기 어려움. </p>
+<p>아래 질문 수보다 사용자 턴 수를 다시 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 장기 대화가 아닌 짧은 단서 분산 실험의 길이 (Figure 3)"><img src="../assets/posts/rag-lost-in-conversation/fig3_p17.webp" alt="장기 대화가 아닌 짧은 단서 분산 실험의 길이 (Figure 3)" loading="lazy" decoding="async"></button><figcaption>장기 대화가 아닌 짧은 단서 분산 실험의 길이 (Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-23"><p>그럼 처음의 정답 문서 질문에 돌아오면?</p>
+<p>자료를 찾는 동안 질문의 표현이 바뀌면<br />
+검색한 근거 자체가 달라질 수 있었음. <br />
+필요한 근거를 모두 찾은 대화에서도<br />
+그 근거를 골라 연결하는 답변 성적은 떨어졌음. </p>
+<p>첫 날짜 예시처럼 뒤에서 회복하는 대화도 있었음. <br />
+그래도 회복을 허용한 BEST 평균에서 손실이 남음. </p>
+<p>내가 대화형 앱을 만든다면<br />
+검색 단계에 누적 요구가 어떻게 전달되는지부터<br />
+로그로 확인하겠음. 이건 실험을 읽은 내 제안임. <br />
+단서 반복의 효과도 검색기별로 따로 시험하겠음.</p></section>
+<section class="part" id="part-24"><p>그 시험을 바로 재현할 수 있는 상태인지도 봤음.</p>
+<p>2026-10-04 확인 기준<br />
+이번 논문의 직접 후속 원문은 확보하지 못했음. <br />
+독립 재현이 끝났다고 소개할 근거도 없음. <br />
+원문에서는 코드와 결과 공개를 계획으로 적었음. </p>
+<p>아래 공개 계획 문단이 남은 다음 단계임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 코드·실험 결과·문서 공개 계획 (원문 재현성 진술)"><img src="../assets/posts/rag-lost-in-conversation/q_release.webp" alt="코드·실험 결과·문서 공개 계획 (원문 재현성 진술)" loading="lazy" decoding="async"></button><figcaption>코드·실험 결과·문서 공개 계획 (원문 재현성 진술)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>누군가 애틀랜타라고 다시 알려줬을 때<br />
+그 말이 다음 검색에도 반영되는지,<br />
+정답 근거가 다음 답에서도 연결되는지 봐야 함. </p>
+<p>3줄 요약<br />
+RAG는 정답 근거를 찾아도 분할 대화에서 틀릴 수 있었음. <br />
+이번 실험의 단서 반복 효과는 검색 방식에 따라 달랐음. <br />
+이 최신 프리프린트는 공개 코드와 독립 재현 확인이 남았음.</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/rag-lost-in-conversation/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2609.36700v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/rag-lost-in-conversation.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

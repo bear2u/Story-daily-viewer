@@ -1,0 +1,37 @@
+그림 출처와 이용 조건 · 2026-10-04 확인
+
+주 논문:
+Pranav Handa and Ariful Azad, Texas A&M University.
+Lost in Conversation or Lost in Translation? Diagnosing Multi-Turn Degradation in RAG.
+arXiv:2609.36700v1, 2026-09-29.
+https://arxiv.org/abs/2609.36700v1
+https://arxiv.org/pdf/2609.36700v1
+https://doi.org/10.48550/arXiv.2609.36700 (arXiv 화면상 등록 대기)
+주 논문 arXiv 표시 라이선스: Creative Commons Attribution 4.0 International.
+https://creativecommons.org/licenses/by/4.0/
+사용: Figure1/3/5/7/8a/11, Table1/2/3/4/8/10, 제목부,
+부록B.4의완료근거짝문단,재현성진술의공개계획문단.
+변경: 설명에해당하는영역크롭·해상도조정·PNG/WebP변환.
+수치·축·그래프라벨은변경하지않음. 해설·번역은새로작성.
+저자가이해설을승인했다는뜻은아님.
+
+선행 연구:
+Patrick Lewis et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.
+arXiv2005.11401v4, Figure1. 최초공개2020-05-22,읽은판본2021-04-12.
+https://arxiv.org/abs/2005.11401v4
+Bernal Jiménez Gutiérrez et al. HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models.
+arXiv2405.14831v3, Figure1. 최초공개2024-05-23,읽은판본2025-01-14.
+https://arxiv.org/abs/2405.14831v3
+위두논문의arXiv라이선스는non-exclusive distribution license임.
+https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html
+이것은arXiv에대한배포허락이며이해설이일반CC재사용허락으로확대하지않음.
+
+Yiruo Cheng et al. CORAL: Benchmarking Multi-turn Conversational Retrieval-Augmented Generation.
+Findings of NAACL2025, 제목·저자·소속. ©2025 Association for Computational Linguistics.
+https://aclanthology.org/2025.findings-naacl.72/
+Philippe Laban, Hiroaki Hayashi, Yingbo Zhou, Jennifer Neville.
+LLMs Get Lost In Multi-Turn Conversation. arXiv2505.06120v1,제목·저자·소속.
+https://arxiv.org/abs/2505.06120v1
+선행자료는연구계보를설명하기위한제한적인인용이며권리는각원권리자에게있음.
+공개저장소에는원문PDF전체를복제하지않음.
+다른용도로재사용할때는각원문의이용조건을확인해야함.
