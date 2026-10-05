@@ -1,0 +1,24 @@
+Korean explanation: 코딩 AI는 모델 바깥에서 뭘 하고 있을까
+Verified: 2026-10-06
+
+Main paper: Paul Barbaste, Tristan Darrigol, Germain Vu, Tom Wiltberger.
+Harness Engineering: Anatomy, Architecture, and Evolution of Coding Agents — A Source-Code Study of Eleven Systems.
+arXiv:2609.00006v1. https://arxiv.org/abs/2609.00006v1
+https://doi.org/10.48550/arXiv.2609.00006
+License verified through arXiv's view license: CC BY 4.0.
+https://creativecommons.org/licenses/by/4.0/
+All main-paper figures/tables/text snippets are original PDF crops or size-adjusted raster exports. Some tables and listings show selected rows/lines as identified in captions. No contents, numbers, or chart marks were retouched. Captioned attribution remains beside every reproduced item.
+
+Prior ReAct figure: Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao. ReAct: Synergizing Reasoning and Acting in Language Models, arXiv:2210.03629v3, Figure 1 (p.2). https://arxiv.org/abs/2210.03629v3
+License verified through arXiv: CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+Original figure rasterized, resized; no content change.
+
+Prior SWE-agent figure: John Yang, Carlos E. Jimenez, Alexander Wettig, Kilian Lieret, Shunyu Yao, Karthik Narasimhan, Ofir Press. SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering, arXiv:2405.15793v3, Figure 1 (p.1). https://arxiv.org/abs/2405.15793v3
+License verified through arXiv: CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+Original figure rasterized, resized; no content change.
+
+Inside the Scaffold header: Benjamin Rombaut. Inside the Scaffold: A Source-Code Taxonomy of Coding Agent Architectures, arXiv:2604.03515v2, p.1 title and author crop. https://arxiv.org/abs/2604.03515v2
+License verified through arXiv: CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+PDF title/author region cropped, resized; no content change.
+
+No endorsement by any original author, institution, or product developer is implied.

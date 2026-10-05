@@ -1,0 +1,374 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="버그 하나를 고치라는 말이 파일 수정과 테스트로 이어지기까지. 코딩 하네스 10개와 OpenClaw 대조점의 소스를 읽은 연구임. 범용 프레임워크와 벡터 코드 검색의 부재가 나왔지만, SDK·대화 기억·표본 밖 예외를 함께 봐야 함.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="코딩 AI는 모델 바깥에서 뭘 하고 있을까">
+<meta property="og:description" content="버그 하나를 고치라는 말이 파일 수정과 테스트로 이어지기까지. 코딩 하네스 10개와 OpenClaw 대조점의 소스를 읽은 연구임. 범용 프레임워크와 벡터 코드 검색의 부재가 나왔지만, SDK·대화 기억·표본 밖 예외를 함께 봐야 함.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/harness-engineering/fig1_p4.webp">
+<title>코딩 AI는 모델 바깥에서 뭘 하고 있을까 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/harness-engineering.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">코딩 에이전트</span><span class="pill">개발자 도구</span><span class="pill">소프트웨어 구조</span><span>·</span><time datetime="2026-10-06">2026. 10. 06</time><span>·</span><span>16분 읽기</span></div>
+<h1>코딩 AI는 모델 바깥에서 뭘 하고 있을까</h1><p class="lead">버그 하나를 고치라는 말이 파일 수정과 테스트로 이어지기까지. 코딩 하네스 10개와 OpenClaw 대조점의 소스를 읽은 연구임. 범용 프레임워크와 벡터 코드 검색의 부재가 나왔지만, SDK·대화 기억·표본 밖 예외를 함께 봐야 함.</p>
+
+<div class="article-details"><strong>Harness Engineering: Anatomy, Architecture, and Evolution of Coding Agents — A Source-Code Study of Eleven Systems</strong><br>Paul Barbaste · Tristan Darrigol · Germain Vu · Tom Wiltberger (논문 당시 Inclusive Brains / Wavestone AI Lab) · 2026 · arXiv v1 · 공식 기록상 2026-07-15 최초 공개 · 프리프린트, 공식 심사 통과·게재처 미확인<br>원문 그림과 함께 읽는 25파트 해설 · 판본 및 출처 확인: 2026-10-06</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">버그 요청과 모델 바깥</a><a href="#part-2">논문 정보와 심사 상태</a><a href="#part-3">10개와 대조점 하나</a><a href="#part-4">ReAct의 추론·행동·관찰</a><a href="#part-5">SWE-agent의 ACI</a><a href="#part-6">동시기 Rombaut 연구</a><a href="#part-7">일곱 하위 시스템</a><a href="#part-8">가운데의 반복문</a><a href="#part-9">검증 없이 끝내지 않기</a><a href="#part-10">범용 프레임워크의 부재</a><a href="#part-11">도움말 RAG와 AI SDK 예외</a><a href="#part-12">코드 탐색의 벡터 검색 0</a><a href="#part-13">대화 기억과 표본 밖 예외</a><a href="#part-14">파일 편집 인터페이스</a><a href="#part-15">도구 정의를 나중에 읽기</a><a href="#part-16">압축된 입력과 남은 기록</a><a href="#part-17">누가 영구 기억을 쓰나</a><a href="#part-18">허용 판단과 실행 격리</a><a href="#part-19">Skills와 MCP의 다른 역할</a><a href="#part-20">하네스와 프레임워크의 양방향</a><a href="#part-21">4월에서 7월로 source diff</a><a href="#part-22">실행 실험과 다른 소스 조사</a><a href="#part-23">90줄 예시의 무증명 추측</a><a href="#part-24">처음 버그 요청에 답하면</a><a href="#part-25">남은 평가와 세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>버그 하나 고쳐 달라고 했음.<br />
+예를 들어 빈 입력에서 함수가 터지는 상황임.</p>
+<p>모델이 수정할 코드를 써 줄 수는 있음.<br />
+근데 어느 파일을 열어야 할까?<br />
+수정은 누가 적용하고, 테스트는 언제 돌릴까?<br />
+모델이 다 고쳤다고 말하면 끝내도 될까?</p>
+<p>이 요청을 실제 작업으로 잇는<br />
+모델 바깥의 코드가 따로 있음.<br />
+논문은 그 런타임을 하네스라고 부름. </p>
+<p>원문의 정의에서도 모델과 하네스를 나눔.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델과 세상을 이어 주는 하네스의 정의 (Barbaste 외, 원문 p.3)"><img src="../assets/posts/harness-engineering/q_definition.webp" alt="모델과 세상을 이어 주는 하네스의 정의 (Barbaste 외, 원문 p.3)" loading="lazy" decoding="async"></button><figcaption>모델과 세상을 이어 주는 하네스의 정의 (Barbaste 외, 원문 p.3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>그 바깥을 소스코드로 들여다본 논문임.</p>
+<p>제목은 Harness Engineering:<br />
+Anatomy, Architecture,<br />
+and Evolution of Coding Agents<br />
+A Source-Code Study of Eleven Systems임. <br />
+Paul Barbaste, Tristan Darrigol,<br />
+Germain Vu, Tom Wiltberger가 썼음. <br />
+논문 당시 Barbaste는 Inclusive Brains와<br />
+Wavestone AI Lab 소속이고,<br />
+나머지 세 명은 Wavestone AI Lab임. </p>
+<p>공식 arXiv 최초 공개일은 2026-07-15.<br />
+읽은 건 v1 원문 83쪽 전체임. <br />
+2026-10-06 확인 기준 프리프린트임.<br />
+공식 심사 통과나 게재처는 확인 못했음. </p>
+<p>아래 제목부에 저자와 당시 소속이 있음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: Harness Engineering 제목·저자·소속 (원문 p.1)"><img src="../assets/posts/harness-engineering/header.webp" alt="Harness Engineering 제목·저자·소속 (원문 p.1)" loading="lazy" decoding="async"></button><figcaption>Harness Engineering 제목·저자·소속 (원문 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2609.00006v1">arXiv 원문</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2609.00006v1">PDF</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2609.00006">DOI</a></p></section>
+<section class="part" id="part-3"><p>그 논문의 비교표를 보기 전에<br />
+표본부터 봐야 함.</p>
+<p>Claude Code, Codex CLI, Gemini CLI,<br />
+Mistral Vibe, OpenHands, Aider,<br />
+Mini-SWE-Agent, Hermes, Pi,<br />
+OpenCode, OpenClaw의 11개임. </p>
+<p>엄밀히는 코딩 하네스 10개와<br />
+개인 비서 연결 허브인 OpenClaw 대조점임.<br />
+Omnigent는 이 분모 밖의 별도 대조 사례임. </p>
+<p>설계 철학과 성숙도 등을 보고 골랐고<br />
+성능 순위를 매긴 실험은 아님. <br />
+주로 2026년 7월 버전을 고정해 읽었음.<br />
+Claude Code는 3월 유통 소스가 예외임. </p>
+<p>표의 버전 칸이 관찰 시점을 고정해 줌.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 조사한 11개 시스템의 소스 버전과 날짜 (원문 Table 3)"><img src="../assets/posts/harness-engineering/tab3_p10.webp" alt="조사한 11개 시스템의 소스 버전과 날짜 (원문 Table 3)" loading="lazy" decoding="async"></button><figcaption>조사한 11개 시스템의 소스 버전과 날짜 (원문 Table 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-4"><p>모델 바깥 코드는 갑자기 생긴 건 아님.</p>
+<p>2022-10-06 공개된 ReAct는<br />
+추론과 행동을 번갈아 만드는 방법을 보였음.<br />
+2023년 ICLR에 실린 연구임. </p>
+<p>쉽게 말하면 답을 머릿속에서만 완성하지 않고<br />
+검색을 해 본 뒤 그 결과를 읽으며 이어 가는 것임.</p>
+<p>정확히는 추론 기록과 작업 행동을 섞고,<br />
+환경에서 돌아온 관찰로 다음 행동을 정함.<br />
+이번 논문도 이 반복을 계보의 기초로 인용함. </p>
+<p>그림에서 Thought, Action, Observation이<br />
+번갈아 나오는 곳을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 추론·행동·관찰을 섞는 ReAct 예시 (Yao 외, Figure 1)"><img src="../assets/posts/harness-engineering/prior_react.webp" alt="추론·행동·관찰을 섞는 ReAct 예시 (Yao 외, Figure 1)" loading="lazy" decoding="async"></button><figcaption>추론·행동·관찰을 섞는 ReAct 예시 (Yao 외, Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-5"><p>그 반복을 코드 작업으로 옮기면<br />
+행동을 어떻게 표현할지가 문제가 됨.</p>
+<p>2024-05-06 공개된 SWE-agent는<br />
+모델이 파일을 찾고 수정하고 테스트하는<br />
+전용 인터페이스를 연구했음.<br />
+NeurIPS 2024에 실린 논문임. </p>
+<p>명령만 있는 게 아님.<br />
+컴퓨터가 돌려주는 결과의 형식도 포함함.<br />
+이걸 agent-computer interface, ACI라고 부름. </p>
+<p>ReAct와 SWE-agent에는<br />
+Shunyu Yao와 Karthik Narasimhan이 함께 있음.<br />
+이번 Wavestone 연구팀과는 다른 저자들임. </p>
+<p>아래 가운데 ACI가 모델과 파일 사이에 있음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 파일 탐색·수정과 반환 결과를 잇는 ACI (Yang 외, SWE-agent Figure 1)"><img src="../assets/posts/harness-engineering/prior_swe.webp" alt="파일 탐색·수정과 반환 결과를 잇는 ACI (Yang 외, SWE-agent Figure 1)" loading="lazy" decoding="async"></button><figcaption>파일 탐색·수정과 반환 결과를 잇는 ACI (Yang 외, SWE-agent Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>이런 바깥 코드를 나란히 조사한 연구도 있음.</p>
+<p>Benjamin Rombaut가 쓴<br />
+Inside the Scaffold임.<br />
+최초 공개일은 2026-04-03이고,<br />
+오픈소스 코딩 에이전트 13개를<br />
+12개 차원으로 비교했음. </p>
+<p>이번 저자들은 자기 연구의 4월판과<br />
+동시기에 진행된 상보적 연구라고 소개함. <br />
+Rombaut 논문이 이번 팀의 전작인 건 아님. </p>
+<p>표본이 다르다는 점을 기억해두셈.<br />
+뒤의 코드 검색 이야기에서 다시 나옴.</p>
+<p>아래 제목부에도 단독 저자가 적혀 있음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 동시기 구조 조사 Inside the Scaffold의 제목·저자 (Rombaut, p.1)"><img src="../assets/posts/harness-engineering/prior_scaffold.webp" alt="동시기 구조 조사 Inside the Scaffold의 제목·저자 (Rombaut, p.1)" loading="lazy" decoding="async"></button><figcaption>동시기 구조 조사 Inside the Scaffold의 제목·저자 (Rombaut, p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2604.03515v2">Rombaut 원문</a></p></section>
+<section class="part" id="part-7"><p>이번은 그 바깥을 일곱 장치로 나눴음. </p>
+<p>가운데는 모델을 부르는 반복문임.<br />
+모델 연결과 도구 실행이 붙고,<br />
+기억과 입력 문맥도 관리함. <br />
+실행을 허용할지 판단하는 장치,<br />
+다른 에이전트를 부르는 장치,<br />
+기능을 더 붙이는 인터페이스도 있음. </p>
+<p>쉽게 말하면 모델이 제안한 일을<br />
+실제 파일과 프로그램에 이어 주는 코드임.<br />
+정확히는 이 반복·도구·문맥·통제 등을<br />
+묶는 런타임이 하네스임. </p>
+<p>그림 가운데 Agent Loop에서<br />
+주변 장치로 이어지는 화살표를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 코딩 하네스의 일곱 하위 시스템과 인터페이스 (원문 Figure 1)"><img src="../assets/posts/harness-engineering/fig1_p4.webp" alt="코딩 하네스의 일곱 하위 시스템과 인터페이스 (원문 Figure 1)" loading="lazy" decoding="async"></button><figcaption>코딩 하네스의 일곱 하위 시스템과 인터페이스 (원문 Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>그 일곱 장치의 가운데부터 열어 보면<br />
+의외로 반복문이 그대로 보임.</p>
+<p>Mini-SWE-Agent의 압축된 예시는<br />
+모델 호출, 행동 실행, 결과 기록을 반복함. </p>
+<p>예를 들어 모델이 테스트 명령을 제안하면<br />
+런타임이 명령을 실행함.<br />
+실패 로그를 기록해 다시 모델에 보냄.<br />
+모델은 그 로그를 보고 다음 행동을 제안함. </p>
+<p>모델의 생각과 실제 실행 결과 사이를<br />
+이 반복문이 계속 이어 주는 구조임. </p>
+<p>아래 query와 execute_actions,<br />
+마지막 observation 기록을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 호출·실행·관찰 기록을 반복하는 최소형 루프 (원문 Listing 1 일부)"><img src="../assets/posts/harness-engineering/listing1.webp" alt="호출·실행·관찰 기록을 반복하는 최소형 루프 (원문 Listing 1 일부)" loading="lazy" decoding="async"></button><figcaption>호출·실행·관찰 기록을 반복하는 최소형 루프 (원문 Listing 1 일부)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>반복은 모델이 끝내자고 할 때도 문제임.</p>
+<p>파일은 바뀌었는데 테스트 없이<br />
+다 고쳤다고 말하는 장면을 생각해 보셈.</p>
+<p>Aider는 수정 뒤 lint와 테스트의 실패를<br />
+모델에 돌려 다시 고치게 하는 경로가 있음.<br />
+기본 reflection 상한은 3회임. </p>
+<p>Hermes는 종료 쪽에 장치를 둠.<br />
+코드를 바꾼 뒤 최신 검증 흔적이 없으면<br />
+텍스트로만 끝내려는 답을 계속 실행으로 바꿈. <br />
+이게 verify-on-stop임.<br />
+검증 흔적이 버그 해결을 보장하진 않음. </p>
+<p>원문에서도 종료를 막는 guard로 설명함.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 최신 검증 없이 끝내려는 응답을 이어 가게 하는 장치 (원문 p.15)"><img src="../assets/posts/harness-engineering/q_verify.webp" alt="최신 검증 없이 끝내려는 응답을 이어 가게 하는 장치 (원문 p.15)" loading="lazy" decoding="async"></button><figcaption>최신 검증 없이 끝내려는 응답을 이어 가게 하는 장치 (원문 p.15)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-10"><p>이 반복을 묶는 프레임워크부터<br />
+찾았는데, 저자들이 발견한 건 부재였음.</p>
+<p>LangChain, LangGraph 같은<br />
+범용 에이전트 프레임워크를 검사했음.<br />
+고정한 11개에서 에이전트 실행 경로의<br />
+해당 import를 찾지 못했다고 함. </p>
+<p>여기서 프레임워크는<br />
+에이전트의 진행 순서를 묶는 공통 틀을 뜻함.<br />
+모델 API 연결 라이브러리와는 구분한 것임. </p>
+<p>조사는 의존성 목록과 소스 검색에 기반함.<br />
+다른 방식을 쓰면 성능이 나빠진다는 실험은 아님. </p>
+<p>원문에서 production agent code path라는<br />
+범위 표현을 놓치면 안 됨.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 범용 프레임워크의 실행 경로 import를 못 찾았다는 관찰 (원문 p.53)"><img src="../assets/posts/harness-engineering/q_framework.webp" alt="범용 프레임워크의 실행 경로 import를 못 찾았다는 관찰 (원문 p.53)" loading="lazy" decoding="async"></button><figcaption>범용 프레임워크의 실행 경로 import를 못 찾았다는 관찰 (원문 p.53)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>그렇다고 전부 맨손으로 짠 건 아님.</p>
+<p>Aider는 선택 기능인 /help에서<br />
+LlamaIndex로 자기 도움말 문서를 검색함.<br />
+에이전트 진행 순서를 맡긴 건 아님. </p>
+<p>OpenCode는 Vercel AI SDK를 사용함.<br />
+이건 모델 제공자 연결과 도구 호출을<br />
+다루는 라이브러리로 분류했음. </p>
+<p>검색 결과를 모델 답에 붙이는 걸<br />
+RAG, 검색 증강 생성이라고 부름.<br />
+도움말 RAG가 있다는 사실과<br />
+범용 에이전트 틀을 쓴다는 말은 다른 이야기임. </p>
+<p>원문도 두 예외를 바로 붙여 적었음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: Aider 도움말 검색과 OpenCode AI SDK의 경계 사례 (원문 p.53)"><img src="../assets/posts/harness-engineering/q_exceptions.webp" alt="Aider 도움말 검색과 OpenCode AI SDK의 경계 사례 (원문 p.53)" loading="lazy" decoding="async"></button><figcaption>Aider 도움말 검색과 OpenCode AI SDK의 경계 사례 (원문 p.53)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-12"><p>그럼 하네스는 코드 파일을 어떻게 찾을까?</p>
+<p>여기서 또 하나의 0이 나옴.<br />
+이 11개 표본은 코드 탐색에<br />
+벡터 임베딩 검색을 쓰지 않았다는 관찰임. </p>
+<p>임베딩은 내용을 숫자 벡터로 바꿔<br />
+의미가 가까운 것을 찾게 하는 표현임.<br />
+이 조사에서 코드를 찾는 주된 수단은<br />
+문자열 검색과 파일·구문 구조였음. </p>
+<p>예를 들어 ripgrep로 함수 이름을 찾고<br />
+필요한 파일을 열어 읽는 방식임. <br />
+tree-sitter는 코드를 구문 구조로 읽고<br />
+함수 이름 같은 심벌을 뽑는 도구임.<br />
+Aider는 그 관계를 순위화한<br />
+RepoMap도 만듦. </p>
+<p>표 오른쪽에서 실제 검색 수단을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 문자열·파일·구문 구조를 쓰는 코드 탐색 (원문 Table 13 일부)"><img src="../assets/posts/harness-engineering/tab13_top.webp" alt="문자열·파일·구문 구조를 쓰는 코드 탐색 (원문 Table 13 일부)" loading="lazy" decoding="async"></button><figcaption>문자열·파일·구문 구조를 쓰는 코드 탐색 (원문 Table 13 일부)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-13"><p>이 0을 기억 검색까지 넓히면 틀림.</p>
+<p>OpenClaw의 기본 대화 기억 검색은<br />
+임베딩과 문자열 검색을 함께 씀.<br />
+sqlite-vec KNN과 FTS5/BM25의 조합임. <br />
+코드 탐색과 대화 회상은 검색 대상이 다름.</p>
+<p>원문 앞쪽의 기억 부재 문장은<br />
+뒤쪽의 이 구체적 설명과 맞지 않음.<br />
+여기서는 Table 13의 예외를 따랐음. </p>
+<p>아까 Rombaut의 다른 표본도 기억해두셈.<br />
+그 논문에는 이번 11개 밖의 Moatless Tools가<br />
+FAISS와 LlamaIndex로 코드를 검색하는 사례가 있음. <br />
+모든 코딩 AI에서 벡터 검색이 없다는 뜻은 아님.</p>
+<p>아래에는 conversation memory only가 적혀 있음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 코드 탐색과 구분한 OpenClaw의 기본 대화 기억 검색 (원문 Table 13 일부)"><img src="../assets/posts/harness-engineering/tab13_memory.webp" alt="코드 탐색과 구분한 OpenClaw의 기본 대화 기억 검색 (원문 Table 13 일부)" loading="lazy" decoding="async"></button><figcaption>코드 탐색과 구분한 OpenClaw의 기본 대화 기억 검색 (원문 Table 13 일부)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-14"><p>찾은 코드를 고칠 때도 인터페이스가 갈림.</p>
+<p>예를 들어 모델이 찾아 바꿀 문장을 냈는데<br />
+실제 파일과 공백 하나가 다르다고 해 보셈.<br />
+정확 문자열 교체라면 대상을 못 찾을 수 있음.<br />
+비슷한 문자열까지 찾는 fuzzy matching은<br />
+허용할 차이를 따로 정해야 함. </p>
+<p>이번 표에는 문자열 교체, 패치,<br />
+fuzzy matching 같은 설계가 나란히 있음. <br />
+어떤 편집 방식이 항상 더 좋다는 실험은 아님. </p>
+<p>OpenCode는 모델에 따라 갈라짐.<br />
+GPT 계열에는 apply_patch,<br />
+그 밖에는 string edit 경로를 씀. </p>
+<p>표에서 Matching과 Fallback 칸을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 파일을 찾고 수정 실패를 처리하는 편집 방식들 (원문 Table 7)"><img src="../assets/posts/harness-engineering/tab7_p28.webp" alt="파일을 찾고 수정 실패를 처리하는 편집 방식들 (원문 Table 7)" loading="lazy" decoding="async"></button><figcaption>파일을 찾고 수정 실패를 처리하는 편집 방식들 (원문 Table 7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-15"><p>수정 도구가 늘면<br />
+모델에게 뭘 보여줄지도 문제가 됨.</p>
+<p>도구 이름과 사용법도 모델 입력을 차지함.<br />
+전부 처음부터 펼치기보다<br />
+필요할 때 찾아 불러오는 설계가 있음. <br />
+이걸 deferred tool loading이라고 부름. </p>
+<p>Claude Code의 ToolSearch,<br />
+Codex의 MCP 도구 검색이 그 사례임. <br />
+검색으로 선택한 도구의 정의를<br />
+모델이 쓸 수 있게 하는 방식임. </p>
+<p>원문의 구현 설명이지<br />
+실제 속도나 비용 절감량을 잰 결과는 아님. </p>
+<p>아래 tool_search와 defer_loading을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 도구 정의를 검색해 필요한 시점에 불러오는 설계 (원문 p.28 일부)"><img src="../assets/posts/harness-engineering/q_deferred.webp" alt="도구 정의를 검색해 필요한 시점에 불러오는 설계 (원문 p.28 일부)" loading="lazy" decoding="async"></button><figcaption>도구 정의를 검색해 필요한 시점에 불러오는 설계 (원문 p.28 일부)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-16"><p>도구 설명뿐 아니라 대화도 계속 늘어남.</p>
+<p>테스트 로그와 수정 결과를 계속 붙이면<br />
+언젠가는 모델 입력 한도에 닿음.<br />
+그전에 입력을 줄이는 context compaction을 함. </p>
+<p>쉽게 말하면 다음 호출에 보낼 기록을<br />
+요약하거나 일부 덜어 내는 것임.<br />
+정확히는 모델 입력 문맥을 압축하는 작업임.<br />
+저장한 기록 전체의 삭제와는 다름. </p>
+<p>Hermes는 압축 후 새 child session을 만들고<br />
+SQLite에서 원래 parent와 연결함.<br />
+입력은 줄어도 기록의 계보는 남길 수 있음. </p>
+<p>아래에는 여러 입력 관리 전략이 나옴.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전체 기록 유지부터 요약·선별까지의 문맥 관리 전략 (원문 Figure 4)"><img src="../assets/posts/harness-engineering/fig4_p31.webp" alt="전체 기록 유지부터 요약·선별까지의 문맥 관리 전략 (원문 Figure 4)" loading="lazy" decoding="async"></button><figcaption>전체 기록 유지부터 요약·선별까지의 문맥 관리 전략 (원문 Figure 4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-17"><p>대화 기록과 다음에 쓸 기억도 다름.</p>
+<p>다음 작업에 남길 내용을 누가 고르고<br />
+언제 파일에 반영할지 설계해야 함.</p>
+<p>Codex는 추출과 합치기를 나눔.<br />
+먼저 session에서 정보를 뽑고,<br />
+격리된 별도 에이전트가<br />
+뽑은 기억을 합쳐 관리함. <br />
+Gemini CLI에는 추출한 기억 수정안을<br />
+검토함에 두는 경로가 있음. </p>
+<p>Hermes는 MEMORY.md 2,200자,<br />
+USER.md 1,375자로 제한함.<br />
+토큰 수가 아니라 글자 수임. <br />
+또 대화 시작 때 모델 입력 앞쪽에 붙일<br />
+기억 내용을 고정함.<br />
+중간 수정이 이 입력을 바로 바꾸진 않음. </p>
+<p>아래 frozen snapshot을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 기억 크기와 고정 스냅샷을 설명한 문장 (원문 p.34 일부)"><img src="../assets/posts/harness-engineering/q_memory.webp" alt="기억 크기와 고정 스냅샷을 설명한 문장 (원문 p.34 일부)" loading="lazy" decoding="async"></button><figcaption>기억 크기와 고정 스냅샷을 설명한 문장 (원문 p.34 일부)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-18"><p>기억 파일이든 코드 파일이든<br />
+쓰기 전에 허용할지 판단해야 함.</p>
+<p>근데 실행 승인을 받는 것과<br />
+프로그램이 갈 수 있는 범위를 막는 건 다름. </p>
+<p>쉽게 말하면 실행해도 되느냐는 permission이고,<br />
+실행한 코드가 어디까지 접근하느냐는 isolation임. <br />
+예를 들어 Git worktree로 파일 작업을 나눠도<br />
+그 자체가 OS 샌드박스가 되는 건 아님. </p>
+<p>논문은 이런 통제 층을 구분해 비교했음.<br />
+보안 공격에 얼마나 버텼는지 실험한 건 아님. </p>
+<p>그림의 규칙 검사·모델 분류·사용자 확인을<br />
+따로 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 여러 단계로 실행을 검사하는 Claude Code 설계 (원문 Figure 5)"><img src="../assets/posts/harness-engineering/permission_layers.webp" alt="여러 단계로 실행을 검사하는 Claude Code 설계 (원문 Figure 5)" loading="lazy" decoding="async"></button><figcaption>여러 단계로 실행을 검사하는 Claude Code 설계 (원문 Figure 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-19"><p>이 허용·실행 규칙 위로<br />
+확장 기능도 붙음.</p>
+<p>정해 둔 작업법을 읽어 실행하는 skills와<br />
+외부 도구를 연결하는 MCP가 그 사례임. <br />
+둘은 같은 역할을 겨루는 기능이 아님. </p>
+<p>고정한 버전에서 SKILL.md는 9/11,<br />
+MCP는 8/11이 채택했음.<br />
+OpenClaw를 빼면 코딩 하네스는 8/10, 7/10임. <br />
+사용자 점유율이나 작업 성공률은 아님.</p>
+<p>Skills는 설명부터 보여 주고<br />
+필요할 때 전체 지침을 읽는 방식이 많았음.<br />
+Pi는 skills와 CLI를 선호하며 MCP는 안 썼음. </p>
+<p>아래 Skills? 칸에서 채택 여부를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 확장 방식의 채택 여부를 비교한 표 (원문 Table 10)"><img src="../assets/posts/harness-engineering/tab10_p49.webp" alt="확장 방식의 채택 여부를 비교한 표 (원문 Table 10)" loading="lazy" decoding="async"></button><figcaption>확장 방식의 채택 여부를 비교한 표 (원문 Table 10)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-20"><p>이런 하네스를<br />
+SDK로 제공한 사례도 있음.</p>
+<p>SDK는 다른 프로그램에서 기능을<br />
+가져다 쓸 수 있게 묶은 개발 도구임.<br />
+논문은 Claude Agent SDK와<br />
+OpenHands SDK 등을 이 방향의 사례로 듦. </p>
+<p>반대 방향도 있음.<br />
+LangGraph 위에 만든 Deep Agents는<br />
+프레임워크 쪽에서 하네스가 된 사례임. <br />
+이번 11개 표본 바깥이라는 점도 붙여야 함.</p>
+<p>저자들은 이런 양방향 변화를<br />
+도구에서 플랫폼으로 가는 흐름으로 해석함. <br />
+프레임워크가 사라졌다는 결론과는 거리가 있음.</p>
+<p>아래 표의 두 방향을 같이 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 하네스의 SDK화와 프레임워크의 하네스화 (원문 Table 15)"><img src="../assets/posts/harness-engineering/tab15_p60.webp" alt="하네스의 SDK화와 프레임워크의 하네스화 (원문 Table 15)" loading="lazy" decoding="async"></button><figcaption>하네스의 SDK화와 프레임워크의 하네스화 (원문 Table 15)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-21"><p>이런 변화는 4월판과 비교해 적은 것임.</p>
+<p>저자들은 4월의 8개를 유지하고<br />
+7월판에서 11개로 넓혔다고 설명함. <br />
+같은 시스템의 과거 소스를 남겨 두고<br />
+새로 고정한 소스와 차이를 본 것임. </p>
+<p>행동 정책 일부가 프롬프트 문장에서<br />
+설정으로 옮겨간 변화도 소개함. </p>
+<p>다만 별도 4월 원문은 확보 못했음.<br />
+이 변화 설명은 이번 원문에 근거함. <br />
+같은 버그를 같은 모델로 고친 성능 실험도 아님. </p>
+<p>원문은 같은 시스템을 다시 고정했다고 적음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 4월 snapshot을 유지해 분기 사이 변화를 본 방법 (원문 p.62)"><img src="../assets/posts/harness-engineering/q_evolution.webp" alt="4월 snapshot을 유지해 분기 사이 변화를 본 방법 (원문 p.62)" loading="lazy" decoding="async"></button><figcaption>4월 snapshot을 유지해 분기 사이 변화를 본 방법 (원문 p.62)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-22"><p>그 비교도 어디까지 읽었는지에 묶여 있음.</p>
+<p>이 연구는 소스를 읽었고<br />
+실행 시간·비용·안전 효과는 직접 재지 않았음. <br />
+모델과 배포 조건이 다른 성능 숫자도<br />
+직접 비교처럼 읽히지 않게 표에서 뺐음. </p>
+<p>특히 Claude Code는 3월 유통 소스임.<br />
+저자도 재현성에서 가장 약한 부분이라고 적음. <br />
+내부 fork와 동적 import로 불리는 plugin 등은<br />
+실행 경로를 끝까지 추적하지 않았음. </p>
+<p>소스 분석과 집필에 Claude Code의<br />
+상당한 도움을 받았다는 공개도 있음. <br />
+저자들의 확인과 독립 재현은 구분해야 함.</p>
+<p>아래 source-code reading과<br />
+not runtime measurement를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 소스 독해와 실제 실행 측정을 구분한 한계 (원문 p.66 일부)"><img src="../assets/posts/harness-engineering/q_limits.webp" alt="소스 독해와 실제 실행 측정을 구분한 한계 (원문 p.66 일부)" loading="lazy" decoding="async"></button><figcaption>소스 독해와 실제 실행 측정을 구분한 한계 (원문 p.66 일부)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-23"><p>그 한계를 알고 90줄 예시를 보면<br />
+뜻이 달라짐.</p>
+<p>마지막에는 bash, 읽기, 쓰기,<br />
+문자열 교체의 네 도구를 가진 코드가 있음.<br />
+약 90줄로 최소 하네스를 설명하는 예시임. </p>
+<p>샌드박스와 여러 에이전트,<br />
+MCP와 skills는 생략했음.<br />
+실제 배포용 코드가 아니라고 명시함. </p>
+<p>좋은 모델을 붙이면 Mini-SWE-Agent 수준에<br />
+가까울 거라는 문장도 있음.<br />
+근데 바로 conjecture, without proof임.<br />
+증명 없이 둔 추측이라는 뜻임. </p>
+<p>아래 문장에서 conjecture를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 90줄 최소형의 성능 예상은 증명 없는 추측임을 명시 (원문 Observation 13)"><img src="../assets/posts/harness-engineering/q_conjecture.webp" alt="90줄 최소형의 성능 예상은 증명 없는 추측임을 명시 (원문 Observation 13)" loading="lazy" decoding="async"></button><figcaption>90줄 최소형의 성능 예상은 증명 없는 추측임을 명시 (원문 Observation 13)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-24"><p>처음의 버그 요청으로 돌아가면<br />
+모델 바깥에서 할 일이 보임.</p>
+<p>코드가 어디 있는지 찾음.<br />
+제안한 수정을 실제 파일에 적용함.<br />
+실행 결과를 다음 모델 호출로 돌려줌. </p>
+<p>테스트 없이 끝내려는 응답을<br />
+계속 실행으로 바꾸는 장치도 있을 수 있음. <br />
+그동안 허용 여부와 실행 격리를 관리함. </p>
+<p>이 연결을 어떻게 구현했는지가<br />
+하네스의 설계 차이였음. <br />
+어느 설계가 같은 버그를 더 잘 고치는지는<br />
+이번 소스 비교만으로 답할 수 없음. </p>
+<p>아래 반복·수정 후 검증·작업 분담을<br />
+각기 다른 설계로 읽으면 됨.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 반복형·수정 후 검증형·작업 분담형의 루프 설계 (원문 Figure 2)"><img src="../assets/posts/harness-engineering/fig2_p17.webp" alt="반복형·수정 후 검증형·작업 분담형의 루프 설계 (원문 Figure 2)" loading="lazy" decoding="async"></button><figcaption>반복형·수정 후 검증형·작업 분담형의 루프 설계 (원문 Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-25"><p>그래서 다음엔 같은 버그를<br />
+같은 모델로 고치게 해야 함.</p>
+<p>저자들도 하네스 사이의 통제된 평가와<br />
+비용·안전·사용 경험을 다음 과제로 듦. </p>
+<p>2026-10-06 기준 공개 원문은 확보됐고<br />
+공식 심사 통과·게재처는 확인 못했음. <br />
+확인 가능한 직접 후속 논문이나<br />
+독립 재현 원문도 찾지 못했음. <br />
+90줄 예시가 그 빈칸을 대신 채우진 않음. </p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2609.00006v1">이번 논문 PDF</a></p>
+<p>3줄 요약<br />
+코딩 AI의 모델 바깥 런타임을 11개 표본으로 비교했음. <br />
+범용 틀과 벡터 코드 검색의 부재는 표본·기능 범위를 지켜 읽어야 함. <br />
+설계 차이는 봤지만 같은 조건의 효과는 아직 재지 않았음.</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/harness-engineering/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2609.00006v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/harness-engineering.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

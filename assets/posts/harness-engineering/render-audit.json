@@ -1,0 +1,649 @@
+{
+  "all_images_valid": true,
+  "trimmed": [
+    [
+      "06.png",
+      [
+        1290,
+        12600
+      ],
+      [
+        1290,
+        1906
+      ]
+    ],
+    [
+      "11.png",
+      [
+        1290,
+        12600
+      ],
+      [
+        1290,
+        1740
+      ]
+    ],
+    [
+      "19.png",
+      [
+        1290,
+        12600
+      ],
+      [
+        1290,
+        3151
+      ]
+    ],
+    [
+      "21.png",
+      [
+        1290,
+        12600
+      ],
+      [
+        1290,
+        1522
+      ]
+    ],
+    [
+      "social_02.png",
+      [
+        1680,
+        12600
+      ],
+      [
+        1680,
+        2353
+      ]
+    ],
+    [
+      "social_17.png",
+      [
+        1680,
+        12600
+      ],
+      [
+        1680,
+        1874
+      ]
+    ]
+  ],
+  "images": [
+    {
+      "category": "cards",
+      "file": "cards/01.png",
+      "size": [
+        1290,
+        1579
+      ],
+      "bytes": 243899
+    },
+    {
+      "category": "cards",
+      "file": "cards/02.png",
+      "size": [
+        1290,
+        2301
+      ],
+      "bytes": 318216
+    },
+    {
+      "category": "cards",
+      "file": "cards/03.png",
+      "size": [
+        1290,
+        2638
+      ],
+      "bytes": 512847
+    },
+    {
+      "category": "cards",
+      "file": "cards/04.png",
+      "size": [
+        1290,
+        2402
+      ],
+      "bytes": 640821
+    },
+    {
+      "category": "cards",
+      "file": "cards/05.png",
+      "size": [
+        1290,
+        1967
+      ],
+      "bytes": 328512
+    },
+    {
+      "category": "cards",
+      "file": "cards/06.png",
+      "size": [
+        1290,
+        1906
+      ],
+      "bytes": 206579
+    },
+    {
+      "category": "cards",
+      "file": "cards/07.png",
+      "size": [
+        1290,
+        2101
+      ],
+      "bytes": 262910
+    },
+    {
+      "category": "cards",
+      "file": "cards/08.png",
+      "size": [
+        1290,
+        2054
+      ],
+      "bytes": 313481
+    },
+    {
+      "category": "cards",
+      "file": "cards/09.png",
+      "size": [
+        1290,
+        1666
+      ],
+      "bytes": 269518
+    },
+    {
+      "category": "cards",
+      "file": "cards/10.png",
+      "size": [
+        1290,
+        1764
+      ],
+      "bytes": 293185
+    },
+    {
+      "category": "cards",
+      "file": "cards/11.png",
+      "size": [
+        1290,
+        1740
+      ],
+      "bytes": 299271
+    },
+    {
+      "category": "cards",
+      "file": "cards/12.png",
+      "size": [
+        1290,
+        2203
+      ],
+      "bytes": 313592
+    },
+    {
+      "category": "cards",
+      "file": "cards/13.png",
+      "size": [
+        1290,
+        1936
+      ],
+      "bytes": 266284
+    },
+    {
+      "category": "cards",
+      "file": "cards/14.png",
+      "size": [
+        1290,
+        2593
+      ],
+      "bytes": 550600
+    },
+    {
+      "category": "cards",
+      "file": "cards/15.png",
+      "size": [
+        1290,
+        1778
+      ],
+      "bytes": 286500
+    },
+    {
+      "category": "cards",
+      "file": "cards/16.png",
+      "size": [
+        1290,
+        1831
+      ],
+      "bytes": 246389
+    },
+    {
+      "category": "cards",
+      "file": "cards/17.png",
+      "size": [
+        1290,
+        1963
+      ],
+      "bytes": 257714
+    },
+    {
+      "category": "cards",
+      "file": "cards/18.png",
+      "size": [
+        1290,
+        1718
+      ],
+      "bytes": 218501
+    },
+    {
+      "category": "cards",
+      "file": "cards/19.png",
+      "size": [
+        1290,
+        3151
+      ],
+      "bytes": 802186
+    },
+    {
+      "category": "cards",
+      "file": "cards/20.png",
+      "size": [
+        1290,
+        2534
+      ],
+      "bytes": 466185
+    },
+    {
+      "category": "cards",
+      "file": "cards/21.png",
+      "size": [
+        1290,
+        1522
+      ],
+      "bytes": 199008
+    },
+    {
+      "category": "cards",
+      "file": "cards/22.png",
+      "size": [
+        1290,
+        1812
+      ],
+      "bytes": 285946
+    },
+    {
+      "category": "cards",
+      "file": "cards/23.png",
+      "size": [
+        1290,
+        1835
+      ],
+      "bytes": 323082
+    },
+    {
+      "category": "cards",
+      "file": "cards/24.png",
+      "size": [
+        1290,
+        2191
+      ],
+      "bytes": 245460
+    },
+    {
+      "category": "cards",
+      "file": "cards/25.png",
+      "size": [
+        1290,
+        1715
+      ],
+      "bytes": 167796
+    },
+    {
+      "category": "social",
+      "file": "social/01_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 258930
+    },
+    {
+      "category": "social",
+      "file": "social/02_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 254918
+    },
+    {
+      "category": "social",
+      "file": "social/02_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 117907
+    },
+    {
+      "category": "social",
+      "file": "social/03_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 224524
+    },
+    {
+      "category": "social",
+      "file": "social/03_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 338645
+    },
+    {
+      "category": "social",
+      "file": "social/04_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 191713
+    },
+    {
+      "category": "social",
+      "file": "social/04_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 486853
+    },
+    {
+      "category": "social",
+      "file": "social/05_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 369194
+    },
+    {
+      "category": "social",
+      "file": "social/06_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 247140
+    },
+    {
+      "category": "social",
+      "file": "social/07_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 180480
+    },
+    {
+      "category": "social",
+      "file": "social/07_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 143414
+    },
+    {
+      "category": "social",
+      "file": "social/08_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 186101
+    },
+    {
+      "category": "social",
+      "file": "social/08_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 184053
+    },
+    {
+      "category": "social",
+      "file": "social/09_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 298236
+    },
+    {
+      "category": "social",
+      "file": "social/10_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 325121
+    },
+    {
+      "category": "social",
+      "file": "social/11_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 318116
+    },
+    {
+      "category": "social",
+      "file": "social/12_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 216875
+    },
+    {
+      "category": "social",
+      "file": "social/12_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 155307
+    },
+    {
+      "category": "social",
+      "file": "social/13_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 320431
+    },
+    {
+      "category": "social",
+      "file": "social/14_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 221564
+    },
+    {
+      "category": "social",
+      "file": "social/14_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 377438
+    },
+    {
+      "category": "social",
+      "file": "social/15_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 311813
+    },
+    {
+      "category": "social",
+      "file": "social/16_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 300967
+    },
+    {
+      "category": "social",
+      "file": "social/17_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 293750
+    },
+    {
+      "category": "social",
+      "file": "social/18_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 280539
+    },
+    {
+      "category": "social",
+      "file": "social/19_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 208468
+    },
+    {
+      "category": "social",
+      "file": "social/19_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 428352
+    },
+    {
+      "category": "social",
+      "file": "social/20_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 208900
+    },
+    {
+      "category": "social",
+      "file": "social/20_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 310855
+    },
+    {
+      "category": "social",
+      "file": "social/21_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 240759
+    },
+    {
+      "category": "social",
+      "file": "social/22_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 326074
+    },
+    {
+      "category": "social",
+      "file": "social/23_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 335326
+    },
+    {
+      "category": "social",
+      "file": "social/24_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 201231
+    },
+    {
+      "category": "social",
+      "file": "social/24_2.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 103015
+    },
+    {
+      "category": "social",
+      "file": "social/25_1.png",
+      "size": [
+        1080,
+        1350
+      ],
+      "bytes": 222924
+    },
+    {
+      "category": "long",
+      "file": "post_01.png",
+      "size": [
+        1290,
+        15038
+      ],
+      "bytes": 2515976
+    },
+    {
+      "category": "long",
+      "file": "post_02.png",
+      "size": [
+        1290,
+        15902
+      ],
+      "bytes": 2596768
+    },
+    {
+      "category": "long",
+      "file": "post_03.png",
+      "size": [
+        1290,
+        14675
+      ],
+      "bytes": 2481656
+    },
+    {
+      "category": "long",
+      "file": "post_04.png",
+      "size": [
+        1290,
+        5789
+      ],
+      "bytes": 737764
+    }
+  ]
+}
