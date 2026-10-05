@@ -1,0 +1,17 @@
+Trust the Critic More — figure attribution
+Verified: 2026-10-05 KST
+
+Primary paper
+- Kaiyue Wen, Luke Bailey, Arvind Mahankali, Tengyu Ma, "Trust the Critic More," arXiv:2609.39247v2 (2026).
+- Source: https://arxiv.org/abs/2609.39247v2
+- PDF: https://arxiv.org/pdf/2609.39247v2
+- License displayed by arXiv: Creative Commons Attribution 4.0 International (CC BY 4.0).
+- Crops from Figures 1, 2, 3, 4, 7, 9, Table 4, Algorithm 1, and short text passages were resized/cropped for this Korean commentary. No research data were altered.
+
+Prior-work excerpts
+- Mnih et al., "Asynchronous Methods for Deep Reinforcement Learning," ICML 2016, Figure 1. https://proceedings.mlr.press/v48/mniha16.html
+- Shao et al., "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models," arXiv:2402.03300v3, Figure 4. https://arxiv.org/abs/2402.03300v3
+- Li et al., "Reinforcement Learning with Action Chunking," arXiv:2507.07969v4 / NeurIPS 2025, Figure 1. https://arxiv.org/abs/2507.07969v4
+- Venkatraman et al., "Le Critique: A Critic-Based Approach to Reinforcement Learning with Verifiable Rewards," arXiv:2608.16739v1, Figure 1. https://arxiv.org/abs/2608.16739v1
+
+These prior-work images are small, credited excerpts used to explain and compare the cited research. Copyright and reuse terms remain with their respective authors and publishers.
