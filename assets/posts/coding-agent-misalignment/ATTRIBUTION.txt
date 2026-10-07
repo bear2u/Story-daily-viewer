@@ -1,0 +1,34 @@
+How Coding Agents Fail Their Users (arXiv:2605.29442v2)
+Authors: Ningzhi Tang, Chaoran Chen, Gelei Xu, Yiyu Shi, Yu Huang, Collin McMillan, Tao Dong, Toby Jia-Jun Li
+License: CC BY 4.0
+Source: https://arxiv.org/abs/2605.29442v2
+
+header.png — p.1 title block, cropped.
+definition.png — p.2 related-work/scope passage, cropped.
+fig1_p4.png — Figure 1, extracted and resized.
+tab1_p3.png — Table 1, extracted and resized.
+pipeline_page.png — p.4 method and validation passages, cropped.
+pipeline_text.png — p.4 method passage, cropped.
+tab2_p5.png — Table 2, extracted and resized.
+tab3_p6.png — Table 3, extracted and resized.
+episode_slide.png — p.14 representative episode, cropped.
+episode_test.png — p.15 representative episode, cropped.
+episode_claim.png — p.15 representative episode, cropped.
+tab4_p7.png — Table 4, extracted and resized.
+tab5_p7.png — Table 5, extracted and resized.
+fig3_p8.png — Figure 3, extracted and resized.
+cross_session_probability.png — p.8 cross-session continuity passage, cropped.
+fig4_p8.png — Figure 4, extracted and resized.
+tab6_p9.png — Table 6, extracted and resized.
+limitations.png — p.10 limitations passage, cropped.
+tab8_p13.png — Table 8, extracted and resized.
+
+Programming by Chat (arXiv:2604.00436v2)
+Authors: Ningzhi Tang et al.
+License: CC BY 4.0
+Source: https://arxiv.org/abs/2604.00436
+
+prior_header.png — p.1 title and author block, cropped.
+prior_fig1.png — Figure 1 on p.2, cropped and resized.
+
+All image edits are limited to cropping and resizing for legibility. Korean captions are editorial descriptions, not text added to the source image.

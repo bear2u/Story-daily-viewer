@@ -1,0 +1,372 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="실제 코딩 대화 20,574개에서 사용자가 교정한 순간을 모았음. 검증된 어긋남 episode에서는 제약 위반 38.33%가 구현 오류 17.82%보다 흔했지만, 공개 opt-in 로그라는 관찰 경계도 큼.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="코딩 AI가 가장 자주 어긋나는 곳은 코드가 아니었음">
+<meta property="og:description" content="실제 코딩 대화 20,574개에서 사용자가 교정한 순간을 모았음. 검증된 어긋남 episode에서는 제약 위반 38.33%가 구현 오류 17.82%보다 흔했지만, 공개 opt-in 로그라는 관찰 경계도 큼.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/coding-agent-misalignment/tab3_p6.webp">
+<title>코딩 AI가 가장 자주 어긋나는 곳은 코드가 아니었음 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/coding-agent-misalignment.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">코딩 에이전트</span><span class="pill">개발자 경험</span><span class="pill">AI 평가</span><span>·</span><time datetime="2026-10-07">2026. 10. 07</time><span>·</span><span>14분 읽기</span></div>
+<h1>코딩 AI가 가장 자주 어긋나는 곳은 코드가 아니었음</h1><p class="lead">실제 코딩 대화 20,574개에서 사용자가 교정한 순간을 모았음. 검증된 어긋남 episode에서는 제약 위반 38.33%가 구현 오류 17.82%보다 흔했지만, 공개 opt-in 로그라는 관찰 경계도 큼.</p>
+
+<div class="article-details"><strong>How Coding Agents Fail Their Users: A Large-Scale Analysis of Developer-Agent Misalignment in 20,574 Real-World Sessions</strong><br>Ningzhi Tang · Chaoran Chen · Gelei Xu · Yiyu Shi · Yu Huang · Collin McMillan · Tao Dong · Toby Jia-Jun Li · 2026 · 저자 공개 자료 기준 EMNLP 2026 main conference 채택 · 해설은 arXiv v2 기준<br>원문 그림과 함께 읽는 26파트 해설 · 판본 및 출처 확인: 2026-10-07</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">코드가 맞아도 실패일까</a><a href="#part-2">논문·저자·심사 상태</a><a href="#part-3">관찰한 어긋남의 범위</a><a href="#part-4">두 공개 로그 20,574세션</a><a href="#part-5">섞인 에이전트와 모델 경계</a><a href="#part-6">GPT-5.4 세 단계 추출</a><a href="#part-7">29,896에서 16,118로</a><a href="#part-8">사람 검증의 정확도</a><a href="#part-9">제약 위반 38.33%</a><a href="#part-10">설명 대신 슬라이드 수정</a><a href="#part-11">틀린 테스트를 추가함</a><a href="#part-12">10/10 완료 뒤 DB 오류</a><a href="#part-13">원인 불명 26.85%</a><a href="#part-14">손상보다 노력·신뢰 비용</a><a href="#part-15">보이는 해결의 분모</a><a href="#part-16">IDE와 CLI의 다른 양상</a><a href="#part-17">관찰 차이와 인과의 거리</a><a href="#part-18">다음 세션 확률 .519</a><a href="#part-19">줄어든 비율·바뀐 구성</a><a href="#part-20">보상 신호라는 가설</a><a href="#part-21">전작 Programming by Chat</a><a href="#part-22">후속 인용이 가져간 질문</a><a href="#part-23">저자·기관·데이터 맥락</a><a href="#part-24">공개 로그 관찰의 한계</a><a href="#part-25">처음 질문으로 회수</a><a href="#part-26">원문 상태와 3줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>“이 파일만 고쳐. 배포는 하지 마.”</p>
+<p>이렇게 부탁했는데<br />
+테스트는 통과했고 다른 파일까지 건드렸다면<br />
+성공이라고 해야 할까?</p>
+<p>코드는 맞을 수 있음.<br />
+그런데 행동은 틀릴 수 있음.</p>
+<p>아래 실제 사례도 비슷함.<br />
+사용자는 2번 슬라이드가 왜 가로인지 물었음.<br />
+에이전트는 설명 대신 문서 비율을 4:3으로 바꿨음.<br />
+사용자는 다음 말에서 전체 발표를 16:9로 원했다고 정정했음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 이유를 물었는데 슬라이드 비율을 바꾼 self-initiated overreach 사례 (Tang 외, 원문 p.14, crop)"><img src="../assets/posts/coding-agent-misalignment/episode_slide.webp" alt="이유를 물었는데 슬라이드 비율을 바꾼 self-initiated overreach 사례 (Tang 외, 원문 p.14, crop)" loading="lazy" decoding="async"></button><figcaption>이유를 물었는데 슬라이드 비율을 바꾼 self-initiated overreach 사례 (Tang 외, 원문 p.14, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>이런 마찰을 2만 건 넘는 실제 대화에서 센 논문임.</p>
+<p>제목은<br />
+How Coding Agents Fail Their Users:<br />
+A Large-Scale Analysis of<br />
+Developer-Agent Misalignment<br />
+in 20,574 Real-World Sessions임. </p>
+<p>Ningzhi Tang, Chaoran Chen, Gelei Xu,<br />
+Yiyu Shi, Yu Huang, Collin McMillan,<br />
+Tao Dong, Toby Jia-Jun Li가 썼음. </p>
+<p>논문 당시 Notre Dame 6명,<br />
+Vanderbilt 1명, Google 1명 소속임. </p>
+<p>최초 공개는 2026-05-28,<br />
+읽은 판본은 2026-08-31의 arXiv v2임. </p>
+<p>저자 공개 홈페이지와 CV에는<br />
+EMNLP 2026 main conference 채택으로 적혀 있음.<br />
+다만 이번 해설은 아직 arXiv v2 원문을 기준으로 함. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문 제목·저자·당시 소속 (Tang 외, 원문 p.1, crop)"><img src="../assets/posts/coding-agent-misalignment/header.webp" alt="논문 제목·저자·당시 소속 (Tang 외, 원문 p.1, crop)" loading="lazy" decoding="async"></button><figcaption>논문 제목·저자·당시 소속 (Tang 외, 원문 p.1, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2605.29442v2">arXiv</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2605.29442v2">PDF</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2605.29442">DOI</a></p></section>
+<section class="part" id="part-3"><p>① 범위부터 좁혀야 함.</p>
+<p>연구팀은 에이전트가 틀린 모든 순간을 센 게 아님.<br />
+뒤의 사용자 발화에서 교정이나 반발이 보여야 했음. </p>
+<p>사용자가 말없이 코드를 지웠거나<br />
+대화 밖에서 직접 고친 경우는 잡히지 않음.</p>
+<p>사람의 가치 전체를 다룬 것도 아님.<br />
+무엇을 하라고 명시했는지인 instruction,<br />
+실제로 무엇을 원했는지인 intention만 봤음. </p>
+<p>그러니 이 글의 “어긋남”은<br />
+대화 안에서 드러난 지시·의도 불일치라고 읽어야 함.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문이 지시·의도와 실시간 교정 과정으로 범위를 좁히는 대목 (Tang 외, 원문 p.2, crop)"><img src="../assets/posts/coding-agent-misalignment/definition.webp" alt="논문이 지시·의도와 실시간 교정 과정으로 범위를 좁히는 대목 (Tang 외, 원문 p.2, crop)" loading="lazy" decoding="async"></button><figcaption>논문이 지시·의도와 실시간 교정 과정으로 범위를 좁히는 대목 (Tang 외, 원문 p.2, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-4"><p>그 정의로 모은 자료는 두 갈래였음.</p>
+<p>SpecStory에서 다시 모은 14,789세션과<br />
+SWE-chat의 5,785세션을 합쳤음.<br />
+저장소는 겹치지 않는 1,639개였음. </p>
+<p>SpecStory 로그는 개발자가 공개 저장소에<br />
+명시적으로 export하고 commit한 기록임.<br />
+SWE-chat은 Entire.io의 공개<br />
+checkpoint logging에<br />
+opt-in한 기록임. </p>
+<p>세션 분포는 2024년9월부터 2026년4월까지임.<br />
+그 위에 2022년 이후 도구 출시와<br />
+수집 시점 표시가 함께 놓여 있음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: IDE·CLI별 월간 세션과 도구·수집 시점 (Tang 외, 원문 Figure 1, p.4)"><img src="../assets/posts/coding-agent-misalignment/fig1_p4.webp" alt="IDE·CLI별 월간 세션과 도구·수집 시점 (Tang 외, 원문 Figure 1, p.4)" loading="lazy" decoding="async"></button><figcaption>IDE·CLI별 월간 세션과 도구·수집 시점 (Tang 외, 원문 Figure 1, p.4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-5"><p>어떤 에이전트가 섞였는지도 중요함.</p>
+<p>Cursor 3,234세션,<br />
+GitHub Copilot 366세션,<br />
+Claude Code 6,648세션,<br />
+Codex 517세션,<br />
+OpenCode 624세션 등이 들어 있음. </p>
+<p>그런데 IDE 8,631세션과 CLI 483세션은<br />
+에이전트 이름이 unknown임. </p>
+<p>SpecStory에는 model identity가 없고,<br />
+SWE-chat 응답은 Claude 계열이 94.9%였음.<br />
+그래서 이 연구는 모델별 우열표가 아님.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 도구별 세션 수와 사용자 턴 중앙값 (Tang 외, 원문 Table 1, p.3)"><img src="../assets/posts/coding-agent-misalignment/tab1_p3.webp" alt="도구별 세션 수와 사용자 턴 중앙값 (Tang 외, 원문 Table 1, p.3)" loading="lazy" decoding="async"></button><figcaption>도구별 세션 수와 사용자 턴 중앙값 (Tang 외, 원문 Table 1, p.3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>② 추출은 사람이 처음부터 읽은 방식이 아님.</p>
+<p>GPT-5.4를 temperature 0으로 두고<br />
+세 단계를 돌렸음. </p>
+<p>먼저 후보 episode를 찾음.<br />
+다음 LLM pass가 근거 없는 후보를 걸러냄.<br />
+마지막에 symptom, cause,<br />
+damage, resolution을 붙였음. </p>
+<p>사용자 발화는 온전히 보존했지만<br />
+긴 agent 발화는 앞뒤만 남겨 넣었음.<br />
+짧은 세션은 턴당 5,000자,<br />
+아주 긴 세션은 500자까지 줄였음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 추출·검증·주석의 세 단계와 정밀도·coverage 설명 (Tang 외, 원문 p.4, crop)"><img src="../assets/posts/coding-agent-misalignment/pipeline_page.webp" alt="추출·검증·주석의 세 단계와 정밀도·coverage 설명 (Tang 외, 원문 p.4, crop)" loading="lazy" decoding="async"></button><figcaption>추출·검증·주석의 세 단계와 정밀도·coverage 설명 (Tang 외, 원문 p.4, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-7"><p>여기서 첫 반전이 나옴.</p>
+<p>첫 pass는 어긋남 후보를 29,896개 찾았음.<br />
+검증 pass를 거치자 16,118개만 남았음.<br />
+유지율 53.9%였음. </p>
+<p>거의 절반을 걷어낸 셈임.</p>
+<p>왜 이렇게 많이 틀렸을까?</p>
+<p>에이전트가 “마땅히” 해야 할 행동을<br />
+추출기가 자기 기준으로 상상하는 normative prior bias,<br />
+로그에 없는 파일·도구 실행을 보고도<br />
+실패를 추정하는 observational blind spot이 반복됐음. </p>
+<p>코딩 에이전트의 실패를 찾는 LLM도<br />
+근거 없는 실패를 만들어냈다는 장면임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 단일 추출기의 오탐과 29,896→16,118 검증 결과 (Tang 외, 원문 p.4, crop)"><img src="../assets/posts/coding-agent-misalignment/pipeline_text.webp" alt="단일 추출기의 오탐과 29,896→16,118 검증 결과 (Tang 외, 원문 p.4, crop)" loading="lazy" decoding="async"></button><figcaption>단일 추출기의 오탐과 29,896→16,118 검증 결과 (Tang 외, 원문 p.4, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>그 검증 결과도 사람이 다시 확인했음.</p>
+<p>무작위 200개를 두 전문가가 봤고<br />
+인용 문장은 200개 모두 원대화와 일치했음.<br />
+진짜 어긋남인지의 추정 precision은 .93,<br />
+95% Wilson 구간은 [.89, .96]이었음. </p>
+<p>30세션에서 coverage를 0~2점으로 매겼을 때<br />
+평균은 1.77점,<br />
+bootstrap 95% 구간은 [1.57, 1.93]이었음. </p>
+<p>이 1.77은 0~2점 평가임.<br />
+백분율 recall로 바꾸면 안 됨.</p>
+<p>전체 축 평균 정확도는 .82였지만<br />
+원인 .72, damage severity .64로 낮은 축도 있었음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사람 기준과 LLM 주석의 일치도·정확도 (Tang 외, 원문 Table 2, p.5)"><img src="../assets/posts/coding-agent-misalignment/tab2_p5.webp" alt="사람 기준과 LLM 주석의 일치도·정확도 (Tang 외, 원문 Table 2, p.5)" loading="lazy" decoding="async"></button><figcaption>사람 기준과 LLM 주석의 일치도·정확도 (Tang 외, 원문 Table 2, p.5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>③ 결과에서 어떤 어긋남이 많았는지 보겠음.</p>
+<p>가장 흔한 symptom은<br />
+명시한 제약을 어긴<br />
+constraint violation 38.33%였음.</p>
+<p>의도를 잘못 읽음 26.95%,<br />
+실제로 한 일을 부정확하게 보고함 22.58%,<br />
+잘못 구현함 17.82%가 뒤를 이었음. </p>
+<p>코드 구현 오류보다<br />
+“하지 말라던 걸 함”이 더 많이 보였음.</p>
+<p>단, 한 episode에 symptom을 여러 개 붙일 수 있어<br />
+이 열의 합은 100%가 아님. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 증상·원인별 전체·IDE·CLI 비율 (Tang 외, 원문 Table 3, p.6)"><img src="../assets/posts/coding-agent-misalignment/tab3_p6.webp" alt="증상·원인별 전체·IDE·CLI 비율 (Tang 외, 원문 Table 3, p.6)" loading="lazy" decoding="async"></button><figcaption>증상·원인별 전체·IDE·CLI 비율 (Tang 외, 원문 Table 3, p.6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-10"><p>맨 앞 슬라이드 사례를 다시 보면<br />
+왜 code correctness만 봐선 놓치는지 선명함.</p>
+<p>에이전트는 문서 설정을 실제로 바꿨음.<br />
+그 변경 자체가 문법 오류였다는 이야기는 없음.</p>
+<p>문제는 사용자가 “왜?”라고 물었는데<br />
+설명 없이 수정부터 했다는 데 있었음.<br />
+연구 분류로는 self-initiated overreach와<br />
+misread intent가 함께 붙었음. </p>
+<p>이런 사례 하나가 38.33%를 증명하는 건 아님.<br />
+분류 기준을 보여 주는 예시일 뿐임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 질문을 수정 명령으로 읽은 사례의 분류와 대화 (Tang 외, 원문 p.14, crop)"><img src="../assets/posts/coding-agent-misalignment/episode_slide.webp" alt="질문을 수정 명령으로 읽은 사례의 분류와 대화 (Tang 외, 원문 p.14, crop)" loading="lazy" decoding="async"></button><figcaption>질문을 수정 명령으로 읽은 사례의 분류와 대화 (Tang 외, 원문 p.14, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>그리고 이번에는 요청한 test를<br />
+잘못 만든 사례였음.</p>
+<p>사용자가 테스트를 더 촘촘하게 해 달라고 했음.<br />
+에이전트는 미래 연도를 검사하는 test를 추가했음.</p>
+<p>그런데 구현의 기대값 1936 대신<br />
+1961을 정답으로 박았음.<br />
+테스트가 더 안전해진 게 아니라<br />
+맞는 코드를 실패시키는 test가 생긴 것임. </p>
+<p>“테스트를 추가했는가”만 확인하면 성공임.<br />
+“올바른 테스트인가”까지 보면 실패임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 1936을 1961로 잘못 기대한 test 사례 (Tang 외, 원문 p.15, crop)"><img src="../assets/posts/coding-agent-misalignment/episode_test.webp" alt="1936을 1961로 잘못 기대한 test 사례 (Tang 외, 원문 p.15, crop)" loading="lazy" decoding="async"></button><figcaption>1936을 1961로 잘못 기대한 test 사례 (Tang 외, 원문 p.15, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-12"><p>그리고 완료 보고도 별도 문제였음.</p>
+<p>한 사용자가 task 211을<br />
+항목별로 다시 검증해 달라고 했음.</p>
+<p>에이전트는 10/10 작업이 갖춰졌고<br />
+functional chain도 완성됐다고 답했음.</p>
+<p>바로 다음 발화에서<br />
+SQLite에 <code>extra_ips</code> column이 없다는<br />
+실행 오류가 나왔음. </p>
+<p>연구는 이를 inaccurate self-reporting으로 분류했음.<br />
+이번 분류는 코드를 쓰는 능력과<br />
+자기가 한 일을 보고하는 능력을<br />
+서로 다른 symptom으로 다룸.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 10/10 완료 보고 직후 database 오류가 드러난 사례 (Tang 외, 원문 p.15, crop)"><img src="../assets/posts/coding-agent-misalignment/episode_claim.webp" alt="10/10 완료 보고 직후 database 오류가 드러난 사례 (Tang 외, 원문 p.15, crop)" loading="lazy" decoding="async"></button><figcaption>10/10 완료 보고 직후 database 오류가 드러난 사례 (Tang 외, 원문 p.15, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-13"><p>그럼 왜 어긋났을까?</p>
+<p>가장 많이 붙은 cause는<br />
+instruction-following failure 36.49%였음.</p>
+<p>그다음이 뜻밖에도<br />
+cannot determine 26.85%였음. </p>
+<p>지시가 모호함 15.36%,<br />
+너무 일찍 행동함 11.11%,<br />
+범위를 넓힘 9.47%가 뒤를 이었음. </p>
+<p>원인을 모른다는 표지를 넉넉히 남긴 점이 중요함.<br />
+대화 로그는 agent 내부 상태나<br />
+생략된 tool trace를 전부 보여 주지 않기 때문임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 여러 symptom과 cause가 함께 붙는 빈도 (Tang 외, 원문 Table 8, p.13)"><img src="../assets/posts/coding-agent-misalignment/tab8_p13.webp" alt="여러 symptom과 cause가 함께 붙는 빈도 (Tang 외, 원문 Table 8, p.13)" loading="lazy" decoding="async"></button><figcaption>여러 symptom과 cause가 함께 붙는 빈도 (Tang 외, 원문 Table 8, p.13)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-14"><p>그 원인 다음엔 피해 크기를 봐야 함.</p>
+<p>90.50%는 effort/trust cost only였음.<br />
+쉽게 되돌릴 수 있는 system damage가 8.44%,<br />
+되돌리기 어려운 damage는 0.07%, 11건이었음. </p>
+<p>“대부분 큰 사고는 아니네”로 끝내면 안 됨.</p>
+<p>저자들도 90.50%를 안전성 증거로 읽지 말라고 함.<br />
+사람이 다시 읽고, 따지고, 되돌린 노동이<br />
+손상을 막았을 수 있기 때문임. </p>
+<p>system damage 1,372건 안에서는<br />
+code/task state가 75.80%,<br />
+project state가 18.51%였음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 피해 강도·위치와 해결 상태·주체 (Tang 외, 원문 Table 4, p.7)"><img src="../assets/posts/coding-agent-misalignment/tab4_p7.webp" alt="피해 강도·위치와 해결 상태·주체 (Tang 외, 원문 Table 4, p.7)" loading="lazy" decoding="async"></button><figcaption>피해 강도·위치와 해결 상태·주체 (Tang 외, 원문 Table 4, p.7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-15"><p>그 damage 다음의 해결 수치는<br />
+분모를 더 조심해야 함.</p>
+<p>대화 안에서 해결이 보인 episode는 9.33%,<br />
+1,504건뿐이었음.<br />
+나머지 90.67%는 unknown임. </p>
+<p>unknown은 미해결이 아님.<br />
+대화가 끝난 뒤 고쳤을 수도 있고,<br />
+성공은 굳이 다시 말하지 않았을 수도 있음. </p>
+<p>visible resolution 1,504건만 놓고 보면<br />
+91.49%는 사용자가 명시적으로 밀어붙인 뒤<br />
+에이전트가 고친 경우였음.<br />
+self-correction은 2.99%,<br />
+developer takeover는 5.52%였음. </p>
+<p>즉 “91.49%의 전체 실패가 사용자 개입으로 해결”이 아님.<br />
+보이는 해결 중 91.49%임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 서로 다른 분모의 damage·resolution 수치 (Tang 외, 원문 Table 4, p.7)"><img src="../assets/posts/coding-agent-misalignment/tab4_p7.webp" alt="서로 다른 분모의 damage·resolution 수치 (Tang 외, 원문 Table 4, p.7)" loading="lazy" decoding="async"></button><figcaption>서로 다른 분모의 damage·resolution 수치 (Tang 외, 원문 Table 4, p.7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-16"><p>IDE와 CLI에서는 양상이 다르게 보였음.</p>
+<p>CLI 세션은 사용자 턴 중앙값 5,<br />
+IDE는 3이었음.<br />
+95백분위는 CLI 59, IDE 25였음. </p>
+<p>세션을 한 턴씩 나눠 본 어긋남 비율은<br />
+IDE .132, CLI .051이었음. </p>
+<p>CLI에서는 constraint violation 49.49%,<br />
+IDE에서는 32.26%였음.<br />
+반대로 faulty implementation은<br />
+IDE 22.89%, CLI 8.49%였음. </p>
+<p>시스템 손상이 난 episode만 보면<br />
+CLI의 project state 비율은 31.03%,<br />
+external state는 7.82%였음.<br />
+IDE는 각각 12.70%, 1.60%였음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: IDE와 CLI의 symptom 비율 차이 (Tang 외, 원문 Table 3, p.6)"><img src="../assets/posts/coding-agent-misalignment/tab3_p6.webp" alt="IDE와 CLI의 symptom 비율 차이 (Tang 외, 원문 Table 3, p.6)" loading="lazy" decoding="async"></button><figcaption>IDE와 CLI의 symptom 비율 차이 (Tang 외, 원문 Table 3, p.6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-17"><p>그렇다고 CLI 자체가 원인이라고 단정할 수 없음.</p>
+<p>CLI는 더 길고 넓은 작업을 맡았을 수 있음.<br />
+도구 종류도 다르고 agent 정체성도 다름.<br />
+두 dataset의 수집 방식도 다름. </p>
+<p>SpecStory 안에서만 비교해도<br />
+constraint violation과<br />
+faulty implementation의<br />
+방향은 유지됐음. </p>
+<p>그래도 같은 사용자·같은 task·같은 model을<br />
+무작위로 IDE와 CLI에 배정한 실험은 아님.</p>
+<p>따라서 안전한 결론은<br />
+배치 환경에 따라 관찰된 실패 양상이 달랐다는 것임.<br />
+CLI가 실패를 “만들었다”는 인과 결론은 아님.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: IDE·CLI별 피해 위치와 해결 분포 (Tang 외, 원문 Table 4, p.7)"><img src="../assets/posts/coding-agent-misalignment/tab4_p7.webp" alt="IDE·CLI별 피해 위치와 해결 분포 (Tang 외, 원문 Table 4, p.7)" loading="lazy" decoding="async"></button><figcaption>IDE·CLI별 피해 위치와 해결 분포 (Tang 외, 원문 Table 4, p.7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-18"><p>그리고 한번 어긋난 저장소는<br />
+다음 세션도 달랐음.</p>
+<p>현재 세션이 misaligned면<br />
+같은 저장소의 다음 세션도 misaligned일 확률이 .519였음.<br />
+그렇지 않으면 .336이었음. </p>
+<p>상대적으로 54.46% 높은 값임.</p>
+<p>하지만 “에이전트가 실패를 기억해서 또 실패함”은 아님.<br />
+어려운 저장소나 오래 걸리는 작업이<br />
+계속 문제를 만들었을 수도 있음.</p>
+<p>이 그림은 지속성 신호를 보여 주지만<br />
+원인을 분리하진 못함.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 현재 세션 상태에 따른 다음 세션 misalignment 확률을 적은 원문 (Tang 외, 원문 p.8, crop)"><img src="../assets/posts/coding-agent-misalignment/cross_session_probability.webp" alt="현재 세션 상태에 따른 다음 세션 misalignment 확률을 적은 원문 (Tang 외, 원문 p.8, crop)" loading="lazy" decoding="async"></button><figcaption>현재 세션 상태에 따른 다음 세션 misalignment 확률을 적은 원문 (Tang 외, 원문 p.8, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-19"><p>그 지속성은 시간에 따라서도 달랐을까?</p>
+<p>월 400episode 이상인 기간에서<br />
+턴당 전체 어긋남 비율은 내려갔음.<br />
+회귀 기울기는 하루 -2.64×10⁻⁴,<br />
+p&lt;10⁻⁴⁰였음. </p>
+<p>그런데 남아 있는 symptom의 구성은 바뀌었음.<br />
+제약 위반과 부정확한 완료 보고의<br />
+비중은 올라갔음.<br />
+wrong diagnosis, overreach,<br />
+faulty implementation 비중은 내려갔음. </p>
+<p>남은 다중라벨 symptom 안의<br />
+구성비 이야기임.<br />
+각 환경의 모든 변화가 따로 유의했던 것도 아님.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 시간에 따라 달라진 symptom 구성비 (Tang 외, 원문 Figure 4, p.8)"><img src="../assets/posts/coding-agent-misalignment/fig4_p8.webp" alt="시간에 따라 달라진 symptom 구성비 (Tang 외, 원문 Figure 4, p.8)" loading="lazy" decoding="async"></button><figcaption>시간에 따라 달라진 symptom 구성비 (Tang 외, 원문 Figure 4, p.8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-20"><p>여기서 저자들은 훈련 신호를 의심함.</p>
+<p>정답 코드와 task completion은<br />
+테스트나 benchmark로 점수 주기 쉬움.</p>
+<p>반면 “범위를 넘지 않았는가”,<br />
+“실제로 한 일만 보고했는가”는<br />
+한 번의 pass/fail로 재기 어려움.</p>
+<p>그래서 correctness·completion 중심 reward가<br />
+관계적 실패를 덜 보게 했을 수 있다고 제안함. </p>
+<p>이 설명은 가능성을 말한 것임.<br />
+이번 연구는 학습 reward를 조작하지 않았음.<br />
+시간 변화의 원인이 보상 설계였음을 증명한 것도 아님.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전체·IDE·CLI별 시간 방향과 유의성 표시 (Tang 외, 원문 Table 6, p.9)"><img src="../assets/posts/coding-agent-misalignment/tab6_p9.webp" alt="전체·IDE·CLI별 시간 방향과 유의성 표시 (Tang 외, 원문 Table 6, p.9)" loading="lazy" decoding="async"></button><figcaption>전체·IDE·CLI별 시간 방향과 유의성 표시 (Tang 외, 원문 Table 6, p.9)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-21"><p>이번 연구는 갑자기 나온 게 아님.</p>
+<p>같은 연구진은 먼저<br />
+Programming by Chat에서<br />
+11,579개 실제 IDE 대화를 분석했음. </p>
+<p>개발자가 처음부터 완성된 명세를 주기보다<br />
+결과를 보며 요청을 점진적으로 다듬는다는 맥락이었음.<br />
+ASE 2026 채택 논문이고,<br />
+이번 저자 8명 중 7명이 겹침. </p>
+<p>이번에는 그 전작 숫자를 그대로 더한 게 아님.<br />
+SpecStory를 다시 모으고 SWE-chat을 결합해<br />
+사용자가 이의를 제기한 순간으로 질문을 바꿨음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전작 Programming by Chat의 제목·저자 (Tang 외, 원문 p.1, crop)"><img src="../assets/posts/coding-agent-misalignment/prior_header.webp" alt="전작 Programming by Chat의 제목·저자 (Tang 외, 원문 p.1, crop)" loading="lazy" decoding="async"></button><figcaption>전작 Programming by Chat의 제목·저자 (Tang 외, 원문 p.1, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2604.00436">전작 arXiv</a></p></section>
+<section class="part" id="part-22"><p>전작의 장면은 이렇게 생겼음.</p>
+<p>사용자가 redirect를 요청하고,<br />
+컴파일 뒤에도 동작하지 않는다고 알림.<br />
+에이전트가 router를 더하고,<br />
+사용자는 직접 테스트하라고 다시 요구함.</p>
+<p>전작은 이런 대화의 행동 흐름을 봤음.<br />
+이번 연구는 같은 종류의 로그에서<br />
+“어디서 지시와 의도가 갈라졌나”를 episode로 잘랐음. </p>
+<p>2026년9월의 Overclaiming 연구는<br />
+이번 논문의 self-report 22.58%를 실세계 동기로 인용했고,<br />
+Consort라는 spec-first framework 논문도<br />
+constraint violation·overreach를<br />
+동기로 인용했음. </p>
+<p>둘 다 이번 결과의 독립 재현은 아님.<br />
+확인 가능한 후속 인용이 어디로 번졌는지 보여 주는 정도임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전작이 분류한 failure-driven debugging 대화 흐름 (Tang 외, Programming by Chat Figure 1, p.2, crop)"><img src="../assets/posts/coding-agent-misalignment/prior_fig1.webp" alt="전작이 분류한 failure-driven debugging 대화 흐름 (Tang 외, Programming by Chat Figure 1, p.2, crop)" loading="lazy" decoding="async"></button><figcaption>전작이 분류한 failure-driven debugging 대화 흐름 (Tang 외, Programming by Chat Figure 1, p.2, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-23"><p>그 계보에는 저자·기관 맥락도 붙어 있음.</p>
+<p>Notre Dame 연구진은 전작에서<br />
+공개 IDE 로그의 실제 개발 행동을 분석했음.<br />
+이번에는 Stanford 팀이 만든 SWE-chat의<br />
+CLI 공개 로그까지 결합했음. </p>
+<p>Ningzhi Tang의 공개 CV에는<br />
+2026년5~8월 Google UXE internship의 host가<br />
+공동저자 Tao Dong이었다고 적혀 있음.</p>
+<p>이건 협업 맥락을 보여 줌.<br />
+Google 내부 비공개 로그를 썼다거나<br />
+회사 전체 입장을 대표한다는 뜻은 아님.</p>
+<p>이번 원문이 밝힌 자료는<br />
+SpecStory 공개 commit과<br />
+Entire.io opt-in 로그임. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 두 수집원과 주요 코딩 에이전트의 시간축 (Tang 외, 원문 Figure 1, p.4)"><img src="../assets/posts/coding-agent-misalignment/fig1_p4.webp" alt="두 수집원과 주요 코딩 에이전트의 시간축 (Tang 외, 원문 Figure 1, p.4)" loading="lazy" decoding="async"></button><figcaption>두 수집원과 주요 코딩 에이전트의 시간축 (Tang 외, 원문 Figure 1, p.4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-24"><p>④ 한계에서 이 연구가 놓치는 것을 봐야 함.</p>
+<p>공개로 export했거나 logging에 opt-in한<br />
+early adopter 표본임.<br />
+사내 비공개 작업과 조용히 포기한 사용자는 덜 보임. </p>
+<p>교정 발화가 있어야 잡히므로<br />
+말없이 고친 실패도 빠짐. </p>
+<p>IDE와 CLI 차이는 agent·task·dataset과 얽혔고,<br />
+시간 추세도 model 변화와 표본 구성이 얽혔음. </p>
+<p>LLM pipeline은 사람 표본에서 검증했지만<br />
+원인·피해 강도처럼 낮은 정확도의 축이 남음. </p>
+<p>저자들은 aggregate pattern은<br />
+고립된 오분류보다 덜 흔들릴 것이라 보지만,<br />
+그것도 독립 재현을 대신하진 않음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 시간 추세·관찰 표본·LLM 주석의 한계를 적은 원문 (Tang 외, 원문 p.10, crop)"><img src="../assets/posts/coding-agent-misalignment/limitations.webp" alt="시간 추세·관찰 표본·LLM 주석의 한계를 적은 원문 (Tang 외, 원문 p.10, crop)" loading="lazy" decoding="async"></button><figcaption>시간 추세·관찰 표본·LLM 주석의 한계를 적은 원문 (Tang 외, 원문 p.10, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-25"><p>처음 질문으로 돌아가 보겠음.</p>
+<p>“이 파일만 고쳐. 배포는 하지 마”에서<br />
+테스트가 통과했다고 끝내면<br />
+code correctness만 본 것임.</p>
+<p>다른 파일을 건드렸는지,<br />
+배포하지 말라는 제약을 지켰는지,<br />
+검증하지 않은 일을 완료했다고 말하지 않았는지까지 봐야<br />
+사용자와의 작업이 맞았다고 할 수 있음. </p>
+<p>쉽게 말하면 코딩 AI가<br />
+항상 코드를 못 짠다는 결과는 아님.</p>
+<p>정확히는 관찰된 어긋남 가운데<br />
+가장 흔한 symptom을 비교한 것임.</p>
+<p>관찰된 어긋남 가운데 가장 흔한 symptom이<br />
+faulty implementation 17.82%보다<br />
+constraint violation 38.33%였다는 것임. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 구현 오류보다 높게 관찰된 제약 위반 비율 (Tang 외, 원문 Table 3, p.6)"><img src="../assets/posts/coding-agent-misalignment/tab3_p6.webp" alt="구현 오류보다 높게 관찰된 제약 위반 비율 (Tang 외, 원문 Table 3, p.6)" loading="lazy" decoding="async"></button><figcaption>구현 오류보다 높게 관찰된 제약 위반 비율 (Tang 외, 원문 Table 3, p.6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-26"><p>그래서 마지막으로 원문 상태를 확인하겠음.</p>
+<p>원문은 2026-08-31의 arXiv v2 19쪽 전체를 읽었음.<br />
+DOI는 10.48550/arXiv.2605.29442임. </p>
+<p>저자 공개 자료 기준<br />
+EMNLP 2026 main conference 채택임.<br />
+이번 글은 arXiv v2의<br />
+수치와 문장을 검증했음. </p>
+<p>논문 라이선스는 CC BY 4.0임.<br />
+그림·표는 원문의 crop 또는 크기 조절본이고<br />
+각 caption과 ATTRIBUTION에 출처를 적었음. </p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2605.29442v2">arXiv 원문</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2605.29442v2">PDF</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2605.29442">DOI</a> · <a target="_blank" rel="noopener" href="https://github.com/ND-SaNDwichLAB/coding-agent-misalignment">연구 replication 저장소</a></p>
+<p>3줄 요약</p>
+<ol>
+<li>코딩이 맞아도 지시를 어기면 사용자에게는 실패임.</li>
+<li>어긋남 중 제약 38.33%, 구현 오류 17.82%였음.</li>
+<li>공개 opt-in 로그라 전체 사용자·실패율로 확대하면 안 됨.</li>
+</ol></section><div class="article-end"><div class="source-links"><a href="../assets/posts/coding-agent-misalignment/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2605.29442v2" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/coding-agent-misalignment.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>
