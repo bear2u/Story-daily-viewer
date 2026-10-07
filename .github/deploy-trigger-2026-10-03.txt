@@ -1,1 +1,2 @@
-Public deployment trigger requested on 2026-10-03 17:22 KST.
+Public deployment trigger requested on 2026-10-07 18:10 KST.
+Includes coding-agent-misalignment post deployment.
