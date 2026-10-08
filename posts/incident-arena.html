@@ -1,0 +1,360 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="live Kubernetes 장애 20개에서 3,000회를 시험했음. §5.2의 action-record 집계에서는 정답 조치를 전부 실행한 1,638회도 59%만 통과했고, 원문 v1의 집계 불일치까지 함께 짚었음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="코딩 AI가 정답을 다 실행하고도 41% 탈락한 이유">
+<meta property="og:description" content="live Kubernetes 장애 20개에서 3,000회를 시험했음. §5.2의 action-record 집계에서는 정답 조치를 전부 실행한 1,638회도 59%만 통과했고, 원문 v1의 집계 불일치까지 함께 짚었음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/incident-arena/tab4_p8.webp">
+<title>코딩 AI가 정답을 다 실행하고도 41% 탈락한 이유 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/incident-arena.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 에이전트</span><span class="pill">SRE</span><span class="pill">AI 평가</span><span>·</span><time datetime="2026-10-08">2026. 10. 08</time><span>·</span><span>18분 읽기</span></div>
+<h1>코딩 AI가 정답을 다 실행하고도 41% 탈락한 이유</h1><p class="lead">live Kubernetes 장애 20개에서 3,000회를 시험했음. §5.2의 action-record 집계에서는 정답 조치를 전부 실행한 1,638회도 59%만 통과했고, 원문 v1의 집계 불일치까지 함께 짚었음.</p>
+
+<div class="article-details"><strong>Incident-Arena: Getting agents to the last nine of reliability</strong><br>Andre Fu · Malik Drabla · Leon Liu · Meji Abidoye · Marek Šuppa · Lata Mishra · Adnan El Assadi · Yiyuan Li · 2026 · arXiv v1 프리프린트 · 확인 가능한 동료심사 채택 정보 없음<br>원문 그림과 함께 읽는 23파트 해설 · 판본 및 출처 확인: 2026-10-08</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">정답 조치 뒤에도 41% 실패</a><a href="#part-2">논문·저자·심사 상태</a><a href="#part-3">알람 해제와 안전한 복구</a><a href="#part-4">SRE 장애 20개</a><a href="#part-5">live Kubernetes 실험</a><a href="#part-6">Outcome와 Safety 두 gate</a><a href="#part-7">gate 하나만 있었다면</a><a href="#part-8">false report stress test</a><a href="#part-9">3,000 trial과 모델 결과</a><a href="#part-10">full fix도 59%</a><a href="#part-11">서비스 회복 전에 종료</a><a href="#part-12">고친 뒤 다시 망침</a><a href="#part-13">추가 변경과 통과율</a><a href="#part-14">종료 시점의 반전</a><a href="#part-15">확인 횟수와 해석 경계</a><a href="#part-16">reasoning 비용 2.3배</a><a href="#part-17">큰 과제 차이와 넓은 구간</a><a href="#part-18">failure taxonomy와 집계 불일치</a><a href="#part-19">reward-hacking judge의 한계</a><a href="#part-20">선행연구와 저자 교차</a><a href="#part-21">20과제 프리프린트의 한계</a><a href="#part-22">검증하고 멈추는 정책</a><a href="#part-23">3줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>장애를 고치는 정답 명령을<br />
+전부 실행했음.</p>
+<p>그럼 복구 성공일까?</p>
+<p>이번 실험에선 아니었음.</p>
+<p>정답 조치를 모두 한 1,638번 중<br />
+실제로 통과한 건 966번, 59%였음.</p>
+<p>나머지 672번은<br />
+정답을 손에 쥐고도 실패했음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 정답 조치를 모두 한 episode도 59%만 통과했다는 원문 대목 (Fu 외, 원문 p.8, crop)"><img src="../assets/posts/incident-arena/quote_full_fix.webp" alt="정답 조치를 모두 한 episode도 59%만 통과했다는 원문 대목 (Fu 외, 원문 p.8, crop)" loading="lazy" decoding="async"></button><figcaption>정답 조치를 모두 한 episode도 59%만 통과했다는 원문 대목 (Fu 외, 원문 p.8, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>논문 제목은<br />
+<strong>Incident-Arena: Getting agents to the<br />
+last nine of reliability</strong>임. </p>
+<p>Andre Fu, Malik Drabla, Leon Liu,<br />
+Meji Abidoye, Marek Šuppa, Lata Mishra,<br />
+Adnan El Assadi, Yiyuan Li가 썼음. </p>
+<p>논문 당시 Abundant AI, Adrenaline AI,<br />
+Carnegie Mellon University,<br />
+Comenius University in Bratislava,<br />
+Massachusetts General Hospital 소속 연구임. </p>
+<p>2026년 9월 30일 공개된 arXiv v1 프리프린트임.<br />
+2026년 10월 8일 기준 확인 가능한<br />
+동료심사 채택 정보는 없음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문 제목·저자·당시 소속 (Fu 외, 원문 p.1, crop)"><img src="../assets/posts/incident-arena/header.webp" alt="논문 제목·저자·당시 소속 (Fu 외, 원문 p.1, crop)" loading="lazy" decoding="async"></button><figcaption>논문 제목·저자·당시 소속 (Fu 외, 원문 p.1, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.00648v1">arXiv</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.00648v1">PDF</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.00648">DOI</a> · <a target="_blank" rel="noopener" href="https://github.com/abundant-ai/incident-arena">공개 코드</a></p></section>
+<section class="part" id="part-3"><p>① 이 연구가 묻는 질문은 단순함.</p>
+<p>“알람을 잠깐 껐다”와<br />
+“서비스를 안전하게 복구했다”를<br />
+어떻게 구분할 것인가?</p>
+<p>예를 들어 연결 풀 설정을 바로잡아<br />
+에러가 사라졌다고 해보겠음.</p>
+<p>그 뒤 에이전트가 더 좋은 값 같다며<br />
+허용 상한을 넘겨버리면 다시 실패함.</p>
+<p>또 queue backlog가 아직 빠지는 중인데<br />
+끝났다고 선언하면<br />
+정답 명령을 썼어도 서비스 지표는 실패임. </p>
+<p>Incident-Arena는 이 마지막 구간을 보려는 평가임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 장애 주입부터 에이전트 실행·검증까지의 전체 흐름 (Fu 외, 원문 Figure 2, p.4)"><img src="../assets/posts/incident-arena/fig2_p4.webp" alt="장애 주입부터 에이전트 실행·검증까지의 전체 흐름 (Fu 외, 원문 Figure 2, p.4)" loading="lazy" decoding="async"></button><figcaption>장애 주입부터 에이전트 실행·검증까지의 전체 흐름 (Fu 외, 원문 Figure 2, p.4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-4"><p>② 과제는 사람이 만든 SRE 장애 20개임. <br />
+서비스 장애를 진단하고 복구하는<br />
+운영 과제라고 보면 됨.</p>
+<p>Slack처럼 생긴 자체 서비스 13개,<br />
+FrappeERP 6개,<br />
+Saleor 1개로 구성됨. </p>
+<p>설정값 오류 외에<br />
+실행 중 상태와 container image에 심은 fault도 있음.</p>
+<p>에이전트가 만질 수 있는 범위도<br />
+제한된 설정만 보이는 경우,<br />
+shell이 보이는 경우,<br />
+직접 build할 수 있는 경우로 나뉨. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 20개 과제의 substrate·fault 수·전체 통과율 (Fu 외, 원문 Table 6, p.14)"><img src="../assets/posts/incident-arena/tab6_p14.webp" alt="20개 과제의 substrate·fault 수·전체 통과율 (Fu 외, 원문 Table 6, p.14)" loading="lazy" decoding="async"></button><figcaption>20개 과제의 substrate·fault 수·전체 통과율 (Fu 외, 원문 Table 6, p.14)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-5"><p>과제는 실제 시스템에서도 돌아갔음.</p>
+<p>매 trial마다 독립된<br />
+live Kubernetes cluster를 띄웠음.<br />
+Slack-like 환경만 해도 application pod 35개,<br />
+harness pod 12개로 합계 47개였음. </p>
+<p>에이전트는 장애를 보고 명령을 실행하고<br />
+실제 서비스 상태를 바꿨음.</p>
+<p>제한 시간은 60분.<br />
+에이전트가 떠난 뒤에도 180초 동안<br />
+새 traffic을 흘리며 채점했음. </p>
+<p>이 차이가 중요함.<br />
+마지막 답변보다<br />
+에이전트가 사라진 뒤 시스템 상태를 채점했음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: fault 주입 층과 agent 접근 범위를 교차한 task-space (Fu 외, 원문 Table 5, p.13)"><img src="../assets/posts/incident-arena/tab5_p13.webp" alt="fault 주입 층과 agent 접근 범위를 교차한 task-space (Fu 외, 원문 Table 5, p.13)" loading="lazy" decoding="async"></button><figcaption>fault 주입 층과 agent 접근 범위를 교차한 task-space (Fu 외, 원문 Table 5, p.13)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>③ 채점에는 문이 두 개 있었음.</p>
+<p>첫째는 <strong>Outcome gate</strong>임.<br />
+새 traffic 아래서 성공 처리된 요청 비율인 goodput,<br />
+응답 시간인 latency,<br />
+error rate가 건강 범위인지 봄.</p>
+<p>이처럼 서비스가 정상인지 보는 수치를<br />
+SLI라고 부름.</p>
+<p>둘째는 <strong>Safety gate</strong>임.<br />
+서비스를 재시작하거나 fault trigger를 다시 걸어도<br />
+수리가 유지되는지 봄.</p>
+<p>허용 범위 밖 설정을 건드렸는지,<br />
+보호 데이터와 guardrail이 온전한지도 확인함. </p>
+<p>두 문을 모두 지나야 1점임. </p>
+<p>쉽게 말하면 불을 껐다는 보고서가 아니라<br />
+다시 불붙지 않고 옆방도 멀쩡한지를 보는 셈임.</p>
+<p>정확히는 정해진 검사기가<br />
+시스템 상태와 이 서비스 지표를 확인함.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: Outcome/Safety 두 gate의 3,000회 판정 조합 (Fu 외, 원문 Table 8, p.15)"><img src="../assets/posts/incident-arena/tab8_p15.webp" alt="Outcome/Safety 두 gate의 3,000회 판정 조합 (Fu 외, 원문 Table 8, p.15)" loading="lazy" decoding="async"></button><figcaption>Outcome/Safety 두 gate의 3,000회 판정 조합 (Fu 외, 원문 Table 8, p.15)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-7"><p>그 두 gate 중 하나만 있었다면<br />
+얼마나 달라졌을까?</p>
+<p>Outcome과 Safety를 모두 통과한 건 1,139회였음.</p>
+<p>Outcome은 통과했지만<br />
+Safety에서 떨어진 경우가 990회였음. </p>
+<p>즉 Outcome만 봤다면<br />
+2,129회가 통과한 것처럼 보였을 것임.<br />
+진짜 두 gate 통과는 1,139회였음. </p>
+<p>서비스 지표가 잠깐 정상이라는 이유만으로<br />
+범위를 넘긴 수정과 재시작 뒤 깨지는 수리를<br />
+성공 처리할 뻔했다는 뜻임.</p></section>
+<section class="part" id="part-8"><p>두 gate를 만든 뒤에는<br />
+검증기가 보고서에 속지 않는지도 시험했음.</p>
+<p>한 Frappe 과제에 외부 process를 달아<br />
+database fault를 약 1초마다 다시 심었음.</p>
+<p>정상 과제에선 17회 모두 복구했음.<br />
+변형 과제 17회 중 11회가<br />
+“해결됨”이라고 잘못 보고했지만<br />
+Outcome checks가 11회를 모두 거절했음. </p>
+<p>다만 이 수치는 공개 20과제 성적에서 빼야 함.<br />
+검증기 stress test를 위한 별도 변형이기 때문임.</p>
+<p>연구팀도 verifier를 시험한 증거로만 해석했음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 변형 과제의 false resolved 11건을 모두 거절한 원문 대목 (Fu 외, 원문 p.19, crop)"><img src="../assets/posts/incident-arena/stress_test_p19.webp" alt="변형 과제의 false resolved 11건을 모두 거절한 원문 대목 (Fu 외, 원문 p.19, crop)" loading="lazy" decoding="async"></button><figcaption>변형 과제의 false resolved 11건을 모두 거절한 원문 대목 (Fu 외, 원문 p.19, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>이 검증기로 model-harness 조합 10개를 채점했음.<br />
+여기서 harness는 모델에 도구를 붙여<br />
+명령을 실행시키는 운영 틀임.<br />
+20과제, 가능한 reasoning setting마다 3회씩,<br />
+총 3,000 trials임. </p>
+<p>가장 높은 개별 설정의 point estimate는<br />
+GPT-6 Astra xhigh 64.3%,<br />
+Claude Opus 5.5 max 63.6%였음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 각 model-harness의 가장 좋은 reasoning setting 결과 (Fu 외, 원문 Figure 1, p.1)"><img src="../assets/posts/incident-arena/fig1_p1.webp" alt="각 model-harness의 가장 좋은 reasoning setting 결과 (Fu 외, 원문 Figure 1, p.1)" loading="lazy" decoding="async"></button><figcaption>각 model-harness의 가장 좋은 reasoning setting 결과 (Fu 외, 원문 Figure 1, p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이걸 1위와 2위의 확정 순위로 읽으면 곤란함.</p>
+<p>20개 과제를 다시 뽑아 계산한<br />
+task-bootstrap 95% 구간이<br />
+각각 45.0~82.1%, 49.7~78.6%로 크게 겹침. </p>
+<p>과제 20개에 trial 3회라<br />
+불확실성이 큼.</p></section>
+<section class="part" id="part-10"><p>④ 이제 핵심 반전으로 돌아가겠음.</p>
+<p>행동 기록을 쓸 수 있던 2,967회 중<br />
+정답 action을 전부 실행한 full fix는<br />
+1,638회, 55%였음. </p>
+<p>full fix가 없으면 통과는<br />
+73/1,329, 5.5%에 그쳤음. </p>
+<p>정답 조치를 실행하는 건 거의 필수였음.<br />
+그런데 충분하지는 않았음.</p>
+<p>full fix 1,638회 중<br />
+966회, 59%만 통과했기 때문임. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: full fix를 모두 했어도 59%만 통과한 원문 대목 (Fu 외, 원문 p.8, crop)"><img src="../assets/posts/incident-arena/quote_full_fix.webp" alt="full fix를 모두 했어도 59%만 통과한 원문 대목 (Fu 외, 원문 p.8, crop)" loading="lazy" decoding="async"></button><figcaption>full fix를 모두 했어도 59%만 통과한 원문 대목 (Fu 외, 원문 p.8, crop)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>그 41% 실패에서<br />
+대표적인 두 장면이 보였음.</p>
+<p>논문이 구체적으로 설명한 건<br />
+340회와 329회이고,<br />
+나머지 3회는 이 문단에서 분해하지 않았음.</p>
+<p>첫 장면은 <strong>너무 일찍 끝냄</strong>임.</p>
+<p>full-fix failures 중 340회는<br />
+Outcome만 실패했음. </p>
+<p>설정은 고쳤지만 restart가 진행 중이거나<br />
+connection이 아직 순환 중이었음.</p>
+<p>또 fault가 남긴 backlog나 중복 record가<br />
+지표를 계속 망치는데<br />
+그 후처리를 하지 않은 경우도 있었음.</p>
+<p>“원인을 제거함”과<br />
+“서비스가 회복됨”은 같은 시점이 아니었음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: full fix 뒤 행동과 통과율을 나눈 결과 (Fu 외, 원문 Table 4, p.8)"><img src="../assets/posts/incident-arena/tab4_p8.webp" alt="full fix 뒤 행동과 통과율을 나눈 결과 (Fu 외, 원문 Table 4, p.8)" loading="lazy" decoding="async"></button><figcaption>full fix 뒤 행동과 통과율을 나눈 결과 (Fu 외, 원문 Table 4, p.8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-12"><p>이어지는 두 번째 장면은<br />
+<strong>고친 뒤 다시 망침</strong>임.</p>
+<p>full-fix failures 중 329회가<br />
+Safety check에서 떨어졌음. </p>
+<p>대표적으로 maintenance window를<br />
+다른 위험한 초로 옮기거나,<br />
+이미 고친 connection pool을<br />
+상한 너머로 다시 키웠음.</p>
+<p>논문 Table 3이 별도로 집계한<br />
+1,948개 failure record에서 가장 큰 단일 범주도<br />
+“repair did not last” 517개, 26.5%였음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 1,948개 실패의 배타적 분류와 비율 (Fu 외, 원문 Table 3, p.7)"><img src="../assets/posts/incident-arena/tab3_p7.webp" alt="1,948개 실패의 배타적 분류와 비율 (Fu 외, 원문 Table 3, p.7)" loading="lazy" decoding="async"></button><figcaption>1,948개 실패의 배타적 분류와 비율 (Fu 외, 원문 Table 3, p.7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-13"><p>⑤ full fix 뒤 추가 변경을 한 그룹은<br />
+통과율이 더 낮았음.</p>
+<p>Table 4에서 post-fix 행동이 분류된 trial 중<br />
+더는 상태를 바꾸지 않은 638회는<br />
+69.6%가 통과했음.</p>
+<p>그 뒤 추가 변경을 한 931회는<br />
+53.0%만 통과했음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: full fix 이후 행동과 통과율 (Fu 외, 원문 Table 4, p.8)"><img src="../assets/posts/incident-arena/tab4_p8.webp" alt="full fix 이후 행동과 통과율 (Fu 외, 원문 Table 4, p.8)" loading="lazy" decoding="async"></button><figcaption>full fix 이후 행동과 통과율 (Fu 외, 원문 Table 4, p.8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이 비교는 무작위 실험이 아닌 관찰 결과임.<br />
+추가 변경이 실패를 <strong>일으켰다</strong>고<br />
+이 표만으로 단정할 수는 없음.</p>
+<p>다만 trajectory를 읽은 저자 분석과 함께 보면<br />
+이미 맞춘 답을 다시 만지는 문제가<br />
+상당한 실패 경로였음.</p></section>
+<section class="part" id="part-14"><p>추가 변경과 함께<br />
+종료 시점도 예상 밖이었음.</p>
+<p>Table 4에 선언 시점이 잡힌 trial 중<br />
+마지막 정답 action 뒤 2분 안에 선언한 경우는<br />
+71.7%가 통과했음.</p>
+<p>2~10분은 59.9%,<br />
+10분 이상은 18.6%였음. </p>
+<p>과제가 쉬워서 빨리 끝난 효과만은 아닌지 보려고<br />
+같은 과제 안에서도 비교했음.</p>
+<p>표본이 충분한 12과제 중 11과제에서<br />
+2분 안에 끝낸 그룹이 5분 이상 기다린 그룹보다<br />
+평균 20%p 높았음. </p>
+<p>이 역시 인과 증명은 아님.<br />
+하지만 “시간을 다 쓰면 안전하다”는 설계 가정에는<br />
+강한 경고가 됨.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 선언 시점별 통과율도 함께 담긴 표 (Fu 외, 원문 Table 4, p.8)"><img src="../assets/posts/incident-arena/tab4_p8.webp" alt="선언 시점별 통과율도 함께 담긴 표 (Fu 외, 원문 Table 4, p.8)" loading="lazy" decoding="async"></button><figcaption>선언 시점별 통과율도 함께 담긴 표 (Fu 외, 원문 Table 4, p.8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-15"><p>확인 자체가 나쁘다는 뜻도 아님.</p>
+<p>Table 4에 확인 횟수가 잡힌 trial 중<br />
+read-only check 5~8회는 65.6%였음.<br />
+9회 이상은 52.3%였음. </p>
+<p>이 표만으로<br />
+확인을 줄이라는 처방까지 내릴 수는 없음.</p>
+<p>복구 뒤 실제 load와 지속성을 확인하되<br />
+정상 상태를 다시 흔드는 추가 변경은<br />
+구분해서 봐야 한다는 단서는 됨.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: read-only 확인 횟수별 통과율 (Fu 외, 원문 Table 4, p.8)"><img src="../assets/posts/incident-arena/tab4_p8.webp" alt="read-only 확인 횟수별 통과율 (Fu 외, 원문 Table 4, p.8)" loading="lazy" decoding="async"></button><figcaption>read-only 확인 횟수별 통과율 (Fu 외, 원문 Table 4, p.8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-16"><p>그럼 reasoning effort를 올리면 해결될까?</p>
+<p>다섯 단계가 있는 8개 모델의 pooled 결과는<br />
+low 39.2%, max 43.8%였음.<br />
+차이는 4.6%p임. </p>
+<p>그런데 task-resampled interval은<br />
+−4.8에서 +13.8%p였음.<br />
+0을 가로지름.</p>
+<p>반면 평균 비용은 episode당<br />
+1.46달러에서 3.38달러로 2.3배가 됐음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: reasoning effort별 pooled 통과율과 평균 비용 (Fu 외, 원문 Table 14, p.18)"><img src="../assets/posts/incident-arena/tab14_p18.webp" alt="reasoning effort별 pooled 통과율과 평균 비용 (Fu 외, 원문 Table 14, p.18)" loading="lazy" decoding="async"></button><figcaption>reasoning effort별 pooled 통과율과 평균 비용 (Fu 외, 원문 Table 14, p.18)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>“생각을 많이 하면 성능이 떨어진다”는 결론은 아님.</p>
+<p>정확한 해석은<br />
+이 20과제의 pooled 결과에서<br />
+비용 증가만큼 확실한 성공률 개선을 보이지 못했다는 것임.</p></section>
+<section class="part" id="part-17"><p>과제 차이는 아주 컸음.</p>
+<p><code>split-sequencer</code> 전체 통과율은 1.3%,<br />
+<code>maintenance-collision</code>은 72.0%였음.<br />
+가장 높은 단일 과제는 76.7%였음. </p>
+<p>앞의 64.3%는 가장 좋은 설정 하나였음.<br />
+이번 pooled 표는 reasoning 설정을 묶은 결과임.</p>
+<p>그 pooled 95% 구간도 넓었음.<br />
+GPT-6 Astra .590 [.430, .743],<br />
+Opus 5.5 .540 [.387, .690]이었음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델별 pooled Pass@1과 task-bootstrap 95% 구간 (Fu 외, 원문 Table 10, p.16)"><img src="../assets/posts/incident-arena/tab10_p16.webp" alt="모델별 pooled Pass@1과 task-bootstrap 95% 구간 (Fu 외, 원문 Table 10, p.16)" loading="lazy" decoding="async"></button><figcaption>모델별 pooled Pass@1과 task-bootstrap 95% 구간 (Fu 외, 원문 Table 10, p.16)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>“SRE 전반의 정확한 능력치”보다<br />
+“이 과제 묶음에서 드러난 실패 구조”를<br />
+보는 편이 맞음.</p></section>
+<section class="part" id="part-18"><p>⑥ 논문 Table 3은 failure record 1,948개를<br />
+첫 번째로 맞는 규칙 하나에 넣었음.</p>
+<p>시간 안에 완료 선언을 못함 317,<br />
+허용 목록 밖을 바꿈 427,<br />
+원인이나 damage를 남김 170,<br />
+수리가 지속되지 않음 517,<br />
+서비스 지표가 계속 범위 밖임 466,<br />
+기타 integrity 실패 51이었음. </p>
+<p>시간이나 step budget을 다 쓴 경우는 325회였는데<br />
+실제로 수리된 상태는 8회뿐이었음. </p>
+<p>“생각하다가 시간만 끝남”도 있고,<br />
+“맞춘 뒤 더 만지다 깨짐”도 있었음.</p>
+<p>하나의 프롬프트 요령으로<br />
+전부 고치기 어려운 이유임.</p>
+<p>여기엔 원문 내부의 숫자 차이도 있음.<br />
+gate matrix의 3,000회에서<br />
+both-pass 1,139회를 빼면 failure는 1,861회임.</p>
+<p>taxonomy의 1,948회와 87건 차이가 나지만<br />
+논문은 그 이유를 설명하지 않았음. </p>
+<p>§5.2 집계도 같은 문제가 있음.<br />
+action record가 있는 2,967회에서<br />
+보고된 pass는 966+73=1,039회임.</p>
+<p>기록 없는 33회를 모두 pass로 잡아도 1,072회라<br />
+gate matrix의 both-pass 1,139회와 맞지 않음.<br />
+v1은 이 차이도 설명하지 않았음. </p>
+<p>따라서 59%는 §5.2가 제시한<br />
+해당 집계 안의 수치로 읽어야 함.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 실패를 첫 규칙 하나로 분류한 taxonomy (Fu 외, 원문 Table 3, p.7)"><img src="../assets/posts/incident-arena/tab3_p7.webp" alt="실패를 첫 규칙 하나로 분류한 taxonomy (Fu 외, 원문 Table 3, p.7)" loading="lazy" decoding="async"></button><figcaption>실패를 첫 규칙 하나로 분류한 taxonomy (Fu 외, 원문 Table 3, p.7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-19"><p>다만 실패 원인을 읽는 분석까지<br />
+모두 같은 확실성을 갖는 건 아님.</p>
+<p>reward hacking,<br />
+즉 실제 복구보다 점수만 유리하게 만들려는 행동은<br />
+특히 조심해서 읽어야 함.</p>
+<p>논문은 trajectory를 사후 LLM judge로 분류했음.<br />
+그런데 judge마다 suspicious 판정 강도가 크게 달랐고<br />
+judge끼리 범주가 얼마나 일치하는지 나타내는<br />
+Cohen’s κ는 일부 pair에서 0.121까지 낮았음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: reward-hacking judge 사이 일치율·Cohen’s κ·상관 (Fu 외, 원문 Table 17, p.20)"><img src="../assets/posts/incident-arena/tab17_p20.webp" alt="reward-hacking judge 사이 일치율·Cohen’s κ·상관 (Fu 외, 원문 Table 17, p.20)" loading="lazy" decoding="async"></button><figcaption>reward-hacking judge 사이 일치율·Cohen’s κ·상관 (Fu 외, 원문 Table 17, p.20)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>연구팀도 이 분석을<br />
+어느 judge가 맞다는 증거가 아닌<br />
+descriptive agreement analysis라고 적었음.</p>
+<p>초기 환경에서는 한 agent가<br />
+채점기 쪽 pod에서 코드를 실행하는<br />
+RCE까지 만들었음.<br />
+필수 제출 조건을 빠뜨린 나쁜 환경 설계가 원인이었음. </p>
+<p>현재 공개 benchmark에서의 확정된 공격률처럼<br />
+옮기면 안 되는 사례임.</p></section>
+<section class="part" id="part-20"><p>복구 결과를 어떻게 확인할지는<br />
+앞선 운영 에이전트 평가에서도 문제였음.</p>
+<p>Cloud-OpsBench는 754개<br />
+runtime-verified 사례에서<br />
+정답 원인을 맞힌 비율과<br />
+그 진단을 뒷받침하는 근거 수집을 따로 봤음.</p>
+<p>두 보고된 시스템의 원인 판정은 .76, .68이었지만<br />
+필수 근거를 닫은 비율은 .38, .15였음. </p>
+<p>SREGym은 90개 live SRE 문제로<br />
+진단과 mitigation을 분리해 측정했음. </p>
+<p>SWE-Marathon은 장기 coding task에서<br />
+다층 검증과 reward hacking 문제를 전면에 놓았음. </p>
+<p>Incident-Arena는 이 흐름을 이어<br />
+“복구 뒤 지속성”과 “허용 범위”를<br />
+별도 deterministic gate로 묶었음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 기존 SRE·agent benchmark와 Incident-Arena 비교 (Fu 외, 원문 Table 1, p.3)"><img src="../assets/posts/incident-arena/tab1_p3.webp" alt="기존 SRE·agent benchmark와 Incident-Arena 비교 (Fu 외, 원문 Table 1, p.3)" loading="lazy" decoding="async"></button><figcaption>기존 SRE·agent benchmark와 Incident-Arena 비교 (Fu 외, 원문 Table 1, p.3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>SWE-Marathon과는 Yiyuan Li,<br />
+Adnan El Assadi,<br />
+Marek Šuppa가 저자로 겹침. <br />
+다층 검증과 reward hacking을 다룬 연구에서<br />
+이번 live 복구 평가로 이어진 인물 교차임.</p>
+<p>2026년 10월 8일 기준 너무 최근이라<br />
+확인 가능한 후속 인용 연구는 아직 없었음. </p>
+<p>“후속 연구가 없다”가 아니라<br />
+현재 색인에서 검증되지 않았다는 뜻임.</p></section>
+<section class="part" id="part-21"><p>⑦ 한계도 큼.</p>
+<p>과제는 20개이고 setting당 반복은 3회임.<br />
+13개가 Slack-like에 몰려 있음.</p>
+<p>어떤 substrate에 어떤 fault와 onset이 배치됐는지도<br />
+서로 얽혀 있어 원인을 분리하기 어려움. </p>
+<p>과제는 연구팀이 어려운 capability gap을<br />
+겨냥해 만든 표본임.</p>
+<p>상용 model과 harness는 계속 바뀜.<br />
+그러니 64.3% 같은 숫자를<br />
+현재 제품의 영구 성적표로 보면 안 됨.</p>
+<p>이건 2026년 9월 공개 판본의<br />
+특정 환경·도구·과제에서 얻은 결과임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델별 결과의 넓은 task-bootstrap 구간 (Fu 외, 원문 Table 10, p.16)"><img src="../assets/posts/incident-arena/tab10_p16.webp" alt="모델별 결과의 넓은 task-bootstrap 구간 (Fu 외, 원문 Table 10, p.16)" loading="lazy" decoding="async"></button><figcaption>모델별 결과의 넓은 task-bootstrap 구간 (Fu 외, 원문 Table 10, p.16)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-22"><p>이 한계를 안고도<br />
+도입 질문에는 답할 수 있음. </p>
+<p>운영 agent에게 필요한 건<br />
+정답 명령을 생성하는 능력만이 아님.</p>
+<p>복구 뒤 서비스 지표와<br />
+수리의 지속성을 확인해야 함.</p>
+<p>허용 범위를 지키면서<br />
+성공 뒤 추가 변경을 멈추는 정책도 필요함.</p>
+<p>Incident-Arena의 가장 흥미로운 발견은<br />
+agent가 정답을 <strong>모를 때만</strong> 실패한 게 아니었다는 점임.</p>
+<p>정답 조치를 실행한 뒤에도<br />
+회복 전에 종료하거나<br />
+추가 변경으로 수리를 깨뜨린 기록이 있었음.</p>
+<p>그런 종료 정책이 실제로 통과율을 높이는지는<br />
+같은 조건에서 정책만 바꾼 통제 비교가 더 필요함.</p></section>
+<section class="part" id="part-23"><p>3줄 요약 </p>
+<ol>
+<li>정답 조치를 다 실행해도 성공은 아니었음.<br />
+§5.2 action-record 집계의 1,638회 중<br />
+실제 통과는 59%였음.</li>
+<li>추가 변경·늦은 종료는 낮은 통과율과 연관됐고,<br />
+서비스 상태와 수리 지속성을 따로 검사했음.</li>
+<li>20과제·setting당 3회인 프리프린트 결과임.<br />
+검증·종료 정책을 더 넓은 조건에서 확인해야 함.</li>
+</ol></section><div class="article-end"><div class="source-links"><a href="../assets/posts/incident-arena/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.00648v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/incident-arena.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

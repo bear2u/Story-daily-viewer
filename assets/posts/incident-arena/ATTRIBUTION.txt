@@ -1,0 +1,16 @@
+Source paper
+Title: Incident-Arena: Getting agents to the last nine of reliability
+Authors: Andre Fu, Malik Drabla, Leon Liu, Meji Abidoye, Marek Šuppa, Lata Mishra, Adnan El Assadi, Yiyuan Li
+Version used: arXiv:2610.00648v1, submitted 2026-09-30
+Paper URL: https://arxiv.org/abs/2610.00648v1
+PDF URL: https://arxiv.org/pdf/2610.00648v1
+DOI URL: https://doi.org/10.48550/arXiv.2610.00648
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+Accessed: 2026-10-08
+
+All images in figures/ named header.png, fig*_p*.png, tab*_p*.png, and quote_*.png
+are unmodified crops from the source PDF, except for resizing performed by the report renderer.
+The filename suffix identifies the source PDF page. Captions in report.md provide the figure/table number and page.
+
+No AI-generated scientific figures are used.
