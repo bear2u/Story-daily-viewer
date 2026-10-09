@@ -1,0 +1,40 @@
+{
+  "slug": "cogadapt",
+  "title": "사람이 코드를 읽은 뇌파로 AI가 고칠 층을 골라봤더니",
+  "excerpt": "사람의 EEG·시선 자료를 prior로 바꿔 과제마다 약 6개 블록만 업데이트했음. Qwen-LiveCodeBench pass@1은 18.86%에서 29.71%로 올랐지만, 실제 시간 절약은 5.87% 이하여서 성능과 계산 절약을 따로 읽어야 했음.",
+  "date": "2026-10-09",
+  "published_at": "2026-10-09T09:00:00+09:00",
+  "verified_date": "2026-10-09",
+  "reading_minutes": 14,
+  "tags": [
+    "코드 LLM",
+    "인지과학",
+    "효율적 학습"
+  ],
+  "cover": "assets/posts/cogadapt/fig2_p4.webp",
+  "cover_alt": "이진 탐색 종료 조건에서 사람 EEG·시선과 코드 모델 반응이 함께 커진 CogAdapt 원문 Figure 2",
+  "markdown": "cogadapt.md",
+  "paper_title": "CogAdapt: Cognition-informed Sparse Adaptation of Code LLMs",
+  "paper_year": "2026",
+  "venue": "arXiv v1 프리프린트 · 확인 가능한 동료심사 채택 정보 없음",
+  "authors": "Yueke Zhang · Zihan Fang · Kevin Leach · Yu Huang",
+  "source_url": "https://arxiv.org/abs/2610.07446v1",
+  "chapters": [
+    "6개 블록으로 pass@1 10.86%p",
+    "논문·저자·심사 상태",
+    "EEG 원자료와 EyeMulator",
+    "이진 탐색 한 줄의 장면",
+    "81개 영역의 약한 상관",
+    "모델마다 다른 내부 신호",
+    "사람 자료를 prior로 요약",
+    "어느 블록이 gradient를 받나",
+    "37명·32프로그램·2모델",
+    "두 벤치마크의 pass@1",
+    "사람 자료를 뺀 ablation",
+    "parameter 87%와 시간 6%",
+    "계산 절약의 한계",
+    "반복·일반화가 더 필요함",
+    "이번 v1에서 말할 수 있는 것"
+  ],
+  "attribution_url": "assets/posts/cogadapt/ATTRIBUTION.txt"
+}

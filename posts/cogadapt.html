@@ -1,0 +1,238 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="사람의 EEG·시선 자료를 prior로 바꿔 과제마다 약 6개 블록만 업데이트했음. Qwen-LiveCodeBench pass@1은 18.86%에서 29.71%로 올랐지만, 실제 시간 절약은 5.87% 이하여서 성능과 계산 절약을 따로 읽어야 했음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="사람이 코드를 읽은 뇌파로 AI가 고칠 층을 골라봤더니">
+<meta property="og:description" content="사람의 EEG·시선 자료를 prior로 바꿔 과제마다 약 6개 블록만 업데이트했음. Qwen-LiveCodeBench pass@1은 18.86%에서 29.71%로 올랐지만, 실제 시간 절약은 5.87% 이하여서 성능과 계산 절약을 따로 읽어야 했음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/cogadapt/fig2_p4.webp">
+<title>사람이 코드를 읽은 뇌파로 AI가 고칠 층을 골라봤더니 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/cogadapt.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">코드 LLM</span><span class="pill">인지과학</span><span class="pill">효율적 학습</span><span>·</span><time datetime="2026-10-09">2026. 10. 09</time><span>·</span><span>14분 읽기</span></div>
+<h1>사람이 코드를 읽은 뇌파로 AI가 고칠 층을 골라봤더니</h1><p class="lead">사람의 EEG·시선 자료를 prior로 바꿔 과제마다 약 6개 블록만 업데이트했음. Qwen-LiveCodeBench pass@1은 18.86%에서 29.71%로 올랐지만, 실제 시간 절약은 5.87% 이하여서 성능과 계산 절약을 따로 읽어야 했음.</p>
+
+<div class="article-details"><strong>CogAdapt: Cognition-informed Sparse Adaptation of Code LLMs</strong><br>Yueke Zhang · Zihan Fang · Kevin Leach · Yu Huang · 2026 · arXiv v1 프리프린트 · 확인 가능한 동료심사 채택 정보 없음<br>원문 그림과 함께 읽는 15파트 해설 · 판본 및 출처 확인: 2026-10-09</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">6개 블록으로 pass@1 10.86%p</a><a href="#part-2">논문·저자·심사 상태</a><a href="#part-3">EEG 원자료와 EyeMulator</a><a href="#part-4">이진 탐색 한 줄의 장면</a><a href="#part-5">81개 영역의 약한 상관</a><a href="#part-6">모델마다 다른 내부 신호</a><a href="#part-7">사람 자료를 prior로 요약</a><a href="#part-8">어느 블록이 gradient를 받나</a><a href="#part-9">37명·32프로그램·2모델</a><a href="#part-10">두 벤치마크의 pass@1</a><a href="#part-11">사람 자료를 뺀 ablation</a><a href="#part-12">parameter 87%와 시간 6%</a><a href="#part-13">계산 절약의 한계</a><a href="#part-14">반복·일반화가 더 필요함</a><a href="#part-15">이번 v1에서 말할 수 있는 것</a></aside><article class="article-body"><section class="part" id="part-1"><p>사람이 코드 한 줄에서 잠깐 멈춘 흔적이<br />
+AI에게도 고칠 곳을 알려줄 수 있음?</p>
+<p>이번 연구는 실제로 해봤음.</p>
+<p>Qwen-LiveCodeBench 조건에선<br />
+48개 블록 가운데 과제마다 평균 6.25개만<br />
+gradient를 받게 했음. </p>
+<p>그런데 첫 생성 답안이 test를 통과한 비율은<br />
+일반 fine-tuning 18.86%에서<br />
+29.71%로 올랐음. </p>
+<p>논문이 보고한 증가폭은 10.86%p임. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사람이 어려워한 코드와 모델이 강하게 반응한 영역으로 일부 층만 고르는 발상 (Zhang 외, Figure 1)"><img src="../assets/posts/cogadapt/fig1_p2.webp" alt="사람이 어려워한 코드와 모델이 강하게 반응한 영역으로 일부 층만 고르는 발상 (Zhang 외, Figure 1)" loading="lazy" decoding="async"></button><figcaption>사람이 어려워한 코드와 모델이 강하게 반응한 영역으로 일부 층만 고르는 발상 (Zhang 외, Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>그 숫자를 낸 논문은<br />
+<strong>CogAdapt: Cognition-informed Sparse<br />
+Adaptation of Code LLMs</strong>임. </p>
+<p>Yueke Zhang, Zihan Fang,<br />
+Kevin Leach, Yu Huang이 썼고<br />
+네 명 모두 논문 당시<br />
+Vanderbilt University 소속임. </p>
+<p>2026년 10월 5일 공개된<br />
+arXiv v1 프리프린트임. </p>
+<p>2026년 10월 9일 기준<br />
+확인되는 동료평가 채택 정보는 없음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문 제목·저자·당시 소속 (Zhang 외, 원문 p.1)"><img src="../assets/posts/cogadapt/p1_header.webp" alt="논문 제목·저자·당시 소속 (Zhang 외, 원문 p.1)" loading="lazy" decoding="async"></button><figcaption>논문 제목·저자·당시 소속 (Zhang 외, 원문 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.07446v1">arXiv</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.07446v1">PDF</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.07446">arXiv DOI</a></p></section>
+<section class="part" id="part-3"><p>그 논문이 사람의 코드 읽기를<br />
+처음 잰 건 아님.</p>
+<p>2022년 ESEC/FSE 연구가<br />
+37명에게 Java 코드 조각을 최대 32개씩 읽히고<br />
+EEG와 눈 움직임을 함께 기록했음. </p>
+<p>그 연구는 일을 잘 푼 참가자일수록<br />
+더 짧게 보고 덜 되돌아가며<br />
+인지 부하도 약간 낮았다고 보고했음.<br />
+다만 상관은 rho -0.09로 약했음. </p>
+<p>2026년 ACL에 나온 EyeMulator는<br />
+사람 시선을 token별 학습 가중치로 바꿨음. </p>
+<p>이번 네 저자 중 세 명이<br />
+그 EyeMulator에도 참여했음. </p>
+<p>CogAdapt는 사람 자료를<br />
+어느 블록을 고칠지 정하는 데도 썼음.</p>
+<p>전작 그림에선 시선 자료가<br />
+코드를 나눈 작은 단위인 token과<br />
+코드 문법 구조인 AST에 매핑되는 곳을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사람 시선을 token별 학습 가중치로 옮긴 EyeMulator (Yifan Zhang 외, ACL 2026 Figure 1)"><img src="../assets/posts/cogadapt/prior_eyemulator_fig1.webp" alt="사람 시선을 token별 학습 가중치로 옮긴 EyeMulator (Yifan Zhang 외, ACL 2026 Figure 1)" loading="lazy" decoding="async"></button><figcaption>사람 시선을 token별 학습 가중치로 옮긴 EyeMulator (Yifan Zhang 외, ACL 2026 Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-4"><p>2022년 원자료에서 가져온 장면이<br />
+짧은 이진 탐색 코드임.</p>
+<p>개발자는 <code>if (high &lt; low)</code>를 지나갔다가<br />
+다시 그 줄로 눈을 돌렸음.</p>
+<p>논문은 탐색을 멈출 조건과<br />
+바로 아래 <code>return -1</code>을 함께 이해하는<br />
+부담이 드러난 장면으로 설명했음. </p>
+<p>같은 부분에서 4~8Hz EEG theta가 강해지고<br />
+MoE 모델의 expert 선택 확신은 커졌음.<br />
+내부 표현 변화와 expert 기여도<br />
+더 컸다고 함. </p>
+<p>그림에선 노랑과 보라가<br />
+같은 boundary check에서 솟는지 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 이진 탐색 종료 조건에서 사람과 모델 반응이 함께 커진 예시 (Zhang 외, Figure 2)"><img src="../assets/posts/cogadapt/fig2_p4.webp" alt="이진 탐색 종료 조건에서 사람과 모델 반응이 함께 커진 예시 (Zhang 외, Figure 2)" loading="lazy" decoding="async"></button><figcaption>이진 탐색 종료 조건에서 사람과 모델 반응이 함께 커진 예시 (Zhang 외, Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-5"><p>장면 하나로는 부족하니<br />
+연구진은 81개 의미 영역을 묶어 비교했음. </p>
+<p>control flow, call과 return,<br />
+array expression, 나머지 연산으로 나눴음.</p>
+<p>표시된 영역의 75.0~83.3%에서<br />
+사람 신호와 모델 신호의 상관이<br />
+0보다 컸음. </p>
+<p>같은 방향으로 움직인 영역은 많았지만<br />
+얼마나 비슷하게 움직였는지는 약했음.</p>
+<p>하지만 비율만 보면 세 보이기 쉬움.</p>
+<p>median Spearman rho는<br />
+0.183에서 0.240 사이였음. </p>
+<p>EEG-Qwen 중앙값의 95% 재표집 구간은<br />
+0.000에서 0.217까지였음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 네 코드 범주에서 사람 신호와 두 모델 반응의 상관 분포 (Zhang 외, Figure 4)"><img src="../assets/posts/cogadapt/fig4_p14.webp" alt="네 코드 범주에서 사람 신호와 두 모델 반응의 상관 분포 (Zhang 외, Figure 4)" loading="lazy" decoding="async"></button><figcaption>네 코드 범주에서 사람 신호와 두 모델 반응의 상관 분포 (Zhang 외, Figure 4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>그 상관은 층마다 달랐음.</p>
+<p>아래 그림의 빨강은 양의 상관,<br />
+파랑은 음의 상관임.</p>
+<p>Qwen에서는 중간 이후 층의<br />
+hidden-state shift가 주로 붉었음.</p>
+<p>GLM에선 그 신호가 대체로 파랬고<br />
+expert-choice confidence와 MoE write가<br />
+더 붉게 나타났음. </p>
+<p>사람 반응과 맞는 모델 내부 신호가<br />
+아키텍처마다 달랐다는 뜻임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델 깊이와 사람 읽기 시간에 따른 EEG·모델 상관 지도 (Zhang 외, Figure 5)"><img src="../assets/posts/cogadapt/fig5_p15.webp" alt="모델 깊이와 사람 읽기 시간에 따른 EEG·모델 상관 지도 (Zhang 외, Figure 5)" loading="lazy" decoding="async"></button><figcaption>모델 깊이와 사람 읽기 시간에 따른 EEG·모델 상관 지도 (Zhang 외, Figure 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>Qwen 41번 블록은 보기 좋은 예지만<br />
+연구진도 유일한 뇌 정렬 층이라고<br />
+해석하지 않았음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: Qwen 41번 블록의 hidden-state 변화·읽기 시간·EEG theta 관계 (Zhang 외, Figure 6)"><img src="../assets/posts/cogadapt/fig6_p15.webp" alt="Qwen 41번 블록의 hidden-state 변화·읽기 시간·EEG theta 관계 (Zhang 외, Figure 6)" loading="lazy" decoding="async"></button><figcaption>Qwen 41번 블록의 hidden-state 변화·읽기 시간·EEG theta 관계 (Zhang 외, Figure 6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-7"><p>이 층별 상관과 사람 자료를<br />
+새 Python 과제에도 쓰게 요약했음.</p>
+<p>쉽게 말하면<br />
+사람이 많이 본 코드에 형광펜을 치고<br />
+과제마다 고칠 층을 따로 고른 것임.</p>
+<p>이전에 관찰한 경향을<br />
+새 과제 학습의 기준으로 가져왔고<br />
+여기서는 그 기준을 prior라고 부름.</p>
+<p>정확히는 prior가 세 종류임.</p>
+<p>Java 프로그램의 여덟 구조 특징으로<br />
+EEG theta를 예측하는 프로그램 prior,<br />
+문법 역할과 AST 문맥으로 옮긴 token prior,<br />
+모델 깊이별 상관을 요약한 depth prior임. </p>
+<p>새 Python 과제에는 실제 EEG가 없음.<br />
+Java에서 배운 구조적 경향만 가져옴. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사람 자료를 재사용 가능한 prior로 바꾸고 과제별 블록을 고르는 전체 과정 (Zhang 외, Figure 3)"><img src="../assets/posts/cogadapt/fig3_p6.webp" alt="사람 자료를 재사용 가능한 prior로 바꾸고 과제별 블록을 고르는 전체 과정 (Zhang 외, Figure 3)" loading="lazy" decoding="async"></button><figcaption>사람 자료를 재사용 가능한 prior로 바꾸고 과제별 블록을 고르는 전체 과정 (Zhang 외, Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>여기부터는 한 파트만 전문가용임.<br />
+건너뛰어도 뒤 결과는 읽힘.</p>
+<p>학습 목표 자체는 평범한<br />
+다음 token 예측임. </p>
+<p>프로그램 prior는 예시 하나의 손실을 키우고<br />
+token prior는 정답 코드 안에서<br />
+어느 token 손실을 더 볼지 정함.</p>
+<p>depth prior와 frozen model 반응은<br />
+이 과제에서 업데이트할 블록을 순위화함. </p>
+<p>전체 backbone은 forward를 돌지만<br />
+고른 블록의 attention adapter와 router만<br />
+gradient를 받음. </p>
+<p>추론할 때는 EEG도 시선도<br />
+정답 코드도 필요 없음.</p></section>
+<section class="part" id="part-9"><p>이 방법의 시험 규모도 봐야 함.</p>
+<p>사람 쪽은 37명, Java 32개,<br />
+의미 영역 81개였음. </p>
+<p>모델은 Qwen3-Coder-30B-A3B-Instruct와<br />
+GLM-4.7-Flash 두 개임.</p>
+<p>Qwen은 48블록에서<br />
+token마다 expert 128개 중 8개,<br />
+GLM은 47블록에서<br />
+routed expert 64개 중 4개를 고름. </p>
+<p>학습·평가는 LiveCodeBench와<br />
+BigCodeBench를 사용했고<br />
+기록된 장비는 RTX A6000 두 장임.</p></section>
+<section class="part" id="part-10"><p>Qwen 결과부터 보면 차이가 큼.</p>
+<p>Qwen의 LiveCodeBench pass@1은<br />
+정규 fine-tuning 18.86,<br />
+CogAdapt 29.71이었음. </p>
+<p>GLM은 17.71에서 24.00으로 올랐음. </p>
+<p>BigCodeBench 차이는 더 작았음.</p>
+<p>Qwen은 36.36에서 37.73,<br />
+GLM은 28.64에서 31.82였음. </p>
+<p>논문이 평가한 네 조합에서는<br />
+모두 CogAdapt가 높거나 공동 최고였음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 두 모델·두 벤치마크의 baseline, ablation, CogAdapt pass@1 (Zhang 외, Table 1)"><img src="../assets/posts/cogadapt/tab1_p17.webp" alt="두 모델·두 벤치마크의 baseline, ablation, CogAdapt pass@1 (Zhang 외, Table 1)" loading="lazy" decoding="async"></button><figcaption>두 모델·두 벤치마크의 baseline, ablation, CogAdapt pass@1 (Zhang 외, Table 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>사람 자료가 도움 됐는지는<br />
+구성요소를 하나씩 뺀 비교에서 확인했음.</p>
+<p>사람 신호를 그대로 두고<br />
+모든 블록을 고친 All-Block도<br />
+네 조합 모두 full method보다 낮았음.</p>
+<p>사람 신호를 빼고 모델 반응만 쓴<br />
+Model-Only의 LiveCodeBench는<br />
+Qwen 24.00, GLM 22.29였음. </p>
+<p>full method는 각각<br />
+29.71과 24.00이었음. </p>
+<p>다만 모든 구성요소가 늘 이긴 건 아님.</p>
+<p>Qwen BigCodeBench에선<br />
+시선 가중치를 뺀 No-Gaze도<br />
+같은 37.73을 냈음.</p></section>
+<section class="part" id="part-12"><p>처음의 약 6개 블록으로 돌아가면<br />
+숫자 두 종류가 갈라짐.</p>
+<p>작업당 평균 6.09~6.55블록만 고르면서<br />
+gradient를 받을 수 있는 parameter는<br />
+86.21~87.21% 줄었음. </p>
+<p>그런데 학습시간 감소는<br />
+2.53~5.87%였고<br />
+추정 GPU 에너지는 2.12~4.55% 줄었음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 고른 블록 수·gradient 대상 parameter·시간·GPU 에너지 비교 (Zhang 외, Table 2)"><img src="../assets/posts/cogadapt/tab2_p17.webp" alt="고른 블록 수·gradient 대상 parameter·시간·GPU 에너지 비교 (Zhang 외, Table 2)" loading="lazy" decoding="async"></button><figcaption>고른 블록 수·gradient 대상 parameter·시간·GPU 에너지 비교 (Zhang 외, Table 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>전체 backbone이 forward pass를<br />
+계속 돌기 때문임. </p>
+<p>87%와 6% 미만.<br />
+같은 절약이 아니었음.</p></section>
+<section class="part" id="part-13"><p>이 방법은 계산 자체를 건너뛴 게 아니라<br />
+업데이트 허용 범위만 줄였음. </p>
+<p>저자들도 다음에는 block이나 adapter를<br />
+조건부로 실행하거나 일찍 끝내야<br />
+더 큰 절약으로 이어질 수 있다고 적었음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: gradient sparsity와 실제 계산 절약이 다르다고 적은 한계 문단 (Zhang 외, 원문 §7)"><img src="../assets/posts/cogadapt/q_limitation.webp" alt="gradient sparsity와 실제 계산 절약이 다르다고 적은 한계 문단 (Zhang 외, 원문 §7)" loading="lazy" decoding="async"></button><figcaption>gradient sparsity와 실제 계산 절약이 다르다고 적은 한계 문단 (Zhang 외, 원문 §7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>일반화 범위도 아직 좁음.<br />
+사람 자료는 Java 32개에서 왔고<br />
+평가는 모델 두 개와 벤치마크 두 개임. </p>
+<p>각 조건은 생성 전체를 한 번만 평가했음.</p>
+<p>층 여섯 개를 무작위로 고른 비교만<br />
+고정 조합 세 개를 반복해<br />
+표준편차를 보고했음. </p>
+<p>10.86%p를 모집단 효과로 확정하기보다<br />
+후속 반복 실험이 필요한 v1 결과로 보는 게 맞음.</p>
+<p>같은 데이터로 독립 반복하고<br />
+다른 크기·언어에서도 재현되는지 봐야 함.</p>
+<p>conditional execution을 붙였을 때<br />
+실제 계산량이 얼마나 줄지도 남아 있음.</p></section>
+<section class="part" id="part-14"><p>그 v1 결과만 놓고 첫 질문에 답하면<br />
+사람이 코드에서 멈춘 흔적은<br />
+이번 설정에선 AI가 어디를 더 학습할지<br />
+고르는 prior로 쓸 수 있었음. </p>
+<p>그렇다고 사람 뇌와 모델이<br />
+같은 방식으로 코드를 이해한다는 뜻은 아님.<br />
+논문도 그 주장을 명시적으로 피했음. </p>
+<p>이번 논문은 2022년 EEG·시선 원자료를 재사용했고<br />
+EyeMulator·ScanCoder의 token 가중치 방법도 이어<br />
+과제별 블록 선택까지 확장했음. </p>
+<p>2026년 10월 8일 Semantic Scholar 기준<br />
+확인 가능한 후속 인용은 0건이었음. </p>
+<p>PDF의 학회명과 ACM DOI도 자리표시자라<br />
+채택본처럼 읽으면 안 됨. </p>
+<p><strong>3줄 요약</strong></p>
+<p>사람 EEG prior는 task 가중치·블록 수를 정했음.<br />
+시선 prior는 token 가중치를 정했음.<br />
+depth prior와 모델 반응이 블록을 골랐음. </p>
+<p>CogAdapt는 과제마다 약 6개 블록만 고쳐<br />
+논문 보고값 기준 최대 10.86%p 높였음. </p>
+<p>parameter 대상은 86% 넘게 줄었지만<br />
+시간·추정 에너지는 최대 5.87%와 4.55% 줄었음.</p></section>
+<section class="part" id="part-15"><p>그 답에 쓴 원문 그림은 arXiv가 표시한<br />
+<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 조건으로 사용했음. </p>
+<p>그림 아래 설명에<br />
+논문과 Figure·Table 번호를 적었음.</p>
+<p>원문 계보를 직접 볼 링크는 아래 셋임.</p>
+<p>전작: <a target="_blank" rel="noopener" href="https://doi.org/10.1145/3540250.3549084">NoviceVsExpert</a> · <a target="_blank" rel="noopener" href="https://aclanthology.org/2026.acl-long.1158/">EyeMulator</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.1145/3808150">ScanCoder</a></p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/cogadapt/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.07446v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/cogadapt.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

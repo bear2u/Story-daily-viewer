@@ -1,0 +1,14 @@
+CogAdapt 한국어 해설에 사용한 논문 그림·표·짧은 인용
+
+주 논문
+- Yueke Zhang, Zihan Fang, Kevin Leach, Yu Huang. “CogAdapt: Cognition-informed Sparse Adaptation of Code LLMs.” arXiv:2610.07446v1, 2026-10-05.
+- 원문: https://arxiv.org/abs/2610.07446v1
+- PDF: https://arxiv.org/pdf/2610.07446v1
+- 라이선스: Creative Commons Attribution 4.0 International (CC BY 4.0)
+- 수록 항목: 원문 p.1 제목·저자 crop, Figures 1–6, Tables 1–2, §7 한계 문단 crop.
+
+선행연구 그림
+- Yifan Zhang 외. “EyeMulator: Embodied Code Understanding via Gaze-Informed Attention in Large Language Models.” ACL 2026.
+- 수록 항목: Figure 1 crop.
+
+모든 crop과 변환 이미지는 연구 내용을 설명하기 위해 사용했으며, 캡션에 원 저자와 원문 위치를 표시했음. 원 저작권은 각 저자에게 있음.
