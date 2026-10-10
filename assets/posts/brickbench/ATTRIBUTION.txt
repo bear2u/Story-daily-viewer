@@ -1,0 +1,14 @@
+BrickBench 한국어 해설에 사용한 논문 그림·표·짧은 인용
+
+주 논문
+- Peter Kulits, Yiqing Xu, R. Kenny Jones, Cordelia Schmid, Jiajun Wu. “BrickBench: Evaluating Agentic Brick Design.” arXiv:2610.12452v1, 2026-10-08.
+- 원문: https://arxiv.org/abs/2610.12452v1
+- PDF: https://arxiv.org/pdf/2610.12452v1
+- 라이선스: arXiv.org perpetual, non-exclusive license 1.0. 별도의 CC 재사용 허가는 확인되지 않음.
+- 수록 항목: Figures 1, 2a, 4–6, A2, A6, Tables 1–2, p.10·p.12 짧은 문단 crop.
+
+선행연구 그림
+- Yuji Pun 외. “BrickGPT: Generating Physically Stable and Buildable Brick Structures from Text.” ICCV 2025.
+- 수록 항목: Figure 1 crop.
+
+모든 crop과 변환 이미지는 연구 내용을 비평·설명하기 위해 필요한 범위로 수록했으며, 캡션에 원 저자와 원문 위치를 표시했음. 원 저작권은 각 저자에게 있음. 원문 그림의 재사용에는 별도 권리 확인이 필요함.

@@ -1,0 +1,42 @@
+{
+  "slug": "brickbench",
+  "title": "예쁘게 보이는데 조립은 안 됨: LEGO로 드러난 AI 평가의 함정",
+  "excerpt": "BrickAgent를 빼자 Luna의 유효성은 100%에서 1% 미만으로 무너졌지만 VQA와 ELO는 오히려 올랐음. 300개 LEGO 설계 과제로 시각적 완성도와 실제 제작 가능성을 함께 평가한 프리프린트임.",
+  "date": "2026-10-10",
+  "published_at": "2026-10-10T09:00:00+09:00",
+  "verified_date": "2026-10-10",
+  "reading_minutes": 14,
+  "tags": [
+    "AI 에이전트",
+    "3D 설계",
+    "로봇·물리"
+  ],
+  "cover": "assets/posts/brickbench/fig1_p1.webp",
+  "cover_alt": "BrickBench에서 여러 AI 에이전트가 만든 복잡한 LEGO 설계 비교",
+  "markdown": "brickbench.md",
+  "paper_title": "BrickBench: Evaluating Agentic Brick Design",
+  "paper_year": "2026",
+  "venue": "arXiv v1 프리프린트 · 확인 가능한 동료심사 채택 정보 없음",
+  "authors": "Peter Kulits · Yiqing Xu · R. Kenny Jones · Cordelia Schmid · Jiajun Wu",
+  "source_url": "https://arxiv.org/abs/2610.12452v1",
+  "chapters": [
+    "논문·저자·심사 상태",
+    "부품 156쌍이 겹쳐도 예쁨",
+    "BrickGPT에서 BrickNet까지",
+    "작은 시험의 포화",
+    "300개 프롬프트와 300턴",
+    "도구와 검증기를 준 이유",
+    "3 LDU 안정성 검사의 한계",
+    "VQA·ELO·Valid를 따로 측정",
+    "상위 모델의 성적과 비용",
+    "도구를 빼자 생긴 역전",
+    "조립 불가능한데 점수 상승",
+    "4,080개 인간 선호 판정",
+    "사람 모델 323/360",
+    "같은 프롬프트 비교는 아님",
+    "전작·저자·후속 맥락",
+    "시각 점수만으론 부족함",
+    "다음 검증과 세 줄 요약"
+  ],
+  "attribution_url": "assets/posts/brickbench/ATTRIBUTION.txt"
+}

@@ -1,0 +1,167 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="BrickAgent를 빼자 Luna의 유효성은 100%에서 1% 미만으로 무너졌지만 VQA와 ELO는 오히려 올랐음. 300개 LEGO 설계 과제로 시각적 완성도와 실제 제작 가능성을 함께 평가한 프리프린트임.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="예쁘게 보이는데 조립은 안 됨: LEGO로 드러난 AI 평가의 함정">
+<meta property="og:description" content="BrickAgent를 빼자 Luna의 유효성은 100%에서 1% 미만으로 무너졌지만 VQA와 ELO는 오히려 올랐음. 300개 LEGO 설계 과제로 시각적 완성도와 실제 제작 가능성을 함께 평가한 프리프린트임.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/brickbench/fig1_p1.webp">
+<title>예쁘게 보이는데 조립은 안 됨: LEGO로 드러난 AI 평가의 함정 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/brickbench.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 에이전트</span><span class="pill">3D 설계</span><span class="pill">로봇·물리</span><span>·</span><time datetime="2026-10-10">2026. 10. 10</time><span>·</span><span>14분 읽기</span></div>
+<h1>예쁘게 보이는데 조립은 안 됨: LEGO로 드러난 AI 평가의 함정</h1><p class="lead">BrickAgent를 빼자 Luna의 유효성은 100%에서 1% 미만으로 무너졌지만 VQA와 ELO는 오히려 올랐음. 300개 LEGO 설계 과제로 시각적 완성도와 실제 제작 가능성을 함께 평가한 프리프린트임.</p>
+
+<div class="article-details"><strong>BrickBench: Evaluating Agentic Brick Design</strong><br>Peter Kulits · Yiqing Xu · R. Kenny Jones · Cordelia Schmid · Jiajun Wu · 2026 · arXiv v1 프리프린트 · 확인 가능한 동료심사 채택 정보 없음<br>원문 그림과 함께 읽는 17파트 해설 · 판본 및 출처 확인: 2026-10-10</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">논문·저자·심사 상태</a><a href="#part-2">부품 156쌍이 겹쳐도 예쁨</a><a href="#part-3">BrickGPT에서 BrickNet까지</a><a href="#part-4">작은 시험의 포화</a><a href="#part-5">300개 프롬프트와 300턴</a><a href="#part-6">도구와 검증기를 준 이유</a><a href="#part-7">3 LDU 안정성 검사의 한계</a><a href="#part-8">VQA·ELO·Valid를 따로 측정</a><a href="#part-9">상위 모델의 성적과 비용</a><a href="#part-10">도구를 빼자 생긴 역전</a><a href="#part-11">조립 불가능한데 점수 상승</a><a href="#part-12">4,080개 인간 선호 판정</a><a href="#part-13">사람 모델 323/360</a><a href="#part-14">같은 프롬프트 비교는 아님</a><a href="#part-15">전작·저자·후속 맥락</a><a href="#part-16">시각 점수만으론 부족함</a><a href="#part-17">다음 검증과 세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>논문: <em>BrickBench: Evaluating Agentic Brick Design</em> </p>
+<p>Peter Kulits, Yiqing Xu, R. Kenny Jones, Cordelia Schmid, Jiajun Wu </p>
+<p>2026년 10월 8일 공개된 arXiv v1 프리프린트임. </p>
+<p>2026년 10월 10일 현재 심사 통과나 학술지 게재는 확인되지 않았음. </p>
+<p>그러니까 아래 결과는 흥미롭지만 확정된 학계 합의처럼 읽으면 안 됨.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: BrickBench에서 비교한 에이전트와 LEGO 결과 예시 (출처: Kulits et al., 2026, Fig. 1)"><img src="../assets/posts/brickbench/fig1_p1.webp" alt="BrickBench에서 비교한 에이전트와 LEGO 결과 예시 (출처: Kulits et al., 2026, Fig. 1)" loading="lazy" decoding="async"></button><figcaption>BrickBench에서 비교한 에이전트와 LEGO 결과 예시 (출처: Kulits et al., 2026, Fig. 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>그럴듯하게 생긴 LEGO를 만들었는데 부품 156쌍이 서로 겹친다면 잘 만든 걸로 쳐야 함?</p>
+<p>화면에서는 불꽃 달린 쓰레기통도, 고양이 밈도, 상어 토네이도도 그럴싸할 수 있음. </p>
+<p>하지만 파일을 실제 부품으로 바꾸는 순간 얘기가 달라짐.</p>
+<p>벽돌이 공중에 뜨거나, 서로 파고들거나, 바닥에 닿자마자 무너질 수 있음.</p>
+<p>이번 논문의 약한 모델은 제작 도구를 빼자 평균 충돌쌍이 155.51개까지 늘었음. </p>
+<p>그런데 그 결과가 시각 평가에서는 오히려 더 높은 점수를 받았음.</p></section>
+<section class="part" id="part-3"><p>이 역전이 나온 배경에는 작은 시험의 포화가 있었음.</p>
+<p>2025년 BrickGPT는 다음 벽돌을 다음 토큰처럼 예측했음. </p>
+<p>다만 쓸 수 있는 벽돌은 8종이고 공간은 20×20×20 격자였음. </p>
+<p>2026년 BrickNet은 32만808개 사람이 만든 LDraw 구조를 모았음. </p>
+<p>LDraw는 부품 종류와 위치를 적은 디지털 LEGO 모델 파일임. </p>
+<p>BrickNet은 부품이 어떻게 맞물리는지도 그래프로 적었음. </p>
+<p>그리고 BrickNet 저자 Peter Kulits와 Cordelia Schmid가 이번 BrickBench에도 다시 등장함. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 같은 캡션을 푼 GT·Luna·BrickNet·BrickGPT 예시 (출처: Kulits et al., 2026, Fig. 2a)"><img src="../assets/posts/brickbench/fig2_p4.webp" alt="같은 캡션을 푼 GT·Luna·BrickNet·BrickGPT 예시 (출처: Kulits et al., 2026, Fig. 2a)" loading="lazy" decoding="async"></button><figcaption>같은 캡션을 푼 GT·Luna·BrickNet·BrickGPT 예시 (출처: Kulits et al., 2026, Fig. 2a)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-4"><p>그 계보에서 먼저 터진 건 작은 시험의 포화였음.</p>
+<p>BrickNet 검증셋은 캡션 512개, 단일 물체, 최대 100부품이었음. </p>
+<p>과제 전용 학습을 하지 않은 GPT-5.6 Luna가 BrickGPT와 BrickNet을 세 지표에서 앞섰음. </p>
+<p>사람이 만든 정답 구조와도 각 지표가 0.02 이내였음. </p>
+<p>저자들 표현대로면 평가가 사실상 포화된 셈임. </p>
+<p>하지만 100부품짜리 의자와 수천 부품짜리 세트는 같은 문제가 아님.</p>
+<p>무엇보다 ‘설명과 닮았나’만으로는 ‘돈 주고 만들고 싶은 디자인인가’를 못 물음.</p>
+<p>그래서 시험판 자체를 키웠음.</p></section>
+<section class="part" id="part-5"><p>키운 시험판이 BrickBench의 300개 프롬프트임.</p>
+<p>Model은 최대 400부품, Set은 400~4000부품을 요구함. </p>
+<p>둘은 1만4441종 부품을 쓸 수 있음. </p>
+<p>Alt-Build는 반대로 소매 세트 10698 안의 783개 부품, 104종만 허용함. </p>
+<p>세 설정마다 100문항, 10개 주제에 10문항씩 배치했음. </p>
+<p>에이전트 하나는 프롬프트마다 최대 300턴 동안 만들고 보고 고칠 수 있음. </p>
+<p>아래는 세 Alt-Build 주문을 11개 에이전트가 푼 장면임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 바다뱀·거대 달팽이·기관차 주문의 결과 (출처: Kulits et al., 2026, Fig. 4)"><img src="../assets/posts/brickbench/fig4_p9.webp" alt="바다뱀·거대 달팽이·기관차 주문의 결과 (출처: Kulits et al., 2026, Fig. 4)" loading="lazy" decoding="async"></button><figcaption>바다뱀·거대 달팽이·기관차 주문의 결과 (출처: Kulits et al., 2026, Fig. 4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>시험이 커졌으니 검증 가능한 바닥도 필요했음.</p>
+<p>BrickAgent는 부품을 찾고, 연결자에 맞춰 놓고, 미러링하고, 서브어셈블리를 합치는 도구를 줌. </p>
+<p>에이전트는 렌더를 보면서 자기 결과를 고칠 수 있음. </p>
+<p>검증기는 어느 부품이 연결·충돌·안정성 검사를 어겼는지 이름까지 알려줌. </p>
+<p>정답 조립법을 가르치는 환경은 아님.</p>
+<p>말하자면 벽돌 상자와 자, 그리고 “여기 두 부품이 겹쳤음”이라는 피드백을 주는 셈임.</p>
+<p>에이전트는 그 도구로 자기 방식의 설계를 고침.</p></section>
+<section class="part" id="part-7"><p>연결된 부품 덩어리를 균일한 밀도의 강체 하나로 취급함. </p>
+<p>힘을 받아도 휘지 않는 단단한 덩어리로 단순화한 셈임. </p>
+<p>PyBullet에서 마찰은 높이고 튕김은 없앤 뒤 중력을 걸어봄. </p>
+<p>어느 점도 3 LDU보다 많이 움직이지 않으면 안정으로 판정함. </p>
+<p>3 LDU는 벽돌 스터드 높이의 4분의 3임. </p>
+<p>충돌이 없고, 설정별 부품 수도 맞고, 이 안정성 검사까지 통과해야 Valid임. </p>
+<p>정확한 구조해석은 아님.</p>
+<p>스터드가 버티는 힘이나 축의 유격을 안 재므로 실제로는 처지거나 분해될 구조도 통과할 수 있음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 저자들이 직접 적은 물리 시뮬레이터 한계 (출처: Kulits et al., 2026, p. 12)"><img src="../assets/posts/brickbench/q_limit.webp" alt="저자들이 직접 적은 물리 시뮬레이터 한계 (출처: Kulits et al., 2026, p. 12)" loading="lazy" decoding="async"></button><figcaption>저자들이 직접 적은 물리 시뮬레이터 한계 (출처: Kulits et al., 2026, p. 12)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>검증 가능한 바닥 다음에는 열린 디자인 천장을 재야 했음.</p>
+<p>쉽게 말하면, 먼저 주문서의 체크리스트를 만드는 방식임.</p>
+<p>정확히는, 프롬프트를 의존 관계가 있는 질문 그래프로 바꿈. </p>
+<p>예컨대 “개가 있나?”, “모자를 썼나?”, “모자는 갈색인가?”로 쪼갬. </p>
+<p>기사가 없으면 갑옷 색 질문은 세지 않도록 의존 관계도 둠. </p>
+<p>조립물을 8방향에서 렌더하고 Gemma 4 31B가 답한 비율이 VQA임. </p>
+<p>Align ELO는 둘 중 프롬프트에 더 맞는 결과를 고름. </p>
+<p>Design ELO는 원래 프롬프트를 가리고 어느 쪽이 공식 세트처럼 더 잘 설계됐는지 고름. </p>
+<p>VQA는 조건을 만족한다고 판정한 질문의 비율임. </p>
+<p>ELO는 쌍대 비교를 모아 만든 상대 점수임. </p>
+<p>표의 ELO는 Align과 Design ELO를 재조정해 평균한 값임. </p>
+<p>VQA와 ELO는 Valid 통과 여부와 독립적으로 계산됨. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 프롬프트를 질문 그래프로 쪼갠 예시 (출처: Kulits et al., 2026, Fig. A2)"><img src="../assets/posts/brickbench/figa2_p16.webp" alt="프롬프트를 질문 그래프로 쪼갠 예시 (출처: Kulits et al., 2026, Fig. A2)" loading="lazy" decoding="async"></button><figcaption>프롬프트를 질문 그래프로 쪼갠 예시 (출처: Kulits et al., 2026, Fig. A2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>상위권은 벤치마크 Valid를 거의 통과했음.</p>
+<p>GPT-6 Astra는 Valid 1.00, VQA 0.954, ELO 1297±22였음. </p>
+<p>GPT-6.1 Sol은 Valid 1.00, VQA 0.945, ELO 1293±23이었음. </p>
+<p>± 수치는 95% 구간임. </p>
+<p>둘의 ELO 구간은 겹치지만 평균 비용은 $4.06 대 $0.87이었음. </p>
+<p>전체에서 다섯 에이전트가 벤치마크 Valid를 전부 통과했음. </p>
+<p>전체 최저도 0.80이었음. </p>
+<p>그렇다고 비싸면 무조건 좋지도 않았음.</p>
+<p>Muse는 DeepSeek보다 9배 비싸면서 ELO는 138점 낮았음. </p>
+<p>저자 계산에서 에이전트 비용은 전용 모델보다 900~6800배 높았음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 11개 에이전트와 두 기준선의 전체 성적표 (출처: Kulits et al., 2026, Table 1)"><img src="../assets/posts/brickbench/tab1_p7.webp" alt="11개 에이전트와 두 기준선의 전체 성적표 (출처: Kulits et al., 2026, Table 1)" loading="lazy" decoding="async"></button><figcaption>11개 에이전트와 두 기준선의 전체 성적표 (출처: Kulits et al., 2026, Table 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-10"><p>여기서 점수의 역전은 BrickAgent를 뺄 때 나왔음.</p>
+<p>Astra에서 BrickAgent를 빼면 Valid가 1.00에서 0.40으로 떨어짐. </p>
+<p>Luna는 300개 중 딱 1개만 Valid였고 비율은 0.01 미만이 됨. </p>
+<p>Luna의 평균 충돌쌍은 0에서 155.51로 늘었음. </p>
+<p>서로 떨어진 부품 집단도 4.60개에서 83.00개가 됐음. </p>
+<p>맨 앞의 156은 여기서 나온 숫자였음.</p>
+<p>그런데 Luna의 VQA는 0.792에서 0.813으로 올랐음. </p>
+<p>ELO도 898±16에서 960±20으로 62점 올랐음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: BrickAgent를 제거했을 때 유효성과 시각 점수가 반대로 움직인 결과 (출처: Kulits et al., 2026, Table 2)"><img src="../assets/posts/brickbench/tab2_p11.webp" alt="BrickAgent를 제거했을 때 유효성과 시각 점수가 반대로 움직인 결과 (출처: Kulits et al., 2026, Table 2)" loading="lazy" decoding="async"></button><figcaption>BrickAgent를 제거했을 때 유효성과 시각 점수가 반대로 움직인 결과 (출처: Kulits et al., 2026, Table 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>왜 거의 전부 조립 불가능해졌는데 점수는 올랐을까.</p>
+<p>부품을 겹치지 말고 연결하라는 제약을 무시할 자유를 얻은 것임. </p>
+<p>그러면 화면에서 모양과 디테일을 맞추기는 쉬워짐.</p>
+<p>VQA와 ELO가 Valid와 별도라서 그 이득을 그대로 점수로 받음. </p>
+<p>저자들도 “더 좋아 보이지만 만들 수 없다”고 해석했음. </p>
+<p>시각 점수만으로는 제작 가능성을 알 수 없었음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 제작 가능성 제한을 빼자 시각 점수가 오른다는 원문 설명 (출처: Kulits et al., 2026, p. 10)"><img src="../assets/posts/brickbench/q_reversal.webp" alt="제작 가능성 제한을 빼자 시각 점수가 오른다는 원문 설명 (출처: Kulits et al., 2026, p. 10)" loading="lazy" decoding="async"></button><figcaption>제작 가능성 제한을 빼자 시각 점수가 오른다는 원문 설명 (출처: Kulits et al., 2026, p. 10)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-12"><p>그럼 “더 좋아 보임”을 판정한 VLM부터 의심할 수 있음.</p>
+<p>저자들은 Prolific 참가자 102명에게 같은 프롬프트의 두 결과를 보여줬음. </p>
+<p>한 사람당 40쌍, 총 4080개 판정을 모았음. </p>
+<p>사람 순위와 Design ELO 순위는 에이전트 36쌍 중 34쌍에서 같았음. </p>
+<p>Kendall τ는 0.89였음. </p>
+<p>VLM은 이미지를 읽고 둘 중 하나를 고른 모델임.</p>
+<p>이 아홉 에이전트에서는 그 순위가 사람 선호와 대체로 맞았음. </p>
+<p>다만 나중에 출시된 Opus 5.5와 GPT-6.1 Sol은 이 인간 검증에 포함되지 않았음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 자동 Design ELO와 사람 ELO의 일치도 (출처: Kulits et al., 2026, Fig. 5)"><img src="../assets/posts/brickbench/fig5_p10.webp" alt="자동 Design ELO와 사람 ELO의 일치도 (출처: Kulits et al., 2026, Fig. 5)" loading="lazy" decoding="async"></button><figcaption>자동 Design ELO와 사람 ELO의 일치도 (출처: Kulits et al., 2026, Fig. 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-13"><p>아직 사람의 표면도 따로 시험했음.</p>
+<p>질문은 어느 쪽이 사람이 만든 모델처럼 보이는지였음. </p>
+<p>LEGO 디자인에 익숙한 5명이 에이전트 결과와 사람 모델을 360번 비교했음. </p>
+<p>사람 모델을 고른 횟수는 323번, 약 89.7%였음. </p>
+<p>어떤 에이전트도 다섯 번 중 한 번 넘게 사람으로 오인되지 않았음. </p>
+<p>가장 자주 사람으로 고른 Astra도 21쌍 중 4번뿐이었음. </p>
+<p>프롬프트 조건을 채우는 것과 부품 선택·비례·표면 디테일까지 설계하는 건 아직 다른 문제였음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사람 제작 모델과 에이전트 제작 모델을 구분한 실험 (출처: Kulits et al., 2026, Fig. 6)"><img src="../assets/posts/brickbench/fig6_p11.webp" alt="사람 제작 모델과 에이전트 제작 모델을 구분한 실험 (출처: Kulits et al., 2026, Fig. 6)" loading="lazy" decoding="async"></button><figcaption>사람 제작 모델과 에이전트 제작 모델을 구분한 실험 (출처: Kulits et al., 2026, Fig. 6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-14"><p>같은 프롬프트로 만든 작품끼리의 대결은 아니었음.</p>
+<p>BrickBench 프롬프트를 사람이 직접 만든 정답 세트가 없었음. </p>
+<p>그래서 연구진은 부품 수가 비슷한 BrickNet 사람 모델을 무작위로 붙였음. </p>
+<p>그림 속 주제도 서로 다름. </p>
+<p>323/360은 “같은 주문에서 사람이 거의 다 이겼다”는 결과가 아님.</p>
+<p>어느 쪽이 사람이 만든 물건처럼 보이는지를 잰 결과에 가까움.</p>
+<p>동일 프롬프트 대결은 사람 설계를 별도로 의뢰해야 함. </p>
+<p>저자들은 이를 후속 과제로 남겼음. </p>
+<p>연결부 힘이나 FEM을 넣은 구조 시뮬레이션도 남아 있음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 여러 프롬프트에서 나온 추가 에이전트 설계 예시 (출처: Kulits et al., 2026, Fig. A6)"><img src="../assets/posts/brickbench/figa6_p21.webp" alt="여러 프롬프트에서 나온 추가 에이전트 설계 예시 (출처: Kulits et al., 2026, Fig. A6)" loading="lazy" decoding="async"></button><figcaption>여러 프롬프트에서 나온 추가 에이전트 설계 예시 (출처: Kulits et al., 2026, Fig. A6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-15"><p>BrickGPT는 작은 격자에서 안정한 다음 벽돌을 예측했음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: BrickGPT의 격자 기반 생성과 실물 조립 흐름 (출처: Pun et al., 2025, Fig. 1)"><img src="../assets/posts/brickbench/brickgpt_overview.webp" alt="BrickGPT의 격자 기반 생성과 실물 조립 흐름 (출처: Pun et al., 2025, Fig. 1)" loading="lazy" decoding="async"></button><figcaption>BrickGPT의 격자 기반 생성과 실물 조립 흐름 (출처: Pun et al., 2025, Fig. 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>BrickNet은 사람이 만든 대규모 구조와 typed connector로 표현 범위를 넓혔음. </p>
+<p>BrickBench는 BrickNet 연결자 체계를 환경에 재사용했음. </p>
+<p>앞의 BrickNet 검증셋은 별도 포화 시험이자 동기였음. </p>
+<p>Peter Kulits는 Max Planck와 Stanford 소속임. </p>
+<p>Cordelia Schmid는 Inria 소속으로 두 논문을 잇고 있음. </p>
+<p>BrickGPT는 공식 기록상 ICCV 2025 Marr Prize를 받은 전작임. </p>
+<p>반면 BrickBench는 2026년 10월 10일 현재 공개 이틀째라 확인 가능한 후속 인용 연구가 아직 없음.</p></section>
+<section class="part" id="part-16"><p>화면이 그럴듯하다는 질문에는 “잘 만들었다”가 맞을 수 있음.</p>
+<p>하지만 실제 LEGO 설계라는 질문에는 부품·충돌·안정성 검사를 통과하기 전까지 답이 아님. </p>
+<p>검증기는 창의성을 점수로 바꾸지 않음.</p>
+<p>대신 시각 점수의 보상이 제작 가능성까지 뜻하지는 않는다고 드러냄. </p>
+<p>그래서 Valid와 시각 점수를 함께 봐야 함. </p>
+<p>이 구조는 코드나 CAD 에이전트 평가에도 참고할 만하지만, 그 분야에서 같은 효과를 실험한 결과는 아님.</p></section>
+<section class="part" id="part-17"><p>상위 모델은 이미 Valid 1.00에 도달했음. </p>
+<p>하지만 출처 구분 실험에서는 사람 모델이 323/360번 골라졌음. </p>
+<p>다음은 동일 프롬프트의 인간 의뢰 설계와 더 정밀한 구조 시뮬레이션임. </p>
+<p>원문: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.12452">arXiv 2610.12452</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.12452">PDF</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.12452">DOI</a> </p>
+<p>그림은 원문에서 인용했으며 arXiv 비독점 배포 라이선스임. 재사용은 별도 권리 확인이 필요함. </p>
+<p>3줄 요약</p>
+<p>화면이 그럴듯해도 부품·충돌·안정성 검사를 따로 봐야 함. </p>
+<p>BrickAgent를 빼자 Luna의 유효성은 100%에서 1% 미만으로 무너졌지만 시각 점수는 오르는 역전이 생겼음. </p>
+<p>상위 에이전트는 Valid를 넘었지만 인간 의뢰 설계와 정밀 구조 시뮬레이션은 남아 있음.</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/brickbench/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.12452v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/brickbench.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>
