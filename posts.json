@@ -1,5 +1,46 @@
 [
   {
+    "slug": "ai-time-horizons",
+    "title": "같은 10배인데 같은 발전이 아니었음: AI 시간 지평선의 휘어진 눈금",
+    "excerpt": "228개 소프트웨어 과제와 26개 AI를 다시 맞추자 2–30분 구간의 추정 평균 난도가 거의 평평했음. 새 모형은 교차검증 점추정치가 더 좋았지만 METR의 성장 추세 자체는 남았음.",
+    "date": "2026-10-11",
+    "published_at": "2026-10-11T08:30:00+09:00",
+    "verified_date": "2026-10-11",
+    "reading_minutes": 13,
+    "tags": [
+      "AI 평가",
+      "AI 에이전트",
+      "통계"
+    ],
+    "cover": "assets/posts/ai-time-horizons/fig1d_p2.png",
+    "cover_alt": "인간 수행시간과 추정 AI 난도의 관계가 2분에서 30분 사이 평평해지는 원문 Figure 1d",
+    "markdown": "ai-time-horizons.md",
+    "paper_title": "On the estimation and validity of AI time horizons—a statistical look at the METR plot",
+    "paper_year": "2026",
+    "venue": "arXiv v1 프리프린트 · 확인 가능한 동료심사 채택 정보 없음",
+    "authors": "Drew T. Nguyen · William Fithian",
+    "source_url": "https://arxiv.org/abs/2610.12466v1",
+    "chapters": [
+      "논문·저자·심사 상태",
+      "같은 10배가 다른 이유",
+      "사람 시간으로 만든 AI 능력 자",
+      "직선 눈금이라는 가정",
+      "공통 spline과 explanatory IRT",
+      "228과제·26개 AI·79개 묶음",
+      "GPT-4o 7.2분에서 4.4분",
+      "family 교차검증 12개 지표",
+      "예상 60%와 실제 83%",
+      "construct validity의 다섯 질문",
+      "남은 성장 추세와 R² 조건",
+      "METR 그래프를 정확히 읽는 법",
+      "30시간 밖과 모형의 한계",
+      "전작·저자·후속 맥락",
+      "숫자와 진단 그림을 함께 보기",
+      "원문·출처·세 줄 요약"
+    ],
+    "attribution_url": "assets/posts/ai-time-horizons/ATTRIBUTION.txt"
+  },
+  {
     "slug": "brickbench",
     "title": "예쁘게 보이는데 조립은 안 됨: LEGO로 드러난 AI 평가의 함정",
     "excerpt": "BrickAgent를 빼자 Luna의 유효성은 100%에서 1% 미만으로 무너졌지만 VQA와 ELO는 오히려 올랐음. 300개 LEGO 설계 과제로 시각적 완성도와 실제 제작 가능성을 함께 평가한 프리프린트임.",

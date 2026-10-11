@@ -1,0 +1,12 @@
+Paper: On the estimation and validity of AI time horizons—a statistical look at the METR plot
+Authors: Drew T. Nguyen, William Fithian
+Source: https://arxiv.org/abs/2610.12466v1
+PDF: https://arxiv.org/pdf/2610.12466
+Version/date: arXiv v1, 2026-10-08 UTC
+License shown by arXiv: perpetual non-exclusive license to distribute
+https://arxiv.org/licenses/nonexclusive-distrib/1.0/
+
+Included images are crops from Figures 1–6 and 9 and a short abstract passage.
+Figure and text rights remain with the paper authors/rightsholders.
+This repository does not grant a new license for those materials.
+Verified: 2026-10-11 KST.

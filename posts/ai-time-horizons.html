@@ -1,0 +1,191 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="228개 소프트웨어 과제와 26개 AI를 다시 맞추자 2–30분 구간의 추정 평균 난도가 거의 평평했음. 새 모형은 교차검증 점추정치가 더 좋았지만 METR의 성장 추세 자체는 남았음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="같은 10배인데 같은 발전이 아니었음: AI 시간 지평선의 휘어진 눈금">
+<meta property="og:description" content="228개 소프트웨어 과제와 26개 AI를 다시 맞추자 2–30분 구간의 추정 평균 난도가 거의 평평했음. 새 모형은 교차검증 점추정치가 더 좋았지만 METR의 성장 추세 자체는 남았음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/ai-time-horizons/fig1d_p2.png">
+<title>같은 10배인데 같은 발전이 아니었음: AI 시간 지평선의 휘어진 눈금 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/ai-time-horizons.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 평가</span><span class="pill">AI 에이전트</span><span class="pill">통계</span><span>·</span><time datetime="2026-10-11">2026. 10. 11</time><span>·</span><span>13분 읽기</span></div>
+<h1>같은 10배인데 같은 발전이 아니었음: AI 시간 지평선의 휘어진 눈금</h1><p class="lead">228개 소프트웨어 과제와 26개 AI를 다시 맞추자 2–30분 구간의 추정 평균 난도가 거의 평평했음. 새 모형은 교차검증 점추정치가 더 좋았지만 METR의 성장 추세 자체는 남았음.</p>
+
+<div class="article-details"><strong>On the estimation and validity of AI time horizons—a statistical look at the METR plot</strong><br>Drew T. Nguyen · William Fithian · 2026 · arXiv v1 프리프린트 · 확인 가능한 동료심사 채택 정보 없음<br>원문 그림과 함께 읽는 16파트 해설 · 판본 및 출처 확인: 2026-10-11</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">논문·저자·심사 상태</a><a href="#part-2">같은 10배가 다른 이유</a><a href="#part-3">사람 시간으로 만든 AI 능력 자</a><a href="#part-4">직선 눈금이라는 가정</a><a href="#part-5">공통 spline과 explanatory IRT</a><a href="#part-6">228과제·26개 AI·79개 묶음</a><a href="#part-7">GPT-4o 7.2분에서 4.4분</a><a href="#part-8">family 교차검증 12개 지표</a><a href="#part-9">예상 60%와 실제 83%</a><a href="#part-10">construct validity의 다섯 질문</a><a href="#part-11">남은 성장 추세와 R² 조건</a><a href="#part-12">METR 그래프를 정확히 읽는 법</a><a href="#part-13">30시간 밖과 모형의 한계</a><a href="#part-14">전작·저자·후속 맥락</a><a href="#part-15">숫자와 진단 그림을 함께 보기</a><a href="#part-16">원문·출처·세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>3분에서 30분, 30분에서 5시간.</p>
+<p>둘 다 10배인데 같은 발전일까?</p>
+<p>논문: <em>On the estimation and validity of AI time horizons</em><br />
+<em>—a statistical look at the METR plot</em> </p>
+<p>Drew T. Nguyen, William Fithian </p>
+<p>두 저자 모두 UC Berkeley 통계학과 소속임. </p>
+<p>2026년 10월 8일 UTC 공개된 arXiv v1 프리프린트임. </p>
+<p>한국 시간으로는 10월 9일임.</p>
+<p>2026년 10월 11일 현재 심사 통과나 학술지 게재는 확인되지 않았음. </p>
+<p>그러니 아래 결과는 흥미로운 통계 재분석이지 확정된 학계 합의는 아님.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 인간 시간에서 추정 AI 난도로 바꾸는 곡선 (출처: Nguyen &amp; Fithian, 2026, Fig. 1d)"><img src="../assets/posts/ai-time-horizons/fig1d_p2.png" alt="인간 시간에서 추정 AI 난도로 바꾸는 곡선 (출처: Nguyen &amp; Fithian, 2026, Fig. 1d)" loading="lazy" decoding="async"></button><figcaption>인간 시간에서 추정 AI 난도로 바꾸는 곡선 (출처: Nguyen &amp; Fithian, 2026, Fig. 1d)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><em>출처: Nguyen &amp; Fithian, 2026, Fig. 1d. 원문 라이선스는 arXiv 비독점 배포 라이선스임.</em></p></section>
+<section class="part" id="part-2"><p>이번 논문의 답은 “이 과제들에서는 아님”에 가까움. </p>
+<p>이 데이터에 맞춘 모형에서 2분부터 30분까지<br />
+평균 AI 난이도가 거의 늘지 않았음.</p></section>
+<section class="part" id="part-3"><p>먼저 읽기 쉬운 자부터 봐야 함.</p>
+<p>50% time horizon은 AI가 절반 확률로 성공하는 과제의 인간 수행시간임. </p>
+<p>예를 들어 GPT-4의 horizon이 4분이라면, 인간이 4분 걸리는 이 과제 분포에서 GPT-4가 약 절반을 푼다는 뜻임. </p>
+<p>무단위 점수 대신 “사람에게 4분짜리 일”이라고 쓰니 직관적임.</p>
+<p>이 아이디어를 제안한 METR 논문은<br />
+2025년 NeurIPS 본 학회에 실렸음. </p>
+<p>당시 frontier horizon이 2019년 이후<br />
+대략 7개월마다 두 배였다고 보고했음.</p></section>
+<section class="part" id="part-4"><p>그다음은 자의 눈금임.</p>
+<p>이 그래프의 세로축은<br />
+온도계처럼 직접 잰 물리량이 아님.</p>
+<p>과제마다 인간 시간과 AI 성공·실패를 모은 뒤 통계모형으로 50% 지점을 추정함. </p>
+<p>그리고 원래 방법은 인간 시간이 두 배씩 늘 때<br />
+AI 난이도가 일정한 폭으로 올라간다고 가정함. </p>
+<p>로그 시간 위에서 직선을 그은 셈임.</p>
+<p>비교 baseline은 2025년 최초 모형보다 나은<br />
+2026년 METR의 shared-slope 버전임. </p>
+<p>이번 연구는 그 직선자를 휘어도 되는 자로 바꿔<br />
+같은 공개 데이터를 다시 맞춰봄.</p></section>
+<section class="part" id="part-5"><p>첫 번째 대안 Model 1은<br />
+모든 AI가 공유하는 단조 스플라인을 씀. </p>
+<p>스플라인은 여러 구간을 부드럽게 이어 만든 곡선임.</p>
+<p>시간이 길수록 평균 난이도가 내려가지는 않게 막되, 어느 구간은 완만하고 다른 구간은 가파를 수 있게 함.</p>
+<p>직선 자를 버리고 휘어지는 자를 쓴다고 보면 됨.</p>
+<p>두 번째 Model 2는 과제의 숨은 난도를 명시함. </p>
+<p>같은 family의 영향과 반복결과의 과산포까지 둔<br />
+explanatory IRT임. </p>
+<p>쉽게 말하면 시험의 학생과 문제를 떠올리면 됨.</p>
+<p>정확히는 학생의 실력과 문제 난도를 함께 추정하듯,<br />
+AI 능력과 과제의 숨은 난도를 함께 추정함.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 중간 능력대 AI 여섯 개에서 직선과 두 곡선을 비교한 결과 (출처: Nguyen &amp; Fithian, 2026, Fig. 4)"><img src="../assets/posts/ai-time-horizons/fig4_p10.png" alt="중간 능력대 AI 여섯 개에서 직선과 두 곡선을 비교한 결과 (출처: Nguyen &amp; Fithian, 2026, Fig. 4)" loading="lazy" decoding="async"></button><figcaption>중간 능력대 AI 여섯 개에서 직선과 두 곡선을 비교한 결과 (출처: Nguyen &amp; Fithian, 2026, Fig. 4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><em>검은 점은 구간별 관측 성공률임. 출처: 원문 Fig. 4.</em></p></section>
+<section class="part" id="part-6"><p>휘어진 구간을 찾는 데이터는<br />
+소프트웨어 관련 과제 228개와 AI 26개임. </p>
+<p>과제는 79개 family로 묶였고 “함수를 구현하라”, “분류기를 학습하라” 같은 지시와 자동 채점기가 있었음. </p>
+<p>인간은 과제마다 대체로 약 네 번 시도했고, 성공한 시간의 기하평균을 human time으로 썼음. </p>
+<p>다만 29%는 인간 측정이 없거나 유효하지 않아 전문가 추정치를 대신 넣었음. </p>
+<p>AI는 같은 과제를 여러 번 풀었지만 AI가 실제로 소비한 시간은 분석하지 않았음. </p>
+<p>그래프의 “시간”은 인간의 시간이지 AI의 벽시계 시간이 아님.</p></section>
+<section class="part" id="part-7"><p>가장 눈에 띄는 결과가<br />
+2분에서 30분 사이의 평평한 평균 관계임. </p>
+<p>이 구간에서는 인간 시간이 길어져도 추정된 AI 난이도가 거의 늘지 않았음.</p>
+<p>그래서 baseline이 GPT-4o의 50% horizon을 7.2분으로 잡을 때 Model 2는 4.4분으로 잡았음. </p>
+<p>둘 중 하나가 단순 오타라서가 아님.</p>
+<p>같은 관측 성공률을 직선 곡선과 굽은 곡선이 서로 다른 50% 지점에서 통과한 것임.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: GPT-4o에서 baseline 7.2분과 Model 2 4.4분이 갈린 장면 (출처: Nguyen &amp; Fithian, 2026, Fig. 1c)"><img src="../assets/posts/ai-time-horizons/fig1c_p2.png" alt="GPT-4o에서 baseline 7.2분과 Model 2 4.4분이 갈린 장면 (출처: Nguyen &amp; Fithian, 2026, Fig. 1c)" loading="lazy" decoding="async"></button><figcaption>GPT-4o에서 baseline 7.2분과 Model 2 4.4분이 갈린 장면 (출처: Nguyen &amp; Fithian, 2026, Fig. 1c)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><em>파란선은 METR baseline, 자주색은 Model 2임.</em></p>
+<p><em>출처: Nguyen &amp; Fithian, 2026, Fig. 1c.</em></p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 2–30분에서 평평해진 인간 시간→AI 난도 변환 (출처: Nguyen &amp; Fithian, 2026, Fig. 1d)"><img src="../assets/posts/ai-time-horizons/fig1d_p2.png" alt="2–30분에서 평평해진 인간 시간→AI 난도 변환 (출처: Nguyen &amp; Fithian, 2026, Fig. 1d)" loading="lazy" decoding="async"></button><figcaption>2–30분에서 평평해진 인간 시간→AI 난도 변환 (출처: Nguyen &amp; Fithian, 2026, Fig. 1d)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><em>붉은 띠가 2–30분 구간임. 출처: Nguyen &amp; Fithian, 2026, Fig. 1d.</em></p></section>
+<section class="part" id="part-8"><p>그렇다고 곡선을 예쁘게 더 많이 휘었다고 이긴 건 아님.</p>
+<p>연구진은 79개 task family를 다섯 묶음으로 나눠, 한 묶음을 감춘 채 학습하고 감춘 묶음에서 예측을 채점했음. </p>
+<p>확률예측 두 종류와 50%·80% horizon용 점수 두 종류에 세 가중법을 곱해 총 12개 지표를 만들었음. </p>
+<p>Model 1과 Model 2의 점추정치는 12개 모두 baseline보다 좋았음. </p>
+<p>다만 그림의 여러 95% 구간은 0을 가로지름.</p>
+<p>“12개 모두 통계적으로 확실히 승리”라고 말하는 건 원문보다 셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 12개 교차검증 지표에서 baseline과 두 새 모형의 차이 (출처: Nguyen &amp; Fithian, 2026, Fig. 2)"><img src="../assets/posts/ai-time-horizons/fig2_p9.png" alt="12개 교차검증 지표에서 baseline과 두 새 모형의 차이 (출처: Nguyen &amp; Fithian, 2026, Fig. 2)" loading="lazy" decoding="async"></button><figcaption>12개 교차검증 지표에서 baseline과 두 새 모형의 차이 (출처: Nguyen &amp; Fithian, 2026, Fig. 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><em>왼쪽이 새 모형에 유리함. 굵은 선은 80%, 가는 선은 95% 구간임.</em> </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모든 성공확률 기준 q에서 세 모형의 점수를 비교한 Murphy diagram (출처: Nguyen &amp; Fithian, 2026, Fig. 3)"><img src="../assets/posts/ai-time-horizons/fig3_p10.png" alt="모든 성공확률 기준 q에서 세 모형의 점수를 비교한 Murphy diagram (출처: Nguyen &amp; Fithian, 2026, Fig. 3)" loading="lazy" decoding="async"></button><figcaption>모든 성공확률 기준 q에서 세 모형의 점수를 비교한 Murphy diagram (출처: Nguyen &amp; Fithian, 2026, Fig. 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><em>q=.5가 앞의 50% 기준임.</em></p>
+<p><em>q&gt;.4에서는 새 모형 점수가 대체로 더 낮았음.</em></p>
+<p><em>낮을수록 좋음. 출처: Nguyen &amp; Fithian, 2026, Fig. 3.</em></p></section>
+<section class="part" id="part-9"><p>Model 2에는 조금 더 미묘한 이유도 있었음.</p>
+<p>baseline이 human time으로 추정한 성공확률만으로는<br />
+반복결과의 몰림을 설명하지 못했음. </p>
+<p>baseline의 적합 확률대로라면 반복묶음의 약 60%가 전부 성공 또는 전부 실패여야 했음. </p>
+<p>실제는 83%였음. </p>
+<p>Model 2는 AI와 과제 조합마다<br />
+예상보다 잘되거나 안 되는 차이를 허용했음. </p>
+<p>Model 2는 beta-binomial 과산포 항으로 이 반복 정보를 덜 중복해서 세었음.</p></section>
+<section class="part" id="part-10"><p>여기서 연구진이 묻는 건 추정 오차만이 아님.</p>
+<p>human time이라는 자가 정말<br />
+“AI 소프트웨어 능력”을 재는가도 물음. </p>
+<p>과제가 현실을 대표하는지 물음. </p>
+<p>능력과 난도를 한 축으로 놓아도 되는지 물음.</p>
+<p>인간 시간이 같은 의미로 잘 측정됐는지 물음.</p>
+<p>시간이 AI 성공을 예측하는지도 물음.</p>
+<p>같은 시간 비율을 구간마다<br />
+같은 증가로 읽어도 되는지도 물음. </p>
+<p>이번 논문은 앞의 세 질문이 괜찮다고 가정하고 마지막 두 개만 진단함. </p>
+<p>즉 METR 벤치마크 전체의 현실 타당성을 끝낸 연구는 아님.</p></section>
+<section class="part" id="part-11"><p>예상 밖으로 성장 추세는 안 무너졌음.</p>
+<p>예상 밖인 건 새 분석이<br />
+원래 그래프를 무너뜨리지 않았다는 점임.</p>
+<p>Figure 5의 파란 METR frontier horizon 추세는<br />
+두 배 주기 6.0개월, R²=.931이었음. </p>
+<p>자주색 Model 2 horizon에<br />
+별도 지수추세를 맞춘 수치는 아님. </p>
+<p>frontier AI의 Model 2 숨은 능력값 눈금을<br />
+METR의 log horizon에 최소제곱으로 맞췄음. </p>
+<p>그렇게 재조정한 뒤 원래 METR 추정치와<br />
+R²=.996으로 거의 겹쳤음. </p>
+<p>독립 자료로 능력을 검증한 수치는 아님. </p>
+<p>저자들은 직선 baseline이<br />
+정확한 time horizon은 놓쳤어도,</p>
+<p>전체 과제의 latent capability는<br />
+꽤 잘 잡았을 수 있다고 해석함. </p>
+<p>성공곡선과 horizon을 추정하는 통계모형에는<br />
+출시일을 넣지 않았음. </p>
+<p>출시일과 horizon의 지수추세는 나중에 따로 그렸고,<br />
+논문은 관측된 성장 자체에 도전하지 않음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 새 horizon과 원래 METR 값, 그리고 재조정한 Rasch ability 비교 (출처: Nguyen &amp; Fithian, 2026, Fig. 5)"><img src="../assets/posts/ai-time-horizons/fig5_p14.png" alt="새 horizon과 원래 METR 값, 그리고 재조정한 Rasch ability 비교 (출처: Nguyen &amp; Fithian, 2026, Fig. 5)" loading="lazy" decoding="async"></button><figcaption>새 horizon과 원래 METR 값, 그리고 재조정한 Rasch ability 비교 (출처: Nguyen &amp; Fithian, 2026, Fig. 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><em>왼쪽은 Model 2 horizon, 오른쪽은 재조정한 latent ability임. 출처: 원문 Fig. 5.</em></p></section>
+<section class="part" id="part-12"><p>이번 분석은 METR 그래프의<br />
+성장 추세를 부정하지 않았음. </p>
+<p>2–30분 구간의 3분→30분 점프는 30분→5시간 점프보다 훨씬 쉬웠다는 진단은 분명함. </p>
+<p>하지만 소프트웨어 과제 전체에서는 human time의 예측력이 강했고, exponential trend도 남았음. </p>
+<p>대신 “로그축의 같은 세로 간격은 같은 능력 증가”라는<br />
+국소 해석을 다시 보게 함. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 같은 10배가 같은 난이도 증가가 아니라는 원문 요약 (출처: Nguyen &amp; Fithian, 2026, p. 1)"><img src="../assets/posts/ai-time-horizons/quote_flat_region.png" alt="같은 10배가 같은 난이도 증가가 아니라는 원문 요약 (출처: Nguyen &amp; Fithian, 2026, p. 1)" loading="lazy" decoding="async"></button><figcaption>같은 10배가 같은 난이도 증가가 아니라는 원문 요약 (출처: Nguyen &amp; Fithian, 2026, p. 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><em>원문 초록 크롭. 출처: Nguyen &amp; Fithian, 2026, p. 1.</em></p></section>
+<section class="part" id="part-13"><p>한계도 자의 눈금만큼 중요함.</p>
+<p>과제는 소프트웨어 중심이고 최대 길이는 약 30시간임. </p>
+<p>더 긴 과제에서도 같은 곡선이 이어진다는 보장은 없음.</p>
+<p>논문 속 1일 이후의 극단적 평탄화 그림은 관측 결과가 아니라 가상 시나리오임. </p>
+<p>human time이 길수록 성공확률이 감소한다는<br />
+단조 가정을 둠. </p>
+<p>과제 대표성, human time의 의미,<br />
+1차원 능력축은 직접 검증하지 않았음. </p>
+<p>29% 과제의 human time이 전문가 추정치라는 측정 한계도 남음. </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 하루 이후 난이도 관계가 다시 평평해질 수 있다는 가상 시나리오 (출처: Nguyen &amp; Fithian, 2026, Fig. 6)"><img src="../assets/posts/ai-time-horizons/fig6_p14.png" alt="하루 이후 난이도 관계가 다시 평평해질 수 있다는 가상 시나리오 (출처: Nguyen &amp; Fithian, 2026, Fig. 6)" loading="lazy" decoding="async"></button><figcaption>하루 이후 난이도 관계가 다시 평평해질 수 있다는 가상 시나리오 (출처: Nguyen &amp; Fithian, 2026, Fig. 6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><em>회색·파란 연장선은 관측이 아니라 가상 예시임. 출처: 원문 Fig. 6.</em></p></section>
+<section class="part" id="part-14"><p>계보는 비교적 선명함.</p>
+<p>2025년 METR 논문이 인간 수행시간에 AI 능력을 고정하는 자를 만들었고 NeurIPS 2025에 실렸음. </p>
+<p><a target="_blank" rel="noopener" href="https://metr.org/notes/2026-03-20-impact-of-modelling-assumptions-on-time-horizon-results/">METR 연구자 Alexander Barry의 2026년 연구 노트</a>도<br />
+shared-slope와 모형 가정의 영향을 점검했음. </p>
+<p>이번 논문은 그 shared-slope를 baseline으로 삼음.</p>
+<p>공통 비선형 스플라인과<br />
+explanatory IRT로 확장했음. </p>
+<p>둘 다 UC Berkeley 통계학과 연구자임.</p>
+<p>William Fithian은 <a target="_blank" rel="noopener" href="https://www.stat.berkeley.edu/~wfithian/index.html">공식 프로필</a>상<br />
+2026년 10월 11일 기준 부교수임. </p>
+<p>Drew T. Nguyen의 직위는 원문에 적혀 있지 않아 추정하지 않음.</p>
+<p>2026년 10월 10일 UTC 조회 기준<br />
+OpenAlex에서 확인되는 후속 인용은 0건임.</p></section>
+<section class="part" id="part-15"><p>결국 숫자 하나보다 진단 그림이 하나 더 필요함. </p>
+<p>실무적으로는 숫자 하나를 버릴 이유보다<br />
+그림 하나를 더 볼 이유가 생겼음. </p>
+<p>50% horizon은 여전히 “사람 기준 몇 분짜리 일인가”를 한 줄로 말하기 좋음.</p>
+<p>다만 time-to-difficulty conversion과<br />
+시간별 성공확률 곡선을 같이 봐야 함.</p>
+<p>그래야 눈금이 평평해지는 구간을 알 수 있음. </p>
+<p>새 벤치마크가 로봇·사무·과학 업무에 human time을 붙일 때도 똑같이 적용될지는 아직 가설임.</p>
+<p>그 분야에서는 human time보다 더 좋은 외부 눈금이 있을 수도 있음.</p></section>
+<section class="part" id="part-16"><p>원문은 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.12466">arXiv 초록</a>과 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.12466">공개 PDF</a>에서 볼 수 있음.</p>
+<p>arXiv 발급 DOI는 <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.12466">10.48550/arXiv.2610.12466</a>임. </p>
+<p>전작은 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2503.14499">arXiv:2503.14499</a>, 심사본은 <a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper_files/paper/2025/hash/85069585133c4c168c865e65d72e9775-Abstract-Conference.html">NeurIPS 2025 proceedings</a>에 있음. </p>
+<p>그림은 논문에서 가져왔고 원문은 arXiv 비독점 배포 라이선스라 재사용 시 별도 권리 확인이 필요함. </p>
+<p>세 줄 요약</p>
+<p>228과제·26개 AI를 다시 보니 2–30분 구간의 추정 평균 난도가 거의 평평했음.</p>
+<p>두 새 모형은 family 단위 교차검증의 12개 점추정치에서 더 좋았지만 여러 95% 구간은 0을 가로질렀음.</p>
+<p>관측된 성장 추세는 남았음. horizon과 시간–난도·성공확률 진단을 함께 보자는 연구임.</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/ai-time-horizons/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.12466v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/ai-time-horizons.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>
