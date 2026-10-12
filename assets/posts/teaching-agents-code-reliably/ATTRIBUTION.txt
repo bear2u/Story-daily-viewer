@@ -1,0 +1,18 @@
+Primary paper: Teaching Agents to Code Reliably
+Authors: Muhammad Ahmed Mohsin, Myeongsoo Kim, Kangrui Ruan, Shweta Garg, Varun Kumar, Murali Krishna Ramanathan
+Source: https://arxiv.org/abs/2610.03984
+PDF: https://arxiv.org/pdf/2610.03984
+Version/date: arXiv v1, 2026-10-02 UTC
+License shown by arXiv: perpetual non-exclusive license to distribute
+https://arxiv.org/licenses/nonexclusive-distrib/1.0/
+
+Predecessor crops:
+- Investigating Test Overfitting on SWE-bench, Figure 1
+  https://arxiv.org/abs/2511.16858
+- Beyond Fail-to-Pass: Iterative Hardening of Co-Generated Bug Reproduction Tests and Fixes, Figure 1
+  https://arxiv.org/abs/2607.19843
+
+Included images are explanatory crops from the papers named in each caption.
+Figure and text rights remain with the paper authors/rightsholders.
+This repository does not grant a new license for those materials.
+Verified: 2026-10-12 KST.

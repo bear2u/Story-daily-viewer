@@ -1,0 +1,404 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="코딩 에이전트의 테스트와 패치가 같은 오해를 공유하면 둘 다 틀리고도 통과할 수 있음. 두 트리 검사와 오답 변이 학습 뒤 학습 제외 270개 이슈의 pass@1은 31.9%에서 43.0%가 됐지만, 유한 변이와 benchmark grader의 경계는 남았음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="테스트가 초록불인데 패치는 틀렸을 수 있음">
+<meta property="og:description" content="코딩 에이전트의 테스트와 패치가 같은 오해를 공유하면 둘 다 틀리고도 통과할 수 있음. 두 트리 검사와 오답 변이 학습 뒤 학습 제외 270개 이슈의 pass@1은 31.9%에서 43.0%가 됐지만, 유한 변이와 benchmark grader의 경계는 남았음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/teaching-agents-code-reliably/fig1_p3.png">
+<title>테스트가 초록불인데 패치는 틀렸을 수 있음 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/teaching-agents-code-reliably.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">코딩 에이전트</span><span class="pill">AI 검증</span><span class="pill">강화학습</span><span>·</span><time datetime="2026-10-12">2026. 10. 12</time><span>·</span><span>18분 읽기</span></div>
+<h1>테스트가 초록불인데 패치는 틀렸을 수 있음</h1><p class="lead">코딩 에이전트의 테스트와 패치가 같은 오해를 공유하면 둘 다 틀리고도 통과할 수 있음. 두 트리 검사와 오답 변이 학습 뒤 학습 제외 270개 이슈의 pass@1은 31.9%에서 43.0%가 됐지만, 유한 변이와 benchmark grader의 경계는 남았음.</p>
+
+<div class="article-details"><strong>Teaching Agents to Code Reliably</strong><br>Muhammad Ahmed Mohsin · Myeongsoo Kim · Kangrui Ruan · Shweta Garg · Varun Kumar · Murali Krishna Ramanathan · 2026 · arXiv v1 · ICLR 2027 제출 상태 · 2026-10-12 기준 채택·심사 통과 미확인<br>원문 그림과 함께 읽는 18파트 해설 · 판본 및 출처 확인: 2026-10-12</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">초록불인데 패치는 틀릴 수 있음</a><a href="#part-2">초록불을 믿을 조건</a><a href="#part-3">생성 테스트에 과적합한 패치</a><a href="#part-4">SWE-bench에서 CoHarden까지</a><a href="#part-5">자기검토 4.6배 비용의 반전</a><a href="#part-6">여덟 풀이법의 배포 불가 상한</a><a href="#part-7">패치 적용·되돌림 두 트리 검사</a><a href="#part-8">DVS 해결률과 제거 실험</a><a href="#part-9">가중 SFT로 행동을 옮기기</a><a href="#part-10">오답 변이를 죽이는 RL</a><a href="#part-11">pass@1 31.9%에서 43.0%</a><a href="#part-12">만드는 범위와 고르는 능력</a><a href="#part-13">같은 후보에서 검증기 재시험</a><a href="#part-14">생성기·검증기 교차 장착</a><a href="#part-15">낯선 오답에서 낮아진 거부율</a><a href="#part-16">held-out과 benchmark의 경계</a><a href="#part-17">프리프린트·저자·동시기 연구</a><a href="#part-18">처음 질문의 조건부 답</a></aside><article class="article-body"><section class="part" id="part-1"><p>코딩 에이전트가 만든 테스트가 통과했음.<br />
+그럼 패치도 맞다고 믿어도 될까.</p>
+<p>이번 논문의 답은 조심스러운 아니오임. <br />
+테스트와 패치가 같은 요구사항을 잘못 읽으면<br />
+둘이 함께 틀리고도 초록불이 켜질 수 있음. </p>
+<p>제목은<br />
+<strong>Teaching Agents to Code Reliably</strong>임. <br />
+Muhammad Ahmed Mohsin, Myeongsoo Kim,<br />
+Kangrui Ruan, Shweta Garg, Varun Kumar,<br />
+Murali Krishna Ramanathan이 썼음. <br />
+논문 당시 Mohsin은 Stanford University,<br />
+나머지 다섯 저자는 AWS AI Labs 소속임. <br />
+Mohsin의 작업은 AWS AI Labs 인턴십 중 수행됐음. </p>
+<p>2026년 10월 2일 처음 공개된 25쪽짜리 arXiv v1임. <br />
+2026년 10월 12일 확인 기준 ICLR 2027 제출 상태이며,<br />
+채택·심사 통과가 확인된 논문은 아님. </p>
+<p>제목과 저자란은 아래에 있음.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문 제목과 저자·소속 (원문 p.1)"><img src="../assets/posts/teaching-agents-code-reliably/header_p1.png" alt="논문 제목과 저자·소속 (원문 p.1)" loading="lazy" decoding="async"></button><figcaption>논문 제목과 저자·소속 (원문 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.03984">arXiv 기록</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.03984">원문 PDF</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.03984">DOI</a></p></section>
+<section class="part" id="part-2"><p><strong>에이전트가 직접 만든 테스트의 초록불을<br />
+어떤 조건에서 믿어도 됨?</strong></p>
+<p>처음 떠오르는 방법은 자기검토임.<br />
+패치를 한 번 더 읽고 테스트도 돌리고,<br />
+틀렸으면 고치라고 세 차례쯤 더 시키는 것임. </p>
+<p>더 생각하면 더 좋아질 듯함.<br />
+그런데 이 논문에서는 정반대 장면이 나왔음. <br />
+그 반전의 시작은 <strong>초록불의 함정</strong>이었음.</p></section>
+<section class="part" id="part-3"><p>이 질문이 말장난이 아닌 장면이 있음.</p>
+<p>앞선 IBM 연구가 Django의 JSONField 버그를 예로 들었음. <br />
+에이전트가 만든 테스트를 보고 패치를 다시 고치자<br />
+그 생성 테스트는 통과했음. <br />
+하지만 숨겨 둔 정답 테스트의 다른 경우는 실패했음. </p>
+<p>쉽게 말하면<br />
+학생이 문제를 잘못 읽었는데<br />
+채점표까지 같은 방식으로 잘못 만든 셈임.</p>
+<p>정확히는<br />
+생성 테스트가 요구사항의 일부 경우만 확인했고,<br />
+그 테스트에 맞춘 패치가<br />
+benchmark의 golden test가 확인한<br />
+다른 동작을 망가뜨린 test overfitting 사례였음. </p>
+<p>아래에서 생성 테스트가 확인한 한 경우와<br />
+숨은 정답 테스트의 여러 경우를 비교해 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 생성 테스트에는 맞지만 숨은 정답 테스트에는 실패한 Django JSONField 사례 (Ahmed 외, 원문 발췌)"><img src="../assets/posts/teaching-agents-code-reliably/prior_overfit_example.png" alt="생성 테스트에는 맞지만 숨은 정답 테스트에는 실패한 Django JSONField 사례 (Ahmed 외, 원문 발췌)" loading="lazy" decoding="async"></button><figcaption>생성 테스트에는 맞지만 숨은 정답 테스트에는 실패한 Django JSONField 사례 (Ahmed 외, 원문 발췌)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이번 논문은 이 문제를 한 문장으로 정리함.<br />
+에이전트의 테스트가 패치의 잘못된 해석을 공유하면<br />
+틀린 행동을 받아들일 수 있다는 것임.</p></section>
+<section class="part" id="part-4"><p>그 장면 앞에는 SWE-bench가 있었음.</p>
+<p>SWE-bench는 실제 GitHub 이슈와 저장소를 주고<br />
+모델이 패치를 만들게 하는 벤치마크임. <br />
+2023년 처음 공개됐고 ICLR 2024에 실렸음. <br />
+원 논문은 12개 Python 저장소의 2,294개 이슈를 모았고,<br />
+당시 Claude 2의 해결률은 1.96%였음. </p>
+<p>그다음 test overfitting 연구가<br />
+생성 테스트에 맞춘 수정도 숨은 테스트에서 무너질 수 있음을 보였음. </p>
+<p>fail-to-pass는 수정 전에는 실패하고<br />
+수정 뒤에는 통과해야 하는 테스트임.<br />
+2026년 CoHarden은 이 테스트 하나로는 부족하다며<br />
+틀린 패치 변이를 만들어 테스트와 수정안을 반복 강화했음. <br />
+이번 저자들도 CoHarden을 자기들 수정·검증 반복 절차의<br />
+가장 가까운 비교 대상으로 명시함. </p>
+<p>CoHarden은 테스트도 세 종류로 나눴음. <br />
+정답 패치는 통과하고 오답은 막는 rigorous test,<br />
+둘 다 통과시키는 lax test,<br />
+정답까지 막는 misaligned test임. </p>
+<p>아래에서 같은 정답·오답 패치를<br />
+세 테스트가 어떻게 가르는지 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 정답·오답 패치에 대한 rigorous·lax·misaligned 테스트 (Tan 외 2026, Figure 1)"><img src="../assets/posts/teaching-agents-code-reliably/prior_coharden_fig1.png" alt="정답·오답 패치에 대한 rigorous·lax·misaligned 테스트 (Tan 외 2026, Figure 1)" loading="lazy" decoding="async"></button><figcaption>정답·오답 패치에 대한 rigorous·lax·misaligned 테스트 (Tan 외 2026, Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이번 논문은 여기서 한 걸음 더 나감.<br />
+좋은 패치를 <strong>만드는 범위</strong>와<br />
+그중 정답을 <strong>골라내는 능력</strong>을 따로 측정함.</p></section>
+<section class="part" id="part-5"><p>그럼 그냥 자기검토를 더 시키면 되지 않냐는 차례임.</p>
+<p>저자들은 SWE-bench Verified 500개 이슈에서<br />
+패치 제출 뒤 최대 세 번의 감사 패스를 돌렸음. <br />
+감사 패스는 저장소를 읽고 테스트하고 패치를 고칠 수 있었음. </p>
+<p>여기서 agent-step은 에이전트와 환경의 상호작용 횟수임. <br />
+토큰 수나 실제 테스트 실행 시간은 아님. </p>
+<p>결과는 184개 해결, 36.8%였음. <br />
+총 189,371 agent-step을 썼음. <br />
+그런데 감사 패스의 78~85%는 코드를 하나도 바꾸지 않았음. </p>
+<p>비교용 단일 시도는 189개, 37.8%를 해결했고<br />
+41,332 agent-step을 썼음. </p>
+<p>즉 자기검토 절차는 총 agent-step을 약 4.6배 쓰고도<br />
+문제를 5개 덜 풀었음. <br />
+다만 시도 제한과 절차가 다른 관찰 비교라서<br />
+“검토를 추가하면 항상 성능이 떨어진다”는 인과 실험은 아님. </p>
+<p>표에서 Self-verification과<br />
+Single-attempt 줄을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 여러 탐색 절차의 해결률과 비용 비교 (원문 Table 1, p.3)"><img src="../assets/posts/teaching-agents-code-reliably/tab1_p3_manual.png" alt="여러 탐색 절차의 해결률과 비용 비교 (원문 Table 1, p.3)" loading="lazy" decoding="async"></button><figcaption>여러 탐색 절차의 해결률과 비용 비교 (원문 Table 1, p.3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>같은 첫 추측을 다시 들여다보는 시간이<br />
+다른 가설을 찾는 시간으로 바뀌지 않았던 것임.</p></section>
+<section class="part" id="part-6"><p>자기검토가 같은 길만 맴돌자 방법을 바꿔봄.</p>
+<p>저자들은 문제를 읽는 방식이 다른<br />
+여덟 개의 방법론 preamble을 붙여 각각 시도했음. <br />
+어떤 문제는 한 방식에서만 풀렸고,<br />
+정답을 하나라도 만든 문제를 전부 합치면<br />
+305/500, 61.0%까지 올라갔음. </p>
+<p>여기서 함정이 있음.<br />
+이 합집합은 사후에 정답 라벨을 보고 고른 oracle임. <br />
+실전에서 어느 답이 맞는지 알려주는 배포 가능한 규칙은 아님. </p>
+<p>쉽게 말하면<br />
+교실 여덟 반 중 누군가는 답을 맞혔다는 뜻임.<br />
+누가 맞혔는지 시험 중에 알아내는 방법은 아직 없음.</p>
+<p>아래 왼쪽에서 서로 다른 파일과 수리 경로를<br />
+탐색하는 후보들을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 다양한 수리 경로 탐색과 변이 기반 학습의 전체 흐름 (원문 Figure 1, p.3)"><img src="../assets/posts/teaching-agents-code-reliably/fig1_p3.png" alt="다양한 수리 경로 탐색과 변이 기반 학습의 전체 흐름 (원문 Figure 1, p.3)" loading="lazy" decoding="async"></button><figcaption>다양한 수리 경로 탐색과 변이 기반 학습의 전체 흐름 (원문 Figure 1, p.3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>정답을 만들 가능성은 생각보다 넓었음.<br />
+병목은 그 정답을 고르는 쪽에도 있었음.</p></section>
+<section class="part" id="part-7"><p>그 후보들을 만드는 방법만 바꿔서는 고를 수 없음.<br />
+그래서 <strong>두 트리 검사</strong>를 시작함.<br />
+같은 테스트를 두 개의 코드 트리에서 돌림. </p>
+<p>쉽게 말하면<br />
+패치한 코드에서는 테스트가 통과하고,<br />
+패치를 되돌린 코드에서는 실패해야 함.<br />
+그래야 그 테스트가 실제 버그 차이를 건드렸다고 봄.</p>
+<p>정확히는<br />
+후보 패치를 적용한 트리와<br />
+그 패치만 되돌린 같은 트리에 reproduction test를 실행함. <br />
+둘 다 통과하면 버그를 식별하지 못한 vacuous test라 보고<br />
+그 후보에 0점을 줌. </p>
+<p>예를 들어 “결과가 존재한다”만 확인한 테스트는<br />
+틀린 옛 코드와 고친 코드에서 모두 통과할 수 있음.<br />
+반면 경계값의 정확한 결과를 확인한 테스트라면<br />
+옛 코드에서 실패하고 새 코드에서 통과할 수 있음.</p>
+<p>이 방식이 <strong>differential verification</strong>임. <br />
+다만 “두 트리를 구분했다”는 말은<br />
+그 테스트가 측정한 행동이 바뀌었다는 뜻까지임. <br />
+패치가 다른 모든 입력에서도 맞다는 증명은 아님.</p></section>
+<section class="part" id="part-8"><p>이 두 트리 규칙을 넣은 탐색 결과를 보면 차이가 큼.</p>
+<p>전체 differential-verification search는<br />
+500개 중 264개, 52.8%를 해결했음. <br />
+8회 샘플링 비교군은 234개, 46.8%였음. </p>
+<p>총 agent-step도 132,697 대 275,943였음. <br />
+DVS가 비교군의 48.1%만 사용한 셈임. <br />
+해결 하나당 503 대 1,179 step이었음. </p>
+<p>어떤 부품이 중요했는지 뺄셈 실험도 했음.<br />
+되돌린 트리 실행을 빼면 52.8%가 47.4%로 떨어졌음. <br />
+조기 종료만 빼면 해결률은 52.8%로 같았지만<br />
+해결당 비용이 503에서 728 step으로 늘었음. </p>
+<p>아래 표에서 No reverted-tree run과<br />
+No early stopping을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: Differential verification 구성요소 제거 실험 (원문 Table 21, p.21)"><img src="../assets/posts/teaching-agents-code-reliably/tab21_p21.png" alt="Differential verification 구성요소 제거 실험 (원문 Table 21, p.21)" loading="lazy" decoding="async"></button><figcaption>Differential verification 구성요소 제거 실험 (원문 Table 21, p.21)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>다만 절차마다 시도 제한과 중단 규칙이 달랐음. <br />
+그래서 52.8%와 46.8%는<br />
+검증 규칙 하나만 고정해 바꾼 순수 효과가 아니라<br />
+정확도와 비용을 묶은 절차 비교로 읽어야 함.</p></section>
+<section class="part" id="part-9"><p>두 트리 검사를 매번 붙이는 대신 행동을 모델 안으로 옮김.</p>
+<p>전체 500개 중 230개 이슈에서<br />
+탐색 궤적 5,061개를 골라 SFT 자료로 만들었음. <br />
+나머지 270개는 SFT와 RL 학습에서 제외했음. </p>
+<p>일부 궤적은 정답 라벨이 아니라 verifier 판정에 의존해<br />
+틀린 수리가 섞일 수 있다고 저자들이 밝힘. </p>
+<p>SFT는 좋은 해결 과정을 보고 따라 하게 하는<br />
+지도 미세조정 단계임.</p>
+<p>여기서 모든 성공 궤적을 똑같이 복사하지 않았음.<br />
+독립된 실행 근거가 있는 후보와<br />
+덜 중복되는 탐색을 더 높게 가중했음. </p>
+<p>주 실험 정책은 Qwen3-Coder-30B-A3B-Instruct,<br />
+실행 틀은 mini-SWE-agent였음. </p>
+<p>pass@1은 첫 답 하나의 성공률,<br />
+pass@8은 여덟 답 중 정답이 하나라도 있는 비율임. </p>
+<p>SFT만 한 뒤 270개 이슈의 pass@1은<br />
+31.9%에서 35.2%로 올랐음. <br />
+pass@8은 46.7%에서 51.1%로 올랐음. </p>
+<p>하지만 모범 행동을 따라 하는 것만으로는<br />
+“그 테스트가 틀린 패치를 거부했는가”를 직접 보상하지 않음. <br />
+그래서 다음 단계에서 오답을 일부러 만들어 붙임.</p></section>
+<section class="part" id="part-10"><p>여기서부터 <strong>오답 죽이기</strong> 단계임.<br />
+저자들은 패치 주변에 mutation gauntlet을 만듦. <br />
+경계값, 값, 논리, 제어흐름, 효과라는<br />
+다섯 종류의 결함을 넣은 틀린 패치들임. <br />
+다른 rollout에서 나온 오답과<br />
+모델이 만든 의미적 변이도 추가했음. </p>
+<p>의미적 변이 생성에는 정책 모델과 분리된<br />
+고정 Claude Opus-4.8을 썼음. <br />
+패치 정답 판정은 benchmark의<br />
+gold execution oracle이 맡았음. </p>
+<p>쉽게 말하면<br />
+정답 하나를 외우게 하는 대신<br />
+그럴듯한 오답 여러 개를 테스트로 죽이게 훈련함.</p>
+<p>정확히는<br />
+assertion은 예상 결과를 코드로 적은 검사문임.<br />
+그 assertion이 실패할 때만 변이를 탐지했다고 계산함. <br />
+프로그램이 그냥 crash한 것은 탐지 점수를 주지 않았음. <br />
+각 assertion token에도 어떤 변이를 추가로 잡았는지<br />
+국소 credit을 주는 강화학습 보상을 사용했음. </p>
+<p>RL은 이런 실행 보상을 높이는 방향으로<br />
+정책을 갱신하는 강화학습 단계임.</p>
+<p>아래 다섯 fault class의 예시를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 강화학습에 쓴 다섯 종류의 패치 변이 예시 (원문 Table 12, p.16)"><img src="../assets/posts/teaching-agents-code-reliably/tab12_p16_clean.png" alt="강화학습에 쓴 다섯 종류의 패치 변이 예시 (원문 Table 12, p.16)" loading="lazy" decoding="async"></button><figcaption>강화학습에 쓴 다섯 종류의 패치 변이 예시 (원문 Table 12, p.16)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>준비한 변이 집합은 유한했음.<br />
+그 변이를 전부 잡았다고 해도<br />
+그 집합 밖의 정확성까지 증명되지는 않음.</p></section>
+<section class="part" id="part-11"><p>그 보상을 받은 뒤 첫 답의 성공률이 움직임.</p>
+<p>학습에서 제외한 270개 이슈에서<br />
+pass@1은 base 31.9%, SFT 35.2%,<br />
+RL 43.0%였음. <br />
+base에서 SFT+RL까지 절대 증가는 11.1%p임. </p>
+<p>여덟 후보 중 정답이 하나라도 있는 pass@8은<br />
+46.7%에서 51.1%, 60.7%로 움직였음. </p>
+<p>검증 정밀도는 맞다고 받아들인 패치 중<br />
+실제로 정답인 비율임. </p>
+<p>보상도 단계별로 비교했음.<br />
+패치 정답 보상만 쓰면<br />
+pass@1 39.6%, 검증 정밀도 28.5%였음. <br />
+검증 점수를 더하면 40.7%, 38.4%였고,<br />
+assertion token credit까지 쓰면<br />
+43.0%, 41.7%였음. </p>
+<p>아래 (b) 패널의<br />
+Full verification objective 행을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 보상 구성에 따른 해결률과 검증 정밀도 (원문 Table 5, p.8)"><img src="../assets/posts/teaching-agents-code-reliably/tab5_p8.png" alt="보상 구성에 따른 해결률과 검증 정밀도 (원문 Table 5, p.8)" loading="lazy" decoding="async"></button><figcaption>보상 구성에 따른 해결률과 검증 정밀도 (원문 Table 5, p.8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이 수치는 “더 좋은 테스트 보상과 함께 학습한 정책이<br />
+이 벤치마크에서 더 많은 문제를 풀었다”는 결과임. <br />
+현업 코드 전체에서도 43.0%라는 뜻은 아님.</p></section>
+<section class="part" id="part-12"><p>그 성공률 하나로는<br />
+무엇이 좋아졌는지 안 보임.<br />
+그래서 <strong>만들기와 고르기</strong>를 분리함.</p>
+<p>쉽게 말하면<br />
+좋은 답을 후보 안에 넣는 능력과<br />
+후보 안의 좋은 답을 집어 드는 능력은 다름.</p>
+<p>정확히는<br />
+<strong>Oracle@8</strong>은 여덟 후보에 정답이 하나라도 있는 이슈 비율,<br />
+<strong>Selected@8</strong>은 실제 선택 규칙이<br />
+정답을 반환한 이슈 비율임. <br />
+selection efficiency는<br />
+Selected@8을 Oracle@8로 나눈 값임. </p>
+<p>base→SFT→RL에서 Oracle@8은<br />
+46.7→51.1→60.7%로 올랐음. <br />
+Selected@8은 33.5→38.5→50.5%였음. <br />
+selection efficiency도<br />
+0.72→0.75→0.83으로 올랐음. </p>
+<p>아래에서 후보 범위와 최종 선택 줄을 함께 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 후보 coverage와 선택 품질의 분리 (원문 Table 3, p.7)"><img src="../assets/posts/teaching-agents-code-reliably/tab3_p7.png" alt="후보 coverage와 선택 품질의 분리 (원문 Table 3, p.7)" loading="lazy" decoding="async"></button><figcaption>후보 coverage와 선택 품질의 분리 (원문 Table 3, p.7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>즉 이번 결과는<br />
+정답 후보를 더 자주 만들고,<br />
+만든 정답을 더 자주 고른 변화가 함께 들어 있음.</p></section>
+<section class="part" id="part-13"><p>고르는 능력만 같은 후보에서 다시 시험함.</p>
+<p>후보가 매번 달라지는 문제를 막기 위해<br />
+세 정책이 같은 고정 repair bank를 판정하게 했음. </p>
+<p>틀린 패치 거부율은<br />
+base 70.0%, SFT 73.0%, RL 87.4%였음. <br />
+올바른 패치 수용률도<br />
+68.0→72.0→80.0%로 올랐음. <br />
+false-positive rate는<br />
+30.0→27.0→12.6%로 내려갔음. </p>
+<p>앞 파트의 검증 정밀도 41.7%는<br />
+“맞다고 받아들인 것 중 실제 정답”의 비율임. <br />
+여기의 87.4%는<br />
+“실제 오답 중 거부한 것”의 비율이라 분모가 다름. </p>
+<p>아래 고정 후보 은행 결과를 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 같은 패치 후보를 판정한 검증기 비교 (원문 Table 4, p.8)"><img src="../assets/posts/teaching-agents-code-reliably/tab4_p8.png" alt="같은 패치 후보를 판정한 검증기 비교 (원문 Table 4, p.8)" loading="lazy" decoding="async"></button><figcaption>같은 패치 후보를 판정한 검증기 비교 (원문 Table 4, p.8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>테스트의 모양도 바뀌었음.<br />
+SFT 뒤 RL 전에는 테스트당 assertion 중앙값이 0이었는데<br />
+RL 뒤에는 11이 됐음. <br />
+길이 중앙값은 42줄에서 33줄로 짧아졌고,<br />
+다루는 fault class는 0/5에서 3/5가 됐음. </p>
+<p>assertion 개수가 많다고<br />
+자동으로 좋은 테스트가 되는 건 아님.<br />
+실제 변이를 assertion 실패로 구분했는지도<br />
+보상에 들어갔음.</p></section>
+<section class="part" id="part-14"><p>여기서 generator와 verifier를 서로 바꿔 끼움.</p>
+<p>이 교차 실험은 같은 한 번의 시도 예산에서<br />
+generator와 verifier의 역할만 바꿨음. <br />
+base가 만든 후보를 base가 고르면 pass@1 31.9%였음. <br />
+후보는 그대로 두고<br />
+trained verifier만 붙이면 36.5%였음. <br />
+검증기만 바꿔도 +4.6%p인 셈임. </p>
+<p>trained generator에 base verifier를 붙이면<br />
+38.5%,<br />
+둘 다 trained면 43.0%였음. </p>
+<p>아래 네 조합을 위에서부터 비교해 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 패치 생성기와 검증기를 교차 장착한 결과 (원문 Table 15, p.18)"><img src="../assets/posts/teaching-agents-code-reliably/tab15_p18.png" alt="패치 생성기와 검증기를 교차 장착한 결과 (원문 Table 15, p.18)" loading="lazy" decoding="async"></button><figcaption>패치 생성기와 검증기를 교차 장착한 결과 (원문 Table 15, p.18)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>두 효과의 interaction 추정치는 −0.1%p였고<br />
+95% 신뢰구간은 [−2.6, 2.4]였음. <br />
+0을 포함하므로 비제로 상호작용이 확인됐다고 말할 수 없음. </p>
+<p>따라서 앞 파트의 여덟 후보 Selected@8과는<br />
+후보 수와 지표가 다른 실험임. </p>
+<p>이 교차 실험 덕분에<br />
+최종 상승을 “더 좋은 후보를 만들었기 때문” 하나로만<br />
+설명하기 어려워졌음. <br />
+고르는 능력 자체의 기여도 관찰됐음.</p></section>
+<section class="part" id="part-15"><p>그 고르는 능력도 낯선 오답을 만나면 약해짐.<br />
+여기서 <strong>검증의 경계</strong>가 보임.</p>
+<p>operator는 오답을 만드는 변형 규칙이고,<br />
+generator는 모델 기반 오답 제작기임.</p>
+<p>RL 정책의 오답 거부율은<br />
+익숙한 변이 91.0%, 학습에서 뺀 operator 84.0%,<br />
+제외한 generator 변이 79.0%,<br />
+자연 발생 오답 74.0%였음. <br />
+분포가 멀어질수록 계단처럼 낮아졌음. </p>
+<p>아래 맨 아래 Natural wrong repairs 행을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 오답 출처가 달라질 때의 거부율 변화 (원문 Table 16, p.18)"><img src="../assets/posts/teaching-agents-code-reliably/tab16_p18.png" alt="오답 출처가 달라질 때의 거부율 변화 (원문 Table 16, p.18)" loading="lazy" decoding="async"></button><figcaption>오답 출처가 달라질 때의 거부율 변화 (원문 Table 16, p.18)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>외부 벤치마크에서는<br />
+SWE-PolyBench pass@1은<br />
+SFT 24.2%에서 RL 31.8%,<br />
+SWE-bench Pro가 15.7%에서 20.2%로 올랐음. <br />
+하지만 DeepSWE 완전 해결은 둘 다 0이었음. </p>
+<p>올바른 대안을 거부하면 벌점을 주는<br />
+signed credit도 시험했음.<br />
+자연 오답 거부 74.0→78.0%,<br />
+올바른 대안 수용 78.0→84.0%,<br />
+pass@1 43.0→43.3%로 움직였음. <br />
+다만 이것은 ablation일 뿐이고<br />
+주 transfer 결과에는 적용되지 않았음. </p>
+<p>자연 발생 오답의 74.0%를 더 올리면서<br />
+정답의 여러 표현을 과하게 거부하지 않을 수 있느냐는 것임.</p></section>
+<section class="part" id="part-16"><p>이 경계에는 숫자보다 먼저 봐야 할<br />
+held-out 조건도 남음.</p>
+<p>저자들은 500개 전체로 먼저 방법을 진단하고,<br />
+230개만 SFT·RL 자료 제작에 썼음. <br />
+나머지 270개는 SFT·RL 학습에서는 제외됐음. </p>
+<p>하지만 그 270개도 앞선 방법 개발용 진단에는 등장했음. <br />
+따라서 완전히 보지 않은 OOD 문제라기보다<br />
+방법 개발에 사용된 벤치마크 안의 학습 제외 split임. </p>
+<p>원문이 이 제한을 직접 적은 부분을 보셈.</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 270개 평가 이슈도 방법 개발 진단에는 등장했다는 제한 (원문 p.5)"><img src="../assets/posts/teaching-agents-code-reliably/quote_heldout.png" alt="270개 평가 이슈도 방법 개발 진단에는 등장했다는 제한 (원문 p.5)" loading="lazy" decoding="async"></button><figcaption>270개 평가 이슈도 방법 개발 진단에는 등장했다는 제한 (원문 p.5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>여기서 “정답”은 benchmark grader의<br />
+테스트 통과로 정의됨. <br />
+프로그램의 모든 의미론적 정확성을 보증하는 말은 아님. </p>
+<p>공개 저장소가 모델 사전학습에 들어갔을 가능성도<br />
+배제하지 못했다고 논문이 밝힘. <br />
+agent-step 절감 계산에는 토큰 길이와<br />
+실제 테스트 실행 비용 차이도 포함되지 않았음. </p>
+<p>결과가 흥미로운 만큼<br />
+43.0%나 48.1%를 현실 개발 전체의 절대값으로<br />
+바로 옮기면 안 되는 이유들임.</p></section>
+<section class="part" id="part-17"><p>한계를 읽고 나면 현재 연구 상태도 짚어야 함.</p>
+<p>2026년 10월 12일 기준 arXiv 프리프린트임. <br />
+“Submitted to ICLR 2027”로 적혀 있고<br />
+심사 결과나 채택은 확인되지 않았음. </p>
+<p>제1저자 Muhammad Ahmed Mohsin은<br />
+논문 기준 Stanford 소속이고<br />
+AWS AI Labs 인턴십 중 연구했음. <br />
+Stanford 공식 프로필에는<br />
+전기공학 박사과정으로 표시됨. </p>
+<p>Semantic Scholar와 OpenAlex에서<br />
+2026년 10월 11일 UTC 기준 직접 피인용은 0으로 조회됐음. <br />
+공개 직후라 색인 지연 가능성이 크므로<br />
+영향력이 없다는 뜻으로 쓰지는 않겠음. </p>
+<p>공개 6일 뒤 나온 TestPrism도<br />
+생성 테스트를 기준 구현 하나에만 대조하면<br />
+판별력을 과대평가할 수 있다는 문제를 다뤘음. <br />
+하지만 현재 논문을 인용하지 않아<br />
+직접 후속작이 아닌 동시기 별도 흐름으로만 볼 수 있음. </p>
+<p>논문은 생성형 AI를 문장 교정과 통상 코딩에만 썼고,<br />
+아이디어·실험·해석에는 쓰지 않았다고 밝힘.</p></section>
+<section class="part" id="part-18"><p>이제 처음 질문에 조건을 붙여 답할 수 있음.</p>
+<p>에이전트가 만든 테스트의 초록불 하나만으로는 부족함.<br />
+최소한 고친 코드에서는 통과하고<br />
+패치를 되돌리거나 그럴듯하게 틀린 변이에서는 실패해야<br />
+선택 근거로 쓸 만해짐. </p>
+<p>이번 논문에서 되돌린 트리 검사를 빼자<br />
+해결률이 52.8%에서 47.4%로 떨어졌고, <br />
+같은 후보를 두고 verifier만 훈련된 것으로 바꿔도<br />
+31.9%에서 36.5%로 올랐음. <br />
+검증이 단순 장식은 아니라는 가장 직접적인 근거임.</p>
+<p>하지만 마지막 선도 남아 있음.<br />
+유한한 오답 변이를 전부 잡아도<br />
+그 밖의 입력에서 패치가 맞다는 증명은 아님. <br />
+benchmark grader와 자연 오답 분포의 경계도 남아 있음. </p>
+<p>남은 문장은 “테스트를 더 만들자”보다<br />
+<strong>테스트가 정답과 오답을 실제로 가르는지 보자</strong>에 가까움.</p>
+<p>다음에 확인할 것은 두 가지임.<br />
+자연 발생 오답에서 74%였던 거부율을 높일 수 있는지, <br />
+signed credit의 작은 개선이<br />
+전체 transfer에서도 유지되는지임. </p>
+<p>원문과 확인 자료:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.03984">Teaching Agents to Code Reliably — arXiv</a> </li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.03984">원문 PDF</a> · <a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.03984">DOI</a> </li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2310.06770">SWE-bench</a> </li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2511.16858">Investigating Test Overfitting on SWE-bench</a> </li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2607.19843">CoHarden</a> </li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.12289">TestPrism</a> </li>
+</ul>
+<p><strong>3줄 요약</strong></p>
+<ol>
+<li>같은 오해를 한 테스트와 패치는 함께 틀리고도 통과할 수 있음. </li>
+<li>학습 제외 270개에서 SFT+RL 뒤 pass@1은 31.9→43.0%였음. </li>
+<li>두 트리·오답 판별력 향상은 완전한 정확성 증명은 아님.</li>
+</ol></section><div class="article-end"><div class="source-links"><a href="../assets/posts/teaching-agents-code-reliably/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.03984" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/teaching-agents-code-reliably.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>
