@@ -1,0 +1,43 @@
+{
+  "slug": "tutor-metric-collapse",
+  "title": "교육 점수는 올랐는데 수업 평가는 떨어졌음",
+  "excerpt": "고정된 학습자 조건에서 활동별 선택을 평균내는 PAI를 올리자 같은 선택의 반복이 나타났음. 수정 30개 계획은 PAI +0.05→+0.42, 교육학 평가자 점수4.46→3.03이었지만 모델 전환과 설명문 변화가 함께 있었고 실제 학생 성과는 재지 않았음.",
+  "date": "2026-10-14",
+  "published_at": "2026-10-14T08:33:58+09:00",
+  "verified_date": "2026-10-14",
+  "reading_minutes": 12,
+  "tags": [
+    "AI 튜터",
+    "평가 지표",
+    "교육"
+  ],
+  "cover": "assets/posts/tutor-metric-collapse/fig4b_p13.png",
+  "cover_alt": "교육 적응성 점수 상승과 사람 평가 하락—원문 Figure 4b",
+  "markdown": "tutor-metric-collapse.md",
+  "paper_title": "The learner who does not learn: when optimizing a pedagogical metric degrades LLM tutoring",
+  "paper_year": "2026",
+  "venue": "arXiv v1 · 2026-10-14 기준 동료심사 채택 미확인",
+  "authors": "Daniel Domínguez Figaredo · Rafael Fernández De la Cruz",
+  "source_url": "https://arxiv.org/abs/2610.12125",
+  "chapters": [
+    "교육 점수와 수업 평가",
+    "학습자가 바뀌는 수업",
+    "보상·선호학습·교육 감사의 계보",
+    "PAI의 선택과 평균",
+    "고정 조건의 반복 최적해",
+    "2,000개 합성 사례",
+    "Qwen 미세조정 정답",
+    "31명 교육학 평가자",
+    "점수 상승과 사람 평가 하락",
+    "반복 선택과 설명문 혼동",
+    "새 사례에도 남은 반복",
+    "평균이 가린 인지 과제 하락",
+    "가중치 변화와 고정 문구",
+    "주어지지 않은 학습 단계 단서",
+    "가상 학습 경로 재채점",
+    "인과와 실제 학습의 경계",
+    "최고점 계획을 직접 보기",
+    "현재 상태와 세 줄 요약"
+  ],
+  "attribution_url": "assets/posts/tutor-metric-collapse/ATTRIBUTION.txt"
+}

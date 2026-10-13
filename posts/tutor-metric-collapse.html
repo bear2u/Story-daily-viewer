@@ -1,0 +1,296 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="고정된 학습자 조건에서 활동별 선택을 평균내는 PAI를 올리자 같은 선택의 반복이 나타났음. 수정 30개 계획은 PAI +0.05→+0.42, 교육학 평가자 점수4.46→3.03이었지만 모델 전환과 설명문 변화가 함께 있었고 실제 학생 성과는 재지 않았음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="교육 점수는 올랐는데 수업 평가는 떨어졌음">
+<meta property="og:description" content="고정된 학습자 조건에서 활동별 선택을 평균내는 PAI를 올리자 같은 선택의 반복이 나타났음. 수정 30개 계획은 PAI +0.05→+0.42, 교육학 평가자 점수4.46→3.03이었지만 모델 전환과 설명문 변화가 함께 있었고 실제 학생 성과는 재지 않았음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/tutor-metric-collapse/fig4b_p13.png">
+<title>교육 점수는 올랐는데 수업 평가는 떨어졌음 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/tutor-metric-collapse.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 튜터</span><span class="pill">평가 지표</span><span class="pill">교육</span><span>·</span><time datetime="2026-10-14">2026. 10. 14</time><span>·</span><span>12분 읽기</span></div>
+<h1>교육 점수는 올랐는데 수업 평가는 떨어졌음</h1><p class="lead">고정된 학습자 조건에서 활동별 선택을 평균내는 PAI를 올리자 같은 선택의 반복이 나타났음. 수정 30개 계획은 PAI +0.05→+0.42, 교육학 평가자 점수4.46→3.03이었지만 모델 전환과 설명문 변화가 함께 있었고 실제 학생 성과는 재지 않았음.</p>
+
+<div class="article-details"><strong>The learner who does not learn: when optimizing a pedagogical metric degrades LLM tutoring</strong><br>Daniel Domínguez Figaredo · Rafael Fernández De la Cruz · 2026 · arXiv v1 · 2026-10-14 기준 동료심사 채택 미확인<br>원문 그림과 함께 읽는 18파트 해설 · 판본 및 출처 확인: 2026-10-14</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">교육 점수와 수업 평가</a><a href="#part-2">학습자가 바뀌는 수업</a><a href="#part-3">보상·선호학습·교육 감사의 계보</a><a href="#part-4">PAI의 선택과 평균</a><a href="#part-5">고정 조건의 반복 최적해</a><a href="#part-6">2,000개 합성 사례</a><a href="#part-7">Qwen 미세조정 정답</a><a href="#part-8">31명 교육학 평가자</a><a href="#part-9">점수 상승과 사람 평가 하락</a><a href="#part-10">반복 선택과 설명문 혼동</a><a href="#part-11">새 사례에도 남은 반복</a><a href="#part-12">평균이 가린 인지 과제 하락</a><a href="#part-13">가중치 변화와 고정 문구</a><a href="#part-14">주어지지 않은 학습 단계 단서</a><a href="#part-15">가상 학습 경로 재채점</a><a href="#part-16">인과와 실제 학습의 경계</a><a href="#part-17">최고점 계획을 직접 보기</a><a href="#part-18">현재 상태와 세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>AI의 교육 점수를 높이면<br />
+더 잘 가르치게 될까?</p>
+<p>같은 학습자에게 맞는 선택을<br />
+활동마다 넣으면 좋아 보임<br />
+근데 다섯 활동이 모두<br />
+같은 선택이면 어떨까? </p>
+<p>이번 논문 제목은<br />
+<em>The learner who does not learn:</em><br />
+<em>when optimizing a pedagogical metric</em><br />
+<em>degrades LLM tutoring</em>임 </p>
+<p>Daniel Domínguez Figaredo와<br />
+Rafael Fernández De la Cruz가 썼음<br />
+둘 다 논문 기준 스페인 UNED 소속임 <br />
+2026년 10월 8일 UTC 공개된 arXiv v1임<br />
+10월 14일 기준 심사 통과·채택 미확인임 <br />
+아래 제목부에서 저자와 소속을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문 제목과 UNED 저자란 (원문 p.1)"><img src="../assets/posts/tutor-metric-collapse/header_p1.png" alt="논문 제목과 UNED 저자란 (원문 p.1)" loading="lazy" decoding="async"></button><figcaption>논문 제목과 UNED 저자란 (원문 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>수업 계획은 학생을 바꾸는 과정이어야 함</p>
+<p>설명용으로 이런 장면을 생각해보셈<br />
+처음엔 혼자 문제를 못 풀던 학생이<br />
+도움을 받고 몇 개를 풀었음<br />
+그다음에도 같은 도움만 계속 주면 될까?</p>
+<p>쉽게 말하면<br />
+첫 활동에 맞던 지시가<br />
+마지막 활동에도 맞는지는 따로 봐야 함</p>
+<p>정확히는<br />
+학습 중 바뀌는 지식 상태에 맞춰<br />
+도움을 조절하고 점차 줄이는 과정이<br />
+교육이론의 scaffolding에 들어감 </p>
+<p>원문에서 조건이 고정된 속성이 아니라<br />
+학습 경로 위 위치라고 적은 대목을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 학습자 조건은 수업을 거치며 달라짐 (원문 p.4)"><img src="../assets/posts/tutor-metric-collapse/quote_trajectory.png" alt="학습자 조건은 수업을 거치며 달라짐 (원문 p.4)" loading="lazy" decoding="async"></button><figcaption>학습자 조건은 수업을 거치며 달라짐 (원문 p.4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그런 변화를 점수표에도 넣었을까?</p></section>
+<section class="part" id="part-3"><p>이 점수표를 학습 목표로 쓸 때의<br />
+위험과 가능성을 다룬 전작들이 있었음</p>
+<p>2023년 ICML의 Gao 외 연구는<br />
+대리 보상 점수에 과하게 맞추면<br />
+기준 보상은 오히려 낮아지는 현상을 봤음<br />
+사람 대신 기준 보상모델을 쓴 합성 실험임 </p>
+<p>2024년 Sonkar 외는<br />
+좋은 튜터 응답과 덜 좋은 응답을<br />
+합성 선호쌍으로 만들어 학습했음<br />
+EMNLP Findings에 실린 연구임 <br />
+아래 전작 제목과 저자란을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 선호 학습으로 튜터 행동을 맞춘 전작 (Sonkar 외 2024, p.1)"><img src="../assets/posts/tutor-metric-collapse/prior_sonkar_header.png" alt="선호 학습으로 튜터 행동을 맞춘 전작 (Sonkar 외 2024, p.1)" loading="lazy" decoding="async"></button><figcaption>선호 학습으로 튜터 행동을 맞춘 전작 (Sonkar 외 2024, p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이번 Daniel의 전작도 있음<br />
+교육이론으로 모델 출력을 감사한 논문이<br />
+2025년 12월 15일 온라인 공개됐음<br />
+그 전작은 심사를 거친 학술지 논문임 </p>
+<p>이번에는 그 감사 점수를 높인 뒤<br />
+사람 평가도 좋아지는지 물었음</p></section>
+<section class="part" id="part-4"><p>그 감사 점수는 수업의 선택을 숫자로 바꿈</p>
+<p>사례 하나에 학습 활동 다섯 개를 만들고<br />
+활동마다 다섯 결정을 하게 함 <br />
+내용 난도, 인지 과제, 도움 구조,<br />
+참여 방식, 교과 접근임 </p>
+<p>쉽게 말하면<br />
+학생 조건과 선택을 대응표에 넣고<br />
+잘 맞으면 높은 점수를 줌</p>
+<p>정확히는<br />
+PAI는 교육 적응성 지표임<br />
+11개 대응표에서 나온 결정 점수<br />
+25개를 단순 평균함<br />
+범위는 −1에서 +1임 </p>
+<p>아래에서 선택이 점수로 바뀌는 화살표를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 선택을 채점하고 평균하는 PAI (원문 Figure 2)"><img src="../assets/posts/tutor-metric-collapse/fig2_p8.png" alt="선택을 채점하고 평균하는 PAI (원문 Figure 2)" loading="lazy" decoding="async"></button><figcaption>선택을 채점하고 평균하는 PAI (원문 Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>설명문도 생성했지만<br />
+PAI는 선택지만 채점했음</p></section>
+<section class="part" id="part-5"><p>이 평균에는 학생이 처음 상태로 남음</p>
+<p>활동 사이의 진행이나 관계를 채점하지 않고<br />
+학생 조건도 다섯 활동 내내 고정함 </p>
+<p>설명용 점수 예시를 들어보겠음<br />
+A가 1점, B가 0.5점이라면<br />
+같은 조건에서 A를 다섯 번 고르면<br />
+평균도 1점임 <br />
+이 숫자는 원문 점수표가 아닌 예시임 </p>
+<p>정확히는<br />
+선택지가 같고 문맥이 고정된 독립 점수를<br />
+평균내는 구조에서는<br />
+각 최고점 선택의 반복도 최적해가 됨 </p>
+<p>원문에서 repeated five times를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 고정 조건의 독립 점수는 최고점 반복을 허용함 (원문 §4.3)"><img src="../assets/posts/tutor-metric-collapse/quote_optimum_p14.png" alt="고정 조건의 독립 점수는 최고점 반복을 허용함 (원문 §4.3)" loading="lazy" decoding="async"></button><figcaption>고정 조건의 독립 점수는 최고점 반복을 허용함 (원문 §4.3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그 반복을 모델도 배웠을까?</p></section>
+<section class="part" id="part-6"><p>그 반복이 나오는지 사례를 넓혀 봄</p>
+<p>합성 학습자 시나리오 2,000개를 만들고<br />
+Gemini 3.1 Pro Preview가 계획을 작성함<br />
+실제 학생 2,000명 실험은 아님 </p>
+<p>전체 PAI 평균은 +0.29였음<br />
+처음 배우는 학생의 기술 연습 단계에서<br />
+낮은 점수 사례가 많았음 </p>
+<p>아래 오른쪽 novice·skill building 칸을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 2,000개 합성 사례의 최초 감사 (원문 Figure 3)"><img src="../assets/posts/tutor-metric-collapse/fig3_p12.png" alt="2,000개 합성 사례의 최초 감사 (원문 Figure 3)" loading="lazy" decoding="async"></button><figcaption>2,000개 합성 사례의 최초 감사 (원문 Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>고칠 모델은 별도로 둠<br />
+공개 가중치 Qwen3-32B를 썼음<br />
+미세조정과 내부 분석은 전부 Qwen에서 함 </p>
+<p>낮은 점수 사례를 고칠 정답이 필요했음</p></section>
+<section class="part" id="part-7"><p>낮은 점수를 고치는 정답은 이렇게 만듦</p>
+<p>학습 사례 589개에서<br />
+각 결정의 최고점 선택을 고름<br />
+동일 선택을 다섯 활동에 반복한 정답임 </p>
+<p>설명문은 학습자와 무관한<br />
+고정 문구 100개에서 붙임<br />
+같은 선택의 문장을 다르게 표현했음 <br />
+아래 fixed bank of 100을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 선택 최고점과 고정 문구로 만든 학습 정답 (원문 p.10)"><img src="../assets/posts/tutor-metric-collapse/quote_train.png" alt="선택 최고점과 고정 문구로 만든 학습 정답 (원문 p.10)" loading="lazy" decoding="async"></button><figcaption>선택 최고점과 고정 문구로 만든 학습 정답 (원문 p.10)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>Qwen에는 얇은 보정 행렬들을 붙여 학습함<br />
+이런 미세조정 방식이 LoRA임 <br />
+자료 전체를 세 번 학습하는 3epoch였음 </p>
+<p>보정 행렬의 폭을 정하는 rank도<br />
+네 설정으로 시험했지만 <br />
+Gemini 자체를 학습한 것은 아님 </p>
+<p>그 계획을 사람에게도 보여줌</p></section>
+<section class="part" id="part-8"><p>그 계획을 평가한 사람은 31명이었음</p>
+<p>교육학 학위를 갖고<br />
+AI·교육 대학원 과정에 있던 평가자들임<br />
+현직 교사 표본으로 보면 안 됨 </p>
+<p>최저점 사례 30개와 최고점 사례 8개를<br />
+수주 간격으로 두 번 보여줌<br />
+사례마다 4~11명이 평가했음 </p>
+<p>두 번째에는 낮은 점수 30개만<br />
+학습한 Qwen 계획으로 교체함<br />
+나머지 8개는 원 계획을 그대로 둠 </p>
+<p>평가자는 지표나 교체 여부를 몰랐고<br />
+선택과 설명을 함께 봤음<br />
+평가 범위는 1~5점임 <br />
+아래 평가자 조건과 계획 제시 절차를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 31명 평가자의 두 차례 평가 절차 (원문 §3.5)"><img src="../assets/posts/tutor-metric-collapse/quote_eval.png" alt="31명 평가자의 두 차례 평가 절차 (원문 §3.5)" loading="lazy" decoding="async"></button><figcaption>31명 평가자의 두 차례 평가 절차 (원문 §3.5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>그 블라인드 평가가 점수와 반대로 움직임</p>
+<p>교체한 30개 사례의 PAI는<br />
++0.05에서 +0.42로 올랐음<br />
+사람의 평균 평가는<br />
+4.46에서 3.03으로 떨어졌음 </p>
+<p>그대로 둔 8개는 4.39→4.51로<br />
+유의한 변화가 확인되지 않았음 <br />
+아래 두 선의 방향을 보셈<br />
+서로 척도가 달라 높이를 직접 비교하면 안 됨 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: PAI 상승과 사람 평가 하락 (원문 Figure 4b)"><img src="../assets/posts/tutor-metric-collapse/fig4b_p13.png" alt="PAI 상승과 사람 평가 하락 (원문 Figure 4b)" loading="lazy" decoding="async"></button><figcaption>PAI 상승과 사람 평가 하락 (원문 Figure 4b)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그림은 초기 값을 4.45로 표시하지만<br />
+본문·초록은 4.46임<br />
+작은 원문 불일치가 있어<br />
+여기서는 본문 값을 썼음 </p>
+<p>평가자들이 무엇을 낮게 봤는지도 읽었음</p></section>
+<section class="part" id="part-10"><p>그 평가자들의 설명은 반복 선택을 자주 짚음</p>
+<p>두 코더가 따로 읽은 일부 약점 설명에서<br />
+수정 계획의 단조로움을 표시한 비율은<br />
+19~25%였음<br />
+원 계획은 최대 3%였음 </p>
+<p>아래 corrected intervention을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 수정 계획에서 더 자주 지적된 단조로움 (원문 Figure 5)"><img src="../assets/posts/tutor-metric-collapse/fig5_p14.png" alt="수정 계획에서 더 자주 지적된 단조로움 (원문 Figure 5)" loading="lazy" decoding="async"></button><figcaption>수정 계획에서 더 자주 지적된 단조로움 (원문 Figure 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>문장 표현을 다르게 써도<br />
+활동의 선택은 계속 같았음 </p>
+<p>근데 선택만 바뀐 실험은 아님<br />
+설명도 짧고 일반적인 고정 문구로 변했음<br />
+사례 단어와의 겹침은 0.21→0.03임 </p>
+<p>반복과 일반적인 설명이 각각<br />
+평가를 얼마나 낮췄는지는 분리 못 했음</p></section>
+<section class="part" id="part-11"><p>그 반복은 처음 본 사례에도 남음</p>
+<p>학습에서 뺀 200개 합성 사례에서<br />
+학습한 Qwen은 모든 계획 내부에서<br />
+각 결정의 한 선택을 다섯 번 반복함 </p>
+<p>설명문 다섯 개가 문자 그대로<br />
+전부 같았다는 뜻은 아님 </p>
+<p>더 좁혀보면 인지 과제 선택에서는<br />
+200개 모두 반복연습 하나를 받았음<br />
+다른 네 결정은 사례별로 달랐음 <br />
+아래 빨간 cognitive task 막대를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 새 사례에서 인지 과제 선택이 하나로 줄어듦 (원문 Figure 6b)"><img src="../assets/posts/tutor-metric-collapse/fig6b_p15.png" alt="새 사례에서 인지 과제 선택이 하나로 줄어듦 (원문 Figure 6b)" loading="lazy" decoding="async"></button><figcaption>새 사례에서 인지 과제 선택이 하나로 줄어듦 (원문 Figure 6b)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>반복연습이 필요한 학생도 있겠지만<br />
+여기서는 학생 조건에 따른 선택 차이가 사라짐</p></section>
+<section class="part" id="part-12"><p>반복연습으로 밀린 항목의 점수는 낮아짐</p>
+<p>학습 제외 200개에서<br />
+인지 과제 DP2 점수는 0.24→0.04임<br />
+그런데 전체 PAI는 0.30→0.42로 올랐음 </p>
+<p>나머지 네 항목의 상승이<br />
+한 항목의 하락을 평균에서 가린 것임 <br />
+아래 task의 빨간 하락을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전체 평균 상승 속에 가려진 인지 과제 하락 (원문 Figure 6a)"><img src="../assets/posts/tutor-metric-collapse/fig6a_p15.png" alt="전체 평균 상승 속에 가려진 인지 과제 하락 (원문 Figure 6a)" loading="lazy" decoding="async"></button><figcaption>전체 평균 상승 속에 가려진 인지 과제 하락 (원문 Figure 6a)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이것은 같은 Qwen을 학습 전후 비교한 결과임<br />
+앞의 사람 평가는 원 Gemini와 수정 Qwen 비교였음 </p>
+<p>사람 평가와 행동 대조군은<br />
+구분해서 읽어야 함</p></section>
+<section class="part" id="part-13"><p>그 반복 변화가 모델 어디에 들어갔는지도 봄<br />
+여기부터는 내부 분석이라 넘겨도 됨</p>
+<p>모델은 마지막에 내부 표현을<br />
+단어별 점수로 바꿔 다음 단어를 고름<br />
+그 마지막 선형 변환이 출력 투영부임 </p>
+<p>rank 8에서 가중치 업데이트 에너지의<br />
+89%가 여기에 모였음<br />
+가중치 변화 행렬의 크기로 계산한 비중임<br />
+전력 소비와는 관계없는 수치임 <br />
+네 rank의 범위는 75~93%였음 <br />
+아래 가운데 output projection 막대를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 가중치 업데이트가 집중된 출력 투영부 (원문 Figure 7)"><img src="../assets/posts/tutor-metric-collapse/fig7_p17.png" alt="가중치 업데이트가 집중된 출력 투영부 (원문 Figure 7)" loading="lazy" decoding="async"></button><figcaption>가중치 업데이트가 집중된 출력 투영부 (원문 Figure 7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>평가한 설명 750개 중 748개도<br />
+고정 100문구와 문자 그대로 일치했음 </p>
+<p>저자들은 이를 얕은 출력 편집으로 해석함<br />
+이 분석만으로 내부 추론이<br />
+완전히 그대로였다고 증명한 것은 아님</p></section>
+<section class="part" id="part-14"><p>그 내부 분석에 이어<br />
+맞출 학생 조건부터 물었음<br />
+입력 문장에서 읽을 수 있었을까?</p>
+<p>시나리오에서 학습 단계를 맞히게 하니<br />
+Gemini 정확도 38.5%, Qwen 32.5%였음<br />
+단어 빈도 기반 분류기도 39.5%였음 </p>
+<p>쉽게 말하면<br />
+채점표는 학생이 어느 단계인지 알지만<br />
+주어진 문장에는 그 단서가 약했을 수 있음</p>
+<p>정확히는<br />
+우연 일치를 보정한 κ도 셋 모두 낮았음<br />
+문장에 단계 정보가 전혀 없다는 증명은 아님 <br />
+아래 Learning stage 마지막 행을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 문장에서 학습 단계를 복원하기 어려웠던 결과 (원문 Table 4)"><img src="../assets/posts/tutor-metric-collapse/tab4_p18.png" alt="문장에서 학습 단계를 복원하기 어려웠던 결과 (원문 Table 4)" loading="lazy" decoding="async"></button><figcaption>문장에서 학습 단계를 복원하기 어려웠던 결과 (원문 Table 4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>조건을 읽는 실패와<br />
+조건에 맞는 선택을 못 한 실패가 섞여 있었음</p></section>
+<section class="part" id="part-15"><p>그럼 고정 학습자를 움직이면 해결됨?</p>
+<p>저자들은 학습 단계가 진행하고<br />
+지식 상태도 바뀐다고 가정해<br />
+기존 계획을 다시 채점했음<br />
+실제 학생의 변화 측정이나 재학습은 아님 </p>
+<p>기본 변화 일정에서 수정 계획의 우위는<br />
++0.37에서 +0.07로 줄었음<br />
+그런데 사람 평가 하락과의 차이는 남았음 <br />
+아래 evolving conditions 대목을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 가상 학습 경로로 다시 채점한 결과 (원문 p.16)"><img src="../assets/posts/tutor-metric-collapse/quote_rescore.png" alt="가상 학습 경로로 다시 채점한 결과 (원문 p.16)" loading="lazy" decoding="async"></button><figcaption>가상 학습 경로로 다시 채점한 결과 (원문 p.16)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>상태를 움직이는 규칙만 추가한다고<br />
+계획 전체의 질이 자동으로 잡히지는 않았음</p></section>
+<section class="part" id="part-16"><p>사람 평가의 하락도 그대로 인과로 읽으면 안 됨</p>
+<p>학습 전 Qwen을 사람이 평가하지 않았음<br />
+두 원 모델의 자동 점수·다양성은 비슷했지만<br />
+사람이 느낀 질도 같았다는 증명은 없음 </p>
+<p>사람이 평가한 30개는 학습에 포함됐음<br />
+새 200개에서는 행동 반복만 확인했음 </p>
+<p>설명문 변화도 함께 있었고<br />
+합성 사례·대학원 평가자 조건임<br />
+각 학습 조건을 한 번만 돌렸고<br />
+학습 seed도 고정하지 않았음 <br />
+아래 원문의 no educators rated를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사람 대조군과 설명문 혼동을 밝힌 한계 (원문 §5.4)"><img src="../assets/posts/tutor-metric-collapse/quote_limits_p21.png" alt="사람 대조군과 설명문 혼동을 밝힌 한계 (원문 §5.4)" loading="lazy" decoding="async"></button><figcaption>사람 대조군과 설명문 혼동을 밝힌 한계 (원문 §5.4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>학생 성적이 나빠졌다고 말할 자료는 없음</p></section>
+<section class="part" id="part-17"><p>점수를 올렸다고 더 잘 가르쳤다고는 못 함</p>
+<p>이 고정 조건·독립 평균 방식에서는<br />
+같은 선택의 반복도 최고점이 될 수 있었음<br />
+학습한 Qwen도 그 반복을 만들었음 </p>
+<p>저자들은 최고점 계획을 공개하고<br />
+반복·진행·도움 축소를 별도로 보라고 제안함<br />
+완성된 해법을 검증했다는 뜻은 아님 <br />
+아래 Publish the argmax 행을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 지표의 최고점 계획과 순서 전체를 함께 보라는 제안 (원문 Table 5)"><img src="../assets/posts/tutor-metric-collapse/tab5_p20.png" alt="지표의 최고점 계획과 순서 전체를 함께 보라는 제안 (원문 Table 5)" loading="lazy" decoding="async"></button><figcaption>지표의 최고점 계획과 순서 전체를 함께 보라는 제안 (원문 Table 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>학습 앱을 만들 때도<br />
+평균 점수 옆에 활동별 선택과<br />
+학생 조건별 차이를 함께 볼 만함<br />
+이것은 해설의 적용 제안임</p></section>
+<section class="part" id="part-18"><p>반복연습이 필요한 학생도 달라질 수 있음</p>
+<p>2026년 10월 14일 기준<br />
+이 연구는 공개 코드가 있는 프리프린트임<br />
+확인 가능한 직접 후속·독립 재현은<br />
+아직 찾지 못했음 </p>
+<p>저자들이 다음으로 제안한 것은<br />
+다른 공개 모델과 실제 교육과정에서의 재검증임<br />
+이번 논문은 학생의 학습 성과를 재지 않았음 </p>
+<p>앞의 다섯 번째 활동에서도<br />
+첫 활동과 같은 도움만 주는 계획을 떠올려보셈<br />
+학생이 달라졌을 때 AI의 선택도 달라지는지<br />
+실제 수업에서 확인하는 단계가 남았음 </p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.12125">arXiv</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.12125">원문 PDF</a><br />
+<a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.12125">arXiv DOI</a>는 등록 대기 표시임 <br />
+<a target="_blank" rel="noopener" href="https://github.com/MrEricPraline/pedagogical_adaptivity_in_LLM_tutors">공개 코드</a><br />
+<a target="_blank" rel="noopener" href="https://doi.org/10.1007/s10639-025-13857-2">전작 감사</a> · <a target="_blank" rel="noopener" href="https://aclanthology.org/2024.findings-emnlp.797/">선호학습</a> · <a target="_blank" rel="noopener" href="https://proceedings.mlr.press/v202/gao23h.html">보상 과최적화</a></p>
+<p>3줄 요약</p>
+<p>고정 조건에서 활동별 점수를 평균하면 같은 선택의 반복도 최고점이 됨. <br />
+30개 수정 계획은 PAI가 올라도 사람 평가가 4.46→3.03이었음. <br />
+실제 학생 성과는 미측정이고 모델·설명문 변화도 함께 있었음.</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/tutor-metric-collapse/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.12125" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/tutor-metric-collapse.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

@@ -1,0 +1,13 @@
+Primary paper: The learner who does not learn: when optimizing a pedagogical metric degrades LLM tutoring
+Authors: Daniel Domínguez Figaredo; Rafael Fernández De la Cruz
+Source: https://arxiv.org/abs/2610.12125v1
+PDF: https://arxiv.org/pdf/2610.12125v1
+First public version: 2026-10-08 UTC. Verified 2026-10-14.
+License: CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+Changes: images are cropped/resized excerpts. Korean captions and explanation added.
+Original Figure4b label4.45 differs from main text4.46; explanation records discrepancy.
+Figure5 coder legend93 differs from methods/Appendix99; ledger records discrepancy.
+Predecessor title crop: Pedagogical Alignment of Large Language Models (Sonkar, Ni, Chaudhary, Baraniuk, 2024), p.1.
+https://aclanthology.org/2024.findings-emnlp.797.pdf
+Copyright remains with source authors/rightsholders. Source attribution retained.
+No endorsement by source authors is implied.
