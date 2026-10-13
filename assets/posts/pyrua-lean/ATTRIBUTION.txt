@@ -1,0 +1,23 @@
+Fewer Tokens, Better Action: GPT-6 Astra Robot Agents with 14% Higher Success Rate but 65% Fewer Tokens
+Ruiyang Si, Jianxin Bi, Shunyu Yang, Rui Ni, Wenbo Huang, Qiang Wang, Shulong Jiang, Duomin Wang, Xiuyu Li, Haiwen Feng, Zhen Dong, Daquan Zhou
+arXiv:2610.01939v1, submitted 2026-10-01
+https://arxiv.org/abs/2610.01939
+https://arxiv.org/pdf/2610.01939
+
+이 페이지의 논문 그림·표·문단 크롭은 연구 내용을 설명하기 위해 원문 페이지와 Figure/Table 번호를 표시해 수록했습니다.
+원문 arXiv 페이지에는 arXiv.org perpetual, non-exclusive license가 표시됩니다. 별도의 Creative Commons 재배포 허가는 확인되지 않았습니다.
+논문 내용과 그림의 권리는 원 저자에게 있습니다.
+
+사용 파일:
+- header_p1.png: 원문 p.1 제목·저자 영역
+- fig1_p1.png: 원문 Figure 1
+- fig2_flow_p4.png, fig2_example_p4.png: 원문 Figure 2의 왼쪽·오른쪽 패널
+- tab2_p5.png: 원문 Table 2
+- fig5_p7.png: 원문 Figure 5
+- tab6_p15.png: 원문 Table 6
+- fig8_scene_p18.png, fig8_code_p18.png: 원문 Figure 8의 상단 장면·하단 코드
+- fig9_p19.png: 원문 Figure 9
+- tab3_p8.png: 원문 Table 3
+- quote_limitations_p8.png: 원문 p.8 Limitations and Future Work 문단
+
+확인일: 2026-10-13

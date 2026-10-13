@@ -1,0 +1,320 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="같은 GPT-6 Astra와 같은 로봇 동작을 쓰고도 Python 셀 인터페이스는 성공률을 63.1%에서 71.7%로 올렸음. 공동 성공 사례의 입력 토큰은 65% 줄었지만, 단일 모델·시뮬레이션·완성 인터페이스 비교라는 경계가 남았음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="로봇은 동작 하나씩 시켜야 더 잘함?">
+<meta property="og:description" content="같은 GPT-6 Astra와 같은 로봇 동작을 쓰고도 Python 셀 인터페이스는 성공률을 63.1%에서 71.7%로 올렸음. 공동 성공 사례의 입력 토큰은 65% 줄었지만, 단일 모델·시뮬레이션·완성 인터페이스 비교라는 경계가 남았음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/pyrua-lean/fig1_p1.png">
+<title>로봇은 동작 하나씩 시켜야 더 잘함? · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/pyrua-lean.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">로봇 에이전트</span><span class="pill">코드 실행</span><span class="pill">VLA</span><span>·</span><time datetime="2026-10-13">2026. 10. 13</time><span>·</span><span>13분 읽기</span></div>
+<h1>로봇은 동작 하나씩 시켜야 더 잘함?</h1><p class="lead">같은 GPT-6 Astra와 같은 로봇 동작을 쓰고도 Python 셀 인터페이스는 성공률을 63.1%에서 71.7%로 올렸음. 공동 성공 사례의 입력 토큰은 65% 줄었지만, 단일 모델·시뮬레이션·완성 인터페이스 비교라는 경계가 남았음.</p>
+
+<div class="article-details"><strong>Fewer Tokens, Better Action: GPT-6 Astra Robot Agents with 14% Higher Success Rate but 65% Fewer Tokens</strong><br>Ruiyang Si · Jianxin Bi · Shunyu Yang · Rui Ni · Wenbo Huang · Qiang Wang · Shulong Jiang · Duomin Wang · Xiuyu Li · Haiwen Feng · Zhen Dong · Daquan Zhou · 2026 · arXiv v1 · 2026-10-13 기준 동료평가 채택 미확인<br>원문 그림과 함께 읽는 18파트 해설 · 판본 및 출처 확인: 2026-10-13</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">논문과 프리프린트 상태</a><a href="#part-2">작은 동작마다 치르는 왕복</a><a href="#part-3">Python 셀이 맡은 중간 제어</a><a href="#part-4">Code as Policies에서 RPent까지</a><a href="#part-5">700개 과제와 같은 조건</a><a href="#part-6">성공률 63.1%에서 71.7%</a><a href="#part-7">입력 토큰 65%의 정확한 범위</a><a href="#part-8">호출 수가 만든 토큰 감소</a><a href="#part-9">이미지만 줄이자 성공률 하락</a><a href="#part-10">11,145개 셀의 실제 습관</a><a href="#part-11">떨어진 모카포트 복구</a><a href="#part-12">캐비닛 문 원호 계산</a><a href="#part-13">VLA와 가이드 제거 실험</a><a href="#part-14">시뮬레이션과 인과의 경계</a><a href="#part-15">일주일 뒤의 직접 인용</a><a href="#part-16">동작 하나씩 시켜야 하는가</a><a href="#part-17">원문과 확인 자료</a><a href="#part-18">세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>논문: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.01939">Fewer Tokens, Better Action: GPT-6 Astra Robot Agents with 14% Higher Success Rate but 65% Fewer Tokens</a><br />
+저자: Ruiyang Si 외 11명<br />
+소속: Peking University · NUS · NVIDIA · Impossible Research<br />
+공개: 2026년 10월 1일, arXiv v1<br />
+상태: 2026년 10월 13일 기준 동료평가 채택을 확인하지 못한 프리프린트임 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: PyRUA-Lean 논문 첫 페이지"><img src="../assets/posts/pyrua-lean/header_p1.png" alt="PyRUA-Lean 논문 첫 페이지" loading="lazy" decoding="async"></button><figcaption>PyRUA-Lean 논문 첫 페이지</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>로봇한테 그릇을 접시에 놓으라고 시킴</p>
+<p>보통 에이전트는<br />
+카메라로 보고 동작 하나를 고름</p>
+<p>그 동작이 끝나면<br />
+카메라 세 장과 상태가 돌아오고<br />
+모델을 다시 부름</p>
+<p>조금 내리고<br />
+다시 보고<br />
+그릇을 놓고<br />
+또 보는 식임 </p>
+<p>통제하기 쉬워 보이는데<br />
+작은 동작마다 모델이<br />
+대화 전체와 이미지를 다시 읽어야 함</p>
+<p>로봇이 움직인 거리보다<br />
+대화 기록이 더 빨리 자람</p></section>
+<section class="part" id="part-3"><p>이번 논문은 중간에<br />
+Python 실행기 하나를 끼움</p>
+<p>모델이 <code>move_to</code> 하나만 고르는 대신<br />
+짧은 코드 셀을 작성함</p>
+<p>그 셀 안에서<br />
+위치를 찾고<br />
+조금 내리고<br />
+결과를 확인하고<br />
+안 됐으면 다시 시도함</p>
+<p>모델은 셀이 끝난 뒤에만 돌아옴<br />
+이미지도 코드가 요청한 것만 받음 </p>
+<p>쉽게 말하면<br />
+매 동작마다 새 지시를 받던 로봇에게<br />
+짧은 작업 절차를 한 번 맡긴 거임</p>
+<p>정확히는<br />
+이동·집기 같은 기본 동작을<br />
+로봇 프리미티브라고 부름</p>
+<p>RPent는 이 기본 동작과<br />
+영상·지시에서 행동을 내는 VLA를<br />
+한데 묶은 실행 스택임</p>
+<p>PyRUA-Lean은 같은 RPent 프리미티브를<br />
+지속되는 Python 네임스페이스에서 조합함<br />
+셀 실행이 끝나도 변수값이 남는 공간임<br />
+조건문과 반복문도 쓸 수 있음 </p>
+<p>아래 두 번째 그림의 코드 셀을 보셈<br />
+도구 호출 네 번이<br />
+코드 셀 하나로 바뀜</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 도구 호출과 PyRUA-Lean의 실행 흐름. 원문 Figure 2 왼쪽 패널"><img src="../assets/posts/pyrua-lean/fig2_flow_p4.png" alt="도구 호출과 PyRUA-Lean의 실행 흐름. 원문 Figure 2 왼쪽 패널" loading="lazy" decoding="async"></button><figcaption>도구 호출과 PyRUA-Lean의 실행 흐름. 원문 Figure 2 왼쪽 패널</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 도구 호출 네 번을 코드 셀 하나로 바꾼 배치 예시. 원문 Figure 2 오른쪽 패널"><img src="../assets/posts/pyrua-lean/fig2_example_p4.png" alt="도구 호출 네 번을 코드 셀 하나로 바꾼 배치 예시. 원문 Figure 2 오른쪽 패널" loading="lazy" decoding="async"></button><figcaption>도구 호출 네 번을 코드 셀 하나로 바꾼 배치 예시. 원문 Figure 2 오른쪽 패널</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이 셀은 성공한 뒤<br />
+텍스트 다섯 줄만 돌려주고<br />
+이미지는 한 장도 안 보냄</p></section>
+<section class="part" id="part-4"><p>코드를 행동으로 쓰는 발상 자체는<br />
+이전에도 있었음</p>
+<p>2022년 Code as Policies는<br />
+언어모델이 로봇 정책 코드를 쓰고<br />
+피드백 루프와 NumPy를 조합할 수 있음을 보였음</p>
+<p>2024년 ICML의 CodeAct는<br />
+JSON 한 덩어리보다<br />
+실행 가능한 Python을 행동 공간으로 쓰면<br />
+일반 에이전트가 더 유연해진다고 보고함</p>
+<p>그리고 2026년 Harness VLA가<br />
+동결된 VLA와 고전 로봇 동작을<br />
+RPent라는 스택으로 묶음</p>
+<p>이번 PyRUA-Lean은<br />
+바로 그 RPent 구현을 가져옴</p>
+<p>새 로봇 팔을 만든 연구가 아니라<br />
+같은 팔과 같은 동작을<br />
+어떤 인터페이스로 시킬지 비교한 연구임</p></section>
+<section class="part" id="part-5"><p>비교 조건은 이렇게 맞춤</p>
+<p>계획 모델은 둘 다 GPT-6 Astra<br />
+reasoning effort도 둘 다 high</p>
+<p>로봇 프리미티브도 같고<br />
+동결된 VLA도 같음</p>
+<p>LIBERO-PRO 200개<br />
+RoboTwin 2.0 250개<br />
+RoboCasa365 250개</p>
+<p>합계 700개 task-seed 쌍임 </p>
+<p>task-seed 쌍은<br />
+과제 하나와 초기 조건 하나의 조합임</p>
+<p>각 쌍에서 에이전트당 한 번만 돌림<br />
+보통 LLM 호출 한도는 40회<br />
+긴 RoboCasa composite만 100회임</p>
+<p>에피소드 사이 기억은 없음 </p>
+<p>각 쌍에서 한 번씩만 돌렸다는 점이 중요함<br />
+같은 조건 비교는 맞지만<br />
+반복 실행의 들쭉날쭉함은 못 잼</p></section>
+<section class="part" id="part-6"><p>먼저 성공률부터 보면</p>
+<p>도구 호출은 63.1%<br />
+코드 실행은 71.7%였음</p>
+<p>차이는 8.6%포인트임</p>
+<p>논문 제목의 상대 개선 14%는<br />
+8.6을 63.1로 나눈 상대 개선치<br />
+약 13.6%를 반올림한 숫자임 </p>
+<p>네 묶음 모두 코드 쪽이 높았음</p>
+<p>atomic은 짧은 단일 조작<br />
+composite는 여러 조작이 이어지는 과제임</p>
+<p>LIBERO는 83.0→94.0%<br />
+RoboTwin은 60.0→69.2%<br />
+RoboCasa atomic은 78.9→86.7%<br />
+composite는 34.4→39.4%임 </p>
+<p>표에서 왼쪽 성공률 칸을 먼저 보고<br />
+오른쪽 효율 칸은 모집단이 다르다는 걸 기억하셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전체 성공률과 공동 성공 인스턴스의 효율. 원문 Table 2"><img src="../assets/posts/pyrua-lean/tab2_p5.png" alt="전체 성공률과 공동 성공 인스턴스의 효율. 원문 Table 2" loading="lazy" decoding="async"></button><figcaption>전체 성공률과 공동 성공 인스턴스의 효율. 원문 Table 2</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-7"><p>논문 제목의 입력 토큰 65% 감소는<br />
+700개 전체 평균이 아님</p>
+<p>두 에이전트가 모두 성공한 인스턴스만 모아<br />
+성공 에피소드당 평균을 낸 값임 </p>
+<p>그 안에서 LLM 호출은<br />
+17.0회에서 8.7회로 줄었음</p>
+<p>입력 토큰은<br />
+788k에서 276k<br />
+65% 감소임</p>
+<p>9월 가격표로 계산한 비용은<br />
+$1.63에서 $0.74가 됨 </p>
+<p>토큰은 2.9배 줄었는데<br />
+비용은 2.2배만 줄었음</p>
+<p>캐시된 입력 토큰이 더 싸서<br />
+토큰 수와 달러가 같은 비율로 안 움직인 거임 </p>
+<p>실패까지 전부 포함하면 격차는 작아짐<br />
+RoboCasa atomic의 추정 비용 차이는<br />
+약 1.1배까지 내려감 </p>
+<p>65%를 전체 운용비 절감으로 읽으면 안 됨</p></section>
+<section class="part" id="part-8"><p>그럼 토큰은 어디서 줄었냐</p>
+<p>호출 한 번을 짧게 만든 효과보다<br />
+모델을 덜 부른 효과가 더 컸음</p>
+<p>LIBERO에서 총 토큰 차이는 4.48배</p>
+<p>그 안을 뜯으면<br />
+호출 수가 2.55배 적었고<br />
+호출당 토큰도 1.76배 적었음</p>
+<p>두 배수를 곱하면 4.48배가 됨 </p>
+<p>아래 그림에서 진한 막대가 호출 수<br />
+연한 막대가 호출당 토큰임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 토큰 감소를 호출 수와 호출당 토큰으로 나눈 결과. 원문 Figure 5"><img src="../assets/posts/pyrua-lean/fig5_p7.png" alt="토큰 감소를 호출 수와 호출당 토큰으로 나눈 결과. 원문 Figure 5" loading="lazy" decoding="async"></button><figcaption>토큰 감소를 호출 수와 호출당 토큰으로 나눈 결과. 원문 Figure 5</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>RoboCasa atomic에선<br />
+코드 쪽 호출 한 번이 오히려 더 컸음</p>
+<p>첫 프롬프트 자체도<br />
+모든 벤치마크에서 코드 쪽이 큼 </p>
+<p>큰 Python API 설명을 먼저 줘도<br />
+왕복 횟수를 줄여 총량을 아낀 셈임</p></section>
+<section class="part" id="part-9"><p>그럼 그냥 이미지를 덜 보내면 되는 거 아님?</p>
+<p>연구진도 그걸 따로 시험함</p>
+<p>도구 호출 baseline에서<br />
+매 동작 뒤 자동으로 오던 이미지를 끄고<br />
+필요할 때만 요청하게 바꿈</p>
+<p>LIBERO 성공률이<br />
+83.0%에서 68.5%로 떨어짐</p>
+<p>세 구성이 모두 성공한 131개에서<br />
+총 입력 토큰도 원래 baseline과 비슷했음 </p>
+<p>관찰을 줄이는 버튼 하나로는<br />
+코드 실행의 이득이 재현되지 않았음</p></section>
+<section class="part" id="part-10"><p>코드 에이전트도 눈을 감고 일한 게 아님</p>
+<p>700개 에피소드의<br />
+Python 셀 11,145개를 세어보니<br />
+84%가 이미지를 요청했음</p>
+<p>다만 20%는<br />
+과제가 아직 안 끝났을 때만 요청함 </p>
+<p>한 셀엔 평균 2.1개 행동이 들어갔고<br />
+도구 방식은 LLM 호출당 0.65개였음</p>
+<p>19%는 앞 동작 결과를 보고<br />
+다음 동작을 바꿈</p>
+<p>14%는 움직임을 반복했고<br />
+8%는 VLA를 재시도함 </p>
+<p>관찰을 없앤 건 아님<br />
+코드가 다시 볼 시점을 고른 쪽에 가까움</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: Python 셀에서 실제로 나타난 코드 습관. 원문 Table 6"><img src="../assets/posts/pyrua-lean/tab6_p15.png" alt="Python 셀에서 실제로 나타난 코드 습관. 원문 Table 6" loading="lazy" decoding="async"></button><figcaption>Python 셀에서 실제로 나타난 코드 습관. 원문 Table 6</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>제일 선명한 장면은<br />
+바닥에 떨어진 모카포트임</p>
+<p>두 에이전트 모두 들고 가다 떨어뜨림</p>
+<p>도구 호출 쪽은<br />
+VLA에게 다시 집으라고 네 번 요청하고<br />
+call 32에서 종료함</p>
+<p>코드 쪽도 바로 잘한 건 아님</p>
+<p>뚜껑에서 잡은 여러 측정점으로<br />
+포트가 얼마나 기울었는지 계산하려다</p>
+<p>수치 형식이 맞지 않아<br />
+NumPy의 half precision 선형대수가 실패하고<br />
+TypeError가 남 </p>
+<p>근데 앞 셀의 변수는 살아 있었음</p>
+<p>다음 셀에서 점군 형을 바꾸고<br />
+평면 맞춤을 다시 실행함</p>
+<p>기울기를 구해 포트를 세운 다음<br />
+손잡이가 아니라 바닥을 버너 위에 맞춰<br />
+call 33에서 성공함 </p>
+<p>아래 그림 왼쪽 아래의 call 23이 에러<br />
+그다음 call 24가 수정 실행임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 떨어진 모카포트와 두 에이전트의 결과. 원문 Figure 8 상단"><img src="../assets/posts/pyrua-lean/fig8_scene_p18.png" alt="떨어진 모카포트와 두 에이전트의 결과. 원문 Figure 8 상단" loading="lazy" decoding="async"></button><figcaption>떨어진 모카포트와 두 에이전트의 결과. 원문 Figure 8 상단</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 평면 맞춤 오류를 고쳐 다시 실행한 코드 셀. 원문 Figure 8 하단"><img src="../assets/posts/pyrua-lean/fig8_code_p18.png" alt="평면 맞춤 오류를 고쳐 다시 실행한 코드 셀. 원문 Figure 8 하단" loading="lazy" decoding="async"></button><figcaption>평면 맞춤 오류를 고쳐 다시 실행한 코드 셀. 원문 Figure 8 하단</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>한 번에 완벽한 코드를 쓴 사례가 아님<br />
+실패한 상태를 버리지 않고 이어 고친 사례임</p></section>
+<section class="part" id="part-12"><p>캐비닛 문에서도 비슷한 차이가 남</p>
+<p>도구 호출 쪽은<br />
+손잡이를 조금 당기고 다시 보는 걸 반복함</p>
+<p>호출 한도 40회가 끝났는데<br />
+문은 덜 열린 상태였음</p>
+<p>코드 쪽은 손잡이 위치 세 개를 찍고<br />
+그 세 점을 지나는 원을 맞춤</p>
+<p>힌지에 붙은 손잡이는<br />
+문이 열릴 때 원호를 따라 움직이기 때문임</p>
+<p>힌지를 중심으로 한 회전 궤적을 추정한 뒤<br />
+그 호를 따라 당겨 call 34에서 성공함 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 손잡이 세 점으로 원호를 계산해 캐비닛 문을 연 사례. 원문 Figure 9"><img src="../assets/posts/pyrua-lean/fig9_p19.png" alt="손잡이 세 점으로 원호를 계산해 캐비닛 문을 연 사례. 원문 Figure 9" loading="lazy" decoding="async"></button><figcaption>손잡이 세 점으로 원호를 계산해 캐비닛 문을 연 사례. 원문 Figure 9</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>로봇 프리미티브 목록엔<br />
+‘문을 원호로 열기’가 따로 없었음</p>
+<p>Python이 중간 계산 공간이 되니까<br />
+있는 동작으로 새 궤적을 만든 거임</p></section>
+<section class="part" id="part-13"><p>이 차이가 VLA 없이도 남는지 봄</p>
+<p>VLA와 운영 가이드를 빼가며<br />
+여러 조건을 다시 돌림</p>
+<p>RoboTwin에서 VLA 없이 가이드만 둔 조건은<br />
+도구 호출 42.8%<br />
+코드 실행 68.8%였음</p>
+<p>토큰은 1.03M에서 316k<br />
+3.2배 차이였음</p>
+<p>이 토큰 평균은<br />
+두 에이전트가 모두 성공한 인스턴스에서 잼 </p>
+<p>근데 표에 이상한 줄도 있음</p>
+<p>같은 무 VLA RoboTwin에서<br />
+가이드를 지웠더니<br />
+도구 호출 성공률이 42.8→60.4%로 오름</p>
+<p>설명서를 더 준다고<br />
+항상 더 잘하는 건 아니었음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: VLA와 운영 가이드를 제거한 절제 실험. 원문 Table 3"><img src="../assets/posts/pyrua-lean/tab3_p8.png" alt="VLA와 운영 가이드를 제거한 절제 실험. 원문 Table 3" loading="lazy" decoding="async"></button><figcaption>VLA와 운영 가이드를 제거한 절제 실험. 원문 Table 3</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-14"><p>여기서 선을 세게 그어야 함</p>
+<p>논문은 GPT-6 Astra 하나만 씀<br />
+시뮬레이션만 씀<br />
+task-seed당 한 번만 실행함</p>
+<p>실물 로봇 성능과<br />
+반복 실행 분산은 아직 모름 </p>
+<p>또 비교한 건<br />
+Python 셀 전체 묶음임</p>
+<p>여러 동작 조합<br />
+지속 상태<br />
+선택적 피드백이 같이 바뀜</p>
+<p>셋 중 무엇이 성공률을 얼마나 올렸는지<br />
+독립적으로 분리하지 못함 </p>
+<p>실제 소요시간도 안 잼<br />
+공용 모델 게이트웨이 지연이 들쭉날쭉해서<br />
+호출 수로 대신했음 </p>
+<p>원문도 이 한계를 분명히 적어둠</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 원문 Limitations and Future Work 문단"><img src="../assets/posts/pyrua-lean/quote_limitations_p8.png" alt="원문 Limitations and Future Work 문단" loading="lazy" decoding="async"></button><figcaption>원문 Limitations and Future Work 문단</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>코드만 성공한 96개 중<br />
+일부는 VLA가 우연히 한 번에 된 경우도 있음</p>
+<p>성공 차이를 전부<br />
+복구 로직의 공으로 돌릴 수 없음</p></section>
+<section class="part" id="part-15"><p>공개 뒤 일주일 사이<br />
+이 논문을 직접 인용한 프리프린트 두 편이 나옴</p>
+<p>10월 7일 RobotWorld는<br />
+84개 과제와 여러 로봇 몸체로 범위를 넓혀<br />
+에이전트가 피드백을 어디서 놓치는지 봄</p>
+<p>10월 8일 Embodied Turing Machines는<br />
+PyRUA-Lean을 실행 중 셀을 쓰는 방식으로 분류함</p>
+<p>모델 호출을 줄이는 방향을<br />
+다른 방식으로 밀었음</p>
+<p>테스트 때 모델을 아예 부르지 않고<br />
+미리 만든 상태 기반 코드를 재사용함 </p>
+<p>둘 다 이번 논문을 참고문헌에 넣었지만<br />
+6~7일 만에 연구가 새로 시작됐다고 볼 수는 없음</p>
+<p>확인 가능한 건<br />
+후속 공개가 이번 결과를 인용했다는 사실까지임</p>
+<p>2026년 10월 13일 arXiv엔<br />
+피인용 2건으로 표시됨</p></section>
+<section class="part" id="part-16"><p>처음 그릇 장면으로 돌아가면</p>
+<p>도구 호출은 네 번 생각해서<br />
+네 동작을 했음</p>
+<p>코드 셀은 한 번 생각한 뒤<br />
+중간 확인과 후속 동작을 로컬에서 처리함</p>
+<p>이 실험 조건에선<br />
+그 차이가 성공률 +8.6%포인트와<br />
+공동 성공 사례 입력 토큰 -65%로 나타남 </p>
+<p>다만 답은<br />
+“로봇에게 긴 프로그램을 던지면 됨”이 아님</p>
+<p>셀은 중간 결과를 확인하고<br />
+실패하면 멈추거나 고칠 수 있었음</p>
+<p>모델 호출 사이에<br />
+작은 제어기를 둔 인터페이스가<br />
+한 동작씩 왕복하는 인터페이스보다<br />
+이 벤치마크에서 잘 맞았다는 결과임</p></section>
+<section class="part" id="part-17"><p>원문과 확인 자료</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.01939">arXiv 초록</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.01939">원문 PDF</a></li>
+<li><a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.01939">arXiv DOI</a></li>
+<li><a target="_blank" rel="noopener" href="https://dagroup-pku.github.io/PyRUA-Lean/">공식 프로젝트 페이지</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/DAGroup-PKU/PyRUA-Lean">공개 코드</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2209.07753">Code as Policies</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2402.01030">CodeAct</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2607.08448">Harness VLA</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.10409">RobotWorld</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.12369">Embodied Turing Machines</a></li>
+</ul></section>
+<section class="part" id="part-18"><p>세 줄 요약</p>
+<p>Python 셀은 같은 Astra의 성공률을 63.1→71.7%로 올렸음. <br />
+공동 성공 사례는 호출 49%, 입력 토큰 65%를 줄였음. 토큰 감소는 주로 호출 수 감소에서 나왔음. <br />
+단일 모델·시뮬레이션이라 실물 일반화와 요소별 인과는 아직 모름.</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/pyrua-lean/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.01939" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/pyrua-lean.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

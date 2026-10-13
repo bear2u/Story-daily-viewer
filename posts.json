@@ -1,5 +1,48 @@
 [
   {
+    "slug": "pyrua-lean",
+    "title": "로봇은 동작 하나씩 시켜야 더 잘함?",
+    "excerpt": "같은 GPT-6 Astra와 같은 로봇 동작을 쓰고도 Python 셀 인터페이스는 성공률을 63.1%에서 71.7%로 올렸음. 공동 성공 사례의 입력 토큰은 65% 줄었지만, 단일 모델·시뮬레이션·완성 인터페이스 비교라는 경계가 남았음.",
+    "date": "2026-10-13",
+    "published_at": "2026-10-13T08:34:53+09:00",
+    "verified_date": "2026-10-13",
+    "reading_minutes": 13,
+    "tags": [
+      "로봇 에이전트",
+      "코드 실행",
+      "VLA"
+    ],
+    "cover": "assets/posts/pyrua-lean/fig1_p1.png",
+    "cover_alt": "PyRUA-Lean과 도구 호출 방식의 성공률·토큰·비용 비교 — 원문 Figure 1",
+    "markdown": "pyrua-lean.md",
+    "paper_title": "Fewer Tokens, Better Action: GPT-6 Astra Robot Agents with 14% Higher Success Rate but 65% Fewer Tokens",
+    "paper_year": "2026",
+    "venue": "arXiv v1 · 2026-10-13 기준 동료평가 채택 미확인",
+    "authors": "Ruiyang Si · Jianxin Bi · Shunyu Yang · Rui Ni · Wenbo Huang · Qiang Wang · Shulong Jiang · Duomin Wang · Xiuyu Li · Haiwen Feng · Zhen Dong · Daquan Zhou",
+    "source_url": "https://arxiv.org/abs/2610.01939",
+    "chapters": [
+      "논문과 프리프린트 상태",
+      "작은 동작마다 치르는 왕복",
+      "Python 셀이 맡은 중간 제어",
+      "Code as Policies에서 RPent까지",
+      "700개 과제와 같은 조건",
+      "성공률 63.1%에서 71.7%",
+      "입력 토큰 65%의 정확한 범위",
+      "호출 수가 만든 토큰 감소",
+      "이미지만 줄이자 성공률 하락",
+      "11,145개 셀의 실제 습관",
+      "떨어진 모카포트 복구",
+      "캐비닛 문 원호 계산",
+      "VLA와 가이드 제거 실험",
+      "시뮬레이션과 인과의 경계",
+      "일주일 뒤의 직접 인용",
+      "동작 하나씩 시켜야 하는가",
+      "원문과 확인 자료",
+      "세 줄 요약"
+    ],
+    "attribution_url": "assets/posts/pyrua-lean/ATTRIBUTION.txt"
+  },
+  {
     "slug": "teaching-agents-code-reliably",
     "title": "테스트가 초록불인데 패치는 틀렸을 수 있음",
     "excerpt": "코딩 에이전트의 테스트와 패치가 같은 오해를 공유하면 둘 다 틀리고도 통과할 수 있음. 두 트리 검사와 오답 변이 학습 뒤 학습 제외 270개 이슈의 pass@1은 31.9%에서 43.0%가 됐지만, 유한 변이와 benchmark grader의 경계는 남았음.",
