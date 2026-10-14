@@ -1,5 +1,48 @@
 [
   {
+    "slug": "beyond-token-savings",
+    "title": "기록을 줄였는데 실행은 느려진 에이전트",
+    "excerpt": "Qwen의 터미널 과제에서 일부 압축 정책은 토큰을 약 3분의 1로 줄였지만 시간은 20~80% 더 걸렸음. 무엇을 남겼는지에 따라 정답도 달랐고, 비용 지표는 실제 청구액이 아닌 출력 과금 제외 입력비용 추정임.",
+    "date": "2026-10-15",
+    "published_at": "2026-10-15T08:32:58+09:00",
+    "verified_date": "2026-10-15",
+    "reading_minutes": 12,
+    "tags": [
+      "에이전트",
+      "컨텍스트 압축",
+      "개발자 도구"
+    ],
+    "cover": "assets/posts/beyond-token-savings/main_terminal.png",
+    "cover_alt": "Qwen Terminal-Bench에서 토큰 절약과 실행 시간이 엇갈리는 원문 Figure2",
+    "markdown": "beyond-token-savings.md",
+    "paper_title": "Beyond Token Savings: A Systematic Study of Context Compression in LLM Agents",
+    "paper_year": "2026",
+    "venue": "arXiv v1 · 2026-10-15 기준 동료심사 채택 미확인",
+    "authors": "Ritul Satish · Prasoon Sinha · Akiho Kawada · Neeraja J. Yadwadkar",
+    "source_url": "https://arxiv.org/abs/2609.32961v1",
+    "chapters": [
+      "덜 읽으면 빨리 끝날까",
+      "쌓이는 도구 기록",
+      "기억·마스킹·생산 관측의 계보",
+      "오래된 출력 치우기",
+      "전체·구조·부분 요약",
+      "방식·시점·깊이와 실험 설정",
+      "비슷한 토큰, 다른 정답률",
+      "터미널에서 느려진 실행",
+      "추정 비용과 꺼진 실측 캐시",
+      "요약 시점을 늦춘 25문제",
+      "깊이 변화의 반대 효과",
+      "비슷한 총점에 숨은 손실",
+      "모델을 바꾸면 달라지는 정책",
+      "작은 요약 모델도 느려짐",
+      "자원 그래프의 제외 규칙",
+      "UT Austin 시스템 연구 맥락",
+      "실제 실행을 같이 평가하기",
+      "후속 검증과 세 줄 요약"
+    ],
+    "attribution_url": "assets/posts/beyond-token-savings/ATTRIBUTION.txt"
+  },
+  {
     "slug": "tutor-metric-collapse",
     "title": "교육 점수는 올랐는데 수업 평가는 떨어졌음",
     "excerpt": "고정된 학습자 조건에서 활동별 선택을 평균내는 PAI를 올리자 같은 선택의 반복이 나타났음. 수정 30개 계획은 PAI +0.05→+0.42, 교육학 평가자 점수4.46→3.03이었지만 모델 전환과 설명문 변화가 함께 있었고 실제 학생 성과는 재지 않았음.",

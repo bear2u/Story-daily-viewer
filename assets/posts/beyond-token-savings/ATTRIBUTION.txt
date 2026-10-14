@@ -1,0 +1,14 @@
+Primary paper: Beyond Token Savings: A Systematic Study of Context Compression in LLM Agents
+Authors: Ritul Satish, Prasoon Sinha, Akiho Kawada, Neeraja J. Yadwadkar
+Affiliation in original: The University of Texas at Austin
+Source: https://arxiv.org/abs/2609.32961v1
+PDF: https://arxiv.org/pdf/2609.32961v1
+First public version: 2026-09-26 UTC; verified 2026-10-15 KST.
+License: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
+Changes: images are cropped/resized excerpts, Korean explanation and captions added.
+Predecessor title crop: The Complexity Trap: Simple Observation Masking Is as Efficient as LLM Summarization for Agent Context Management.
+Tobias Lindenbauer, Igor Slinko, Ludwig Felder, Egor Bogomolov, Yaroslav Zharov.
+https://arxiv.org/pdf/2508.21433v3 p.1. License: CC BY 4.0.
+Copyright remains with source authors/rightsholders. No endorsement is implied.
+Resource comparisons exclude time-capped attempts except Figure3c sweep table; see original A.5.
+Cost is estimated input cost, excludes output pricing; Qwen runtime prefix caching was disabled.
