@@ -1,0 +1,43 @@
+{
+  "slug": "lapt-scale",
+  "title": "사람 영상을 더 봤는데 컵 과제는 오히려 덜 성공했음",
+  "excerpt": "사람 영상에서 두 장면 사이의 변화를 배워 로봇 정책의 사전학습에 썼음. 영상1천→5천 시간에서 세 실제 과제 평균은63.3%→85.0%였지만,3천→5천 구간의 컵은95%→75%였음. 로봇 정렬250시간과 과제별 시연도 사용한 결과임.",
+  "date": "2026-10-16",
+  "published_at": "2026-10-16T08:25:27+09:00",
+  "verified_date": "2026-10-16",
+  "reading_minutes": 12,
+  "tags": [
+    "로봇",
+    "영상 학습",
+    "잠재행동"
+  ],
+  "cover": "assets/posts/lapt-scale/html_fig1_1.png",
+  "cover_alt": "사람 영상에서 로봇 명령까지 이어지는 LAPT-Scale 원문 Figure1",
+  "markdown": "lapt-scale.md",
+  "paper_title": "LAPT-Scale: Scaling Embodied Policies with Latent Action Pre-Training on Human Videos",
+  "paper_year": "2026",
+  "venue": "arXiv v1 · 저자 등록상 CoRL2026 채택, 공식 결정 독립 미확보 (2026-10-16)",
+  "authors": "Zhiyuan Xiang · Peidong Liu · Mingyang Li · Jiawei Li · Wenhow Li · Wenbo Ding · Xiang Deng",
+  "source_url": "https://arxiv.org/abs/2610.13732v1",
+  "chapters": [
+    "사람 영상으로 다른 몸의 로봇도 배울까",
+    "영상에 없는 로봇 명령",
+    "LAPA·VITRA·LAOF 계보",
+    "두 프레임 사이의 변화",
+    "연속 잠재행동과 복원",
+    "배경보다 움직임을 보게 하기",
+    "로봇 몸에 맞추는 세 단계",
+    "23,300시간과 정제본 구분",
+    "실제 로봇의 시연과 평가",
+    "영상 규모와 평균 성공률",
+    "평균이 가린 컵 과제 하락",
+    "연산량을 맞춘 대조군",
+    "화질과 성공이 달라진 제거 실험",
+    "낯선 환경의 실제 로봇",
+    "잠재행동만 바꾼 영상 진단",
+    "연산 비용과 같은 팀 전작",
+    "다시 사람 손 영상으로",
+    "다음 검증과 세 줄 요약"
+  ],
+  "attribution_url": "assets/posts/lapt-scale/ATTRIBUTION.txt"
+}

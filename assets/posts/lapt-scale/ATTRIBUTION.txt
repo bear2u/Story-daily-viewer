@@ -1,0 +1,13 @@
+Primary: LAPT-Scale: Scaling Embodied Policies with Latent Action Pre-Training on Human Videos
+Authors: Zhiyuan Xiang, Peidong Liu, Mingyang Li, Jiawei Li, Wenhow Li, Wenbo Ding, Xiang Deng
+Source: https://arxiv.org/abs/2610.13732v1
+PDF: https://arxiv.org/pdf/2610.13732v1
+First public: 2026-10-09 UTC (2026-10-10 KST). Verified: 2026-10-16 KST.
+License: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
+Changes: cropped/resized source figures, tables and text; Korean explanation and captions added.
+Predecessor header: Latent Action Pretraining from Videos, Seonghyeon Ye, Joel Jang and coauthors.
+https://arxiv.org/pdf/2410.11758v2 p.1. License CC BY 4.0.
+Copyright remains with original authors/rightsholders. No endorsement is implied.
+CoRL 2026 acceptance is stated by authors in arXiv metadata and PDF; official decision was not independently obtained.
+Scaling: LAM fixed at23.3K hours, only policy pre-training human video varies1K/3K/5K;250-hour robot alignment and task post-training remain.
+Real evaluations use one platform, original3 tasks20trials each; added4 tasks20trials per task per domain. Simulation and video diagnostics are separate.

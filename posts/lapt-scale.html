@@ -1,0 +1,286 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="사람 영상에서 두 장면 사이의 변화를 배워 로봇 정책의 사전학습에 썼음. 영상1천→5천 시간에서 세 실제 과제 평균은63.3%→85.0%였지만,3천→5천 구간의 컵은95%→75%였음. 로봇 정렬250시간과 과제별 시연도 사용한 결과임.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="사람 영상을 더 봤는데 컵 과제는 오히려 덜 성공했음">
+<meta property="og:description" content="사람 영상에서 두 장면 사이의 변화를 배워 로봇 정책의 사전학습에 썼음. 영상1천→5천 시간에서 세 실제 과제 평균은63.3%→85.0%였지만,3천→5천 구간의 컵은95%→75%였음. 로봇 정렬250시간과 과제별 시연도 사용한 결과임.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/lapt-scale/html_fig1_1.png">
+<title>사람 영상을 더 봤는데 컵 과제는 오히려 덜 성공했음 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/lapt-scale.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">로봇</span><span class="pill">영상 학습</span><span class="pill">잠재행동</span><span>·</span><time datetime="2026-10-16">2026. 10. 16</time><span>·</span><span>12분 읽기</span></div>
+<h1>사람 영상을 더 봤는데 컵 과제는 오히려 덜 성공했음</h1><p class="lead">사람 영상에서 두 장면 사이의 변화를 배워 로봇 정책의 사전학습에 썼음. 영상1천→5천 시간에서 세 실제 과제 평균은63.3%→85.0%였지만,3천→5천 구간의 컵은95%→75%였음. 로봇 정렬250시간과 과제별 시연도 사용한 결과임.</p>
+
+<div class="article-details"><strong>LAPT-Scale: Scaling Embodied Policies with Latent Action Pre-Training on Human Videos</strong><br>Zhiyuan Xiang · Peidong Liu · Mingyang Li · Jiawei Li · Wenhow Li · Wenbo Ding · Xiang Deng · 2026 · arXiv v1 · 저자 등록상 CoRL2026 채택, 공식 결정 독립 미확보 (2026-10-16)<br>원문 그림과 함께 읽는 18파트 해설 · 판본 및 출처 확인: 2026-10-16</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">사람 영상으로 다른 몸의 로봇도 배울까</a><a href="#part-2">영상에 없는 로봇 명령</a><a href="#part-3">LAPA·VITRA·LAOF 계보</a><a href="#part-4">두 프레임 사이의 변화</a><a href="#part-5">연속 잠재행동과 복원</a><a href="#part-6">배경보다 움직임을 보게 하기</a><a href="#part-7">로봇 몸에 맞추는 세 단계</a><a href="#part-8">23,300시간과 정제본 구분</a><a href="#part-9">실제 로봇의 시연과 평가</a><a href="#part-10">영상 규모와 평균 성공률</a><a href="#part-11">평균이 가린 컵 과제 하락</a><a href="#part-12">연산량을 맞춘 대조군</a><a href="#part-13">화질과 성공이 달라진 제거 실험</a><a href="#part-14">낯선 환경의 실제 로봇</a><a href="#part-15">잠재행동만 바꾼 영상 진단</a><a href="#part-16">연산 비용과 같은 팀 전작</a><a href="#part-17">다시 사람 손 영상으로</a><a href="#part-18">다음 검증과 세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>사람이 손으로 한 일을 영상으로 보여주면<br />
+몸이 다른 로봇도 배울 수 있을까?</p>
+<p>이번 논문은 <em>LAPT-Scale: Scaling Embodied</em><br />
+<em>Policies with Latent Action</em><br />
+<em>Pre-Training on Human Videos</em>임 </p>
+<p>Zhiyuan Xiang, Peidong Liu, Mingyang Li,<br />
+Jiawei Li, Wenhow Li, Wenbo Ding,<br />
+Xiang Deng의 공동 연구임 <br />
+JD와 하얼빈공대 선전·칭화 SIGS·<br />
+HKUST 광저우 연구진이 참여했음 </p>
+<p>2026년 10월 9일 UTC 공개된 v1임<br />
+한국 시간으로는 10월 10일임 <br />
+저자 등록 정보에는 CoRL 2026 채택으로 표기됨<br />
+10월 16일 확인에서 학회 공식 결정문은 확보 못 함 <br />
+아래 제목과 소속 번호를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: LAPT-Scale 제목·저자·소속 (원문 p.1)"><img src="../assets/posts/lapt-scale/header.png" alt="LAPT-Scale 제목·저자·소속 (원문 p.1)" loading="lazy" decoding="async"></button><figcaption>LAPT-Scale 제목·저자·소속 (원문 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>그 영상에는 로봇의 관절 정답이 없음</p>
+<p>사람이 물건을 잡는 모습은 찍혀 있어도<br />
+로봇 팔을 어느 방향으로 얼마나 움직일지는<br />
+그대로 들어 있지 않음 </p>
+<p>쉽게 말하면<br />
+무슨 일이 일어났는지는 보이는데<br />
+로봇이 실행할 명령표는 비어 있음</p>
+<p>정확히는<br />
+사람 영상에는 로봇 행동 라벨이 없고<br />
+사람 움직임을 로봇 제어 공간에<br />
+그대로 대응시키기도 어려움 <br />
+아래 주방·공장 장면의 손과 물체를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 다양한 사람 시점 영상과 조작 장면 (원문 Figure 2)"><img src="../assets/posts/lapt-scale/html_fig2_1.png" alt="다양한 사람 시점 영상과 조작 장면 (원문 Figure 2)" loading="lazy" decoding="async"></button><figcaption>다양한 사람 시점 영상과 조작 장면 (원문 Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이번 연구는 그 영상을 먼저 학습 재료로 쓰고<br />
+나중에 로봇 명령으로 맞추는 길을 택함</p></section>
+<section class="part" id="part-3"><p>그 빈칸을 메우는 전작들이 있었음</p>
+<p>2024년 10월 15일 공개된 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2410.11758">LAPA</a>는<br />
+영상 변화에 잠재행동 번호를 붙였음<br />
+그 번호를 예측하도록 먼저 학습한 뒤<br />
+로봇 행동으로 미세조정했음<br />
+ICLR 2025 논문으로 표기돼 있음 <br />
+아래 LAPA의 제목과 여러 기관 저자란을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 영상 잠재행동 사전학습의 전작 (Ye 외, LAPA v2 p.1)"><img src="../assets/posts/lapt-scale/prior_header.png" alt="영상 잠재행동 사전학습의 전작 (Ye 외, LAPA v2 p.1)" loading="lazy" decoding="async"></button><figcaption>영상 잠재행동 사전학습의 전작 (Ye 외, LAPA v2 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>2025년 10월 24일 공개된 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.21571">VITRA</a>는<br />
+손과 카메라의 움직임을 복원해 라벨을 만들었음 <br />
+같은 해 11월 20일 공개된 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2511.16407">LAOF</a>는<br />
+영상의 이동 정보를 잠재행동 학습에 더했음 </p>
+<p>이번은 그 선행 접근들 위에서<br />
+연속 표현과 여러 학습 신호를 함께 비교함<br />
+영상 학습이나 이동 신호를 처음 발명한 건 아님</p></section>
+<section class="part" id="part-4"><p>그 변화를 두 장의 영상에서 뽑음</p>
+<p>아래 손이 물체 쪽으로 움직이는 두 장을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전후 프레임에서 잠재행동을 만들고 다음 프레임을 복원 (원문 Figure 3)"><img src="../assets/posts/lapt-scale/html_fig3_1.png" alt="전후 프레임에서 잠재행동을 만들고 다음 프레임을 복원 (원문 Figure 3)" loading="lazy" decoding="async"></button><figcaption>전후 프레임에서 잠재행동을 만들고 다음 프레임을 복원 (원문 Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>쉽게 말하면<br />
+현재 장면을 알고 있을 때<br />
+다음 장면으로 무엇이 달라졌는지<br />
+짧은 숫자 묶음에 담으려 함</p>
+<p>정확히는<br />
+전후 프레임을 숫자로 바꾸는 인코더가<br />
+32차원 연속 잠재행동을 만듦<br />
+영상으로 되돌리는 디코더는 현재 프레임과<br />
+그 잠재로 다음 프레임을 복원하도록 학습함 </p>
+<p>현재 장면을 따로 주니 잠재에는<br />
+배경보다 변화를 담도록 유도할 수 있음<br />
+변화만 완벽히 분리된다는 보장은 아님 <br />
+이게 잠재행동 모델, LAM임</p></section>
+<section class="part" id="part-5"><p>그 잠재행동은 고정 동작 번호가 아님</p>
+<p>미리 정한 이산 코드북에서 하나를 고르면<br />
+서로 조금 다른 움직임이 같은 코드로 묶일 수 있음<br />
+이번은 연속 숫자로 미세한 차이를 남기려 함 </p>
+<p>쉽게 말하면<br />
+비슷하게 움직여도 조금씩 다르게 적을 공간을 둠</p>
+<p>정확히는<br />
+평균과 퍼짐을 정하는 가우시안 분포를 학습함<br />
+LAM 학습 때는 그 분포에서 숫자 묶음을 뽑음<br />
+정책 학습용 라벨에는 그 분포의 평균값을 씀 <br />
+로봇 관절 각도나 힘을 직접 추출한 값은 아님 <br />
+아래 이산 방식 VQ-LAM과<br />
+이번 LAPT-Scale-LAM의 손 주변을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 같은 영상 전이의 복원 비교 (원문 Figure 5)"><img src="../assets/posts/lapt-scale/html_fig5_1.png" alt="같은 영상 전이의 복원 비교 (원문 Figure 5)" loading="lazy" decoding="async"></button><figcaption>같은 영상 전이의 복원 비교 (원문 Figure 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>다만 잘 그린 영상이<br />
+잘 움직이는 로봇을 보증하진 않음</p></section>
+<section class="part" id="part-6"><p>잘 그리려다 배경에만 맞출 수도 있음</p>
+<p>움직이는 손이 화면의 작은 부분이라면<br />
+픽셀 차이만 줄이는 학습에서<br />
+그 변화가 약하게 다뤄질 수 있다는 문제임 </p>
+<p>논문은 보이는 모양의 지각 특징도 맞추고<br />
+물체 구조를 담는 DINOv2 특징도 맞춤 <br />
+여기에 영상의 각 위치가 어디로 이동했는지<br />
+겉보기 이동 정보도 비교함<br />
+이걸 광류, optical flow라고 부름 </p>
+<p>정확히는<br />
+고정된 RAFT 모델로 뽑은 광류를 써서<br />
+복원 영상의 변화와 실제 영상의 변화를 맞춤<br />
+접촉력이나 진짜 관절 상태를 측정한 건 아님 <br />
+아래 오른쪽 LPIPS·DINO·RAFT 줄을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 지각·의미 특징·움직임을 함께 맞추는 학습 (원문 Figure 3)"><img src="../assets/posts/lapt-scale/html_fig3_1.png" alt="지각·의미 특징·움직임을 함께 맞추는 학습 (원문 Figure 3)" loading="lazy" decoding="async"></button><figcaption>지각·의미 특징·움직임을 함께 맞추는 학습 (원문 Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그 숫자를 로봇 명령으로 바꾸는 단계가 남음</p></section>
+<section class="part" id="part-7"><p>이제 그 숫자를 로봇 몸에 맞춤</p>
+<p>정책은 관측과 지시를 받아 행동을 내는 모델임<br />
+시각·언어·행동을 함께 다루는 VLA를 씀 </p>
+<p>처음엔 사람 영상의 잠재행동을 예측하게 함<br />
+그다음 로봇 행동을 정답으로 바꿔 학습함<br />
+마지막으로 실제 과제의 시연에 맞춰 조정함 </p>
+<p>쉽게 말하면<br />
+영상에서 배운 변화를 로봇 명령에 연결한 뒤<br />
+시키려는 작업에 다시 맞춤</p>
+<p>정확히는<br />
+같은 행동 모듈을 세 단계에 걸쳐 계속 학습함<br />
+별도 모듈로 갈아끼우거나 새로 초기화하지 않음 <br />
+실제 실행 때는 로봇 명령을 예측함<br />
+미래 정답 영상을 보고 움직이는 구조가 아님 <br />
+아래 사람 영상 다음에 로봇 데이터가 오는 순서를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사람 영상·로봇 정렬·과제 후학습의 순서 (원문 Figure 1)"><img src="../assets/posts/lapt-scale/html_fig1_1.png" alt="사람 영상·로봇 정렬·과제 후학습의 순서 (원문 Figure 1)" loading="lazy" decoding="async"></button><figcaption>사람 영상·로봇 정렬·과제 후학습의 순서 (원문 Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>그 학습에 쓴 영상 시간도 나눠 봐야 함</p>
+<p>LAM 자체는 사람 영상 23,300시간으로 학습함<br />
+정책의 주 실험 사전학습은<br />
+그중 정제한 5,100시간을 사용했음 </p>
+<p>깨지거나 심하게 흐린 장면을 빼고<br />
+손·물체 상호작용이 약하거나<br />
+카메라 움직임이 지배하는 장면도 걸렀음 <br />
+아래 마지막 열이 정책 학습에 남은 시간임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: LAM 전체 영상과 정제한 정책 학습 영상의 구성 (원문 Table 8)"><img src="../assets/posts/lapt-scale/tab8_p14.png" alt="LAM 전체 영상과 정제한 정책 학습 영상의 구성 (원문 Table 8)" loading="lazy" decoding="async"></button><figcaption>LAM 전체 영상과 정제한 정책 학습 영상의 구성 (원문 Table 8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>전부 인터넷에서 주운 영상은 아님<br />
+정제본 중 자체 수집 사람 영상이 2,900시간임 <br />
+영상 1천·3천·5천 시간의 비교는<br />
+정책 사전학습 분량을 바꾸는 별도 실험임 <br />
+LAM 학습 분량은 그 비교 내내 고정했음</p></section>
+<section class="part" id="part-9"><p>그 정책을 실제 로봇에서 시험했음</p>
+<p>로봇은 AgiBot G1 한 플랫폼임<br />
+몸에 맞추는 로봇 데이터 250시간을 쓴 뒤<br />
+원래 세 과제마다 시연 50개로 후학습했음 <br />
+사람 영상만 보여주고 바로 실행한 실험은 아님 </p>
+<p>마우스패드·헤드폰·컵 과제를<br />
+방법마다 각각 20번씩 평가함<br />
+합치면 세 과제 60번임 <br />
+끝났을 때 과제 목표 상태를 만족해야 성공임 <br />
+아래 50 demonstrations와 20 trials를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 정렬 데이터·과제별 시연·평가 횟수를 구분한 프로토콜 (원문 D.1)"><img src="../assets/posts/lapt-scale/q_protocol.png" alt="정렬 데이터·과제별 시연·평가 횟수를 구분한 프로토콜 (원문 D.1)" loading="lazy" decoding="async"></button><figcaption>정렬 데이터·과제별 시연·평가 횟수를 구분한 프로토콜 (원문 D.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이 로봇 데이터를 그대로 두고<br />
+사람 영상만 더 늘리면 어떻게 될까?</p></section>
+<section class="part" id="part-10"><p>사람 영상을 늘리자 평균 성공률이 올랐음</p>
+<p>정책 사전학습 영상이 1천 시간일 때 63.3%<br />
+3천 시간일 때 80.0%, 5천 시간일 때 85.0%임<br />
+앞의 세 실제 과제 평균임 <br />
+로봇 데이터·정책 구조·후학습 일정은 고정함 <br />
+아래 주황 선과 회색 선의 마지막 구간을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사람 영상 규모에 따른 세 실제 과제 평균 성공률 (원문 Figure 4b)"><img src="../assets/posts/lapt-scale/scaling_real.png" alt="사람 영상 규모에 따른 세 실제 과제 평균 성공률 (원문 Figure 4b)" loading="lazy" decoding="async"></button><figcaption>사람 영상 규모에 따른 세 실제 과제 평균 성공률 (원문 Figure 4b)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>손 움직임을 직접 추정한 비교선은<br />
+3천 시간 75.0%에서 5천 시간 55.0%로 내려감 <br />
+그 비교선은 VITRA 전체 시스템의 동일 재현은 아님 <br />
+저자는 손 추정 오류가 쌓였을 가능성을 설명함<br />
+그 원인을 따로 격리해 입증한 결과는 아님 </p>
+<p>영상 양만 늘린다고 항상 좋아지진 않았음</p></section>
+<section class="part" id="part-11"><p>그 평균이 오를 때 컵 과제는 내려가기도 했음</p>
+<p>이번 방법도 3천에서 5천 시간으로 늘리면<br />
+컵은 95.0%에서 75.0%로 낮아짐 <br />
+20회 중 19회 성공에서 15회로 바뀐 것임 <br />
+마우스패드와 헤드폰의 상승이<br />
+전체 평균에서 이 하락을 가렸음 <br />
+아래 LAPT-Scale-LAM의 마지막 세 줄을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 평균 상승과 다른 컵 과제의 성공률 변화 (원문 Table 15)"><img src="../assets/posts/lapt-scale/tab15_p19.png" alt="평균 상승과 다른 컵 과제의 성공률 변화 (원문 Table 15)" loading="lazy" decoding="async"></button><figcaption>평균 상승과 다른 컵 과제의 성공률 변화 (원문 Table 15)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>쉽게 말하면<br />
+전체 점수가 올라도 모든 과제가 나아진 건 아님</p>
+<p>정확히는<br />
+1천에서 5천 시간의 평균 63.3%→85.0%는<br />
+이 평가에서 총 38회→51회 성공에 해당함 <br />
+다시 학습해도 같은 차이가 나는지<br />
+우연한 차이인지는 이 수치만으로 확정 못 함</p></section>
+<section class="part" id="part-12"><p>그 상승이 그냥 오래 학습해서 나온 걸까?</p>
+<p>사람 영상 사전학습을 아예 뺀 조건도 둠<br />
+초기화·로봇 데이터·이후 학습을 맞추자<br />
+평균 성공률은 55.0%였음 </p>
+<p>빠진 연산량만큼 로봇 정렬 학습을 늘린<br />
+비교 조건은 53.3%였음<br />
+사람 영상 5천 시간을 쓴 조건은 85.0%임 <br />
+아래 Extended, compute-matched 행을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사전학습 제거와 연산량을 맞춘 대조군 (원문 Table 4)"><img src="../assets/posts/lapt-scale/tab4_p7.png" alt="사전학습 제거와 연산량을 맞춘 대조군 (원문 Table 4)" loading="lazy" decoding="async"></button><figcaption>사전학습 제거와 연산량을 맞춘 대조군 (원문 Table 4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>같은 구조에서 사람 영상 단계를 빼고<br />
+로봇 학습만 연장하는 것으로는<br />
+이 결과에 도달하지 못했음 <br />
+사람 영상 조건의 상승을<br />
+연산 시간 차이만으로 설명하기는 어려움</p></section>
+<section class="part" id="part-13"><p>뭘 맞추게 학습했는지도 성공을 바꿈</p>
+<p>아까 배경만 잘 그릴 수 있다고 했던 문제임<br />
+이번엔 광류 정렬 항목을 빼고<br />
+라벨 제작부터 정책 학습까지 다시 돌렸음 </p>
+<p>픽셀 복원 품질을 재는 PSNR은<br />
+전체 모델 34.4217, 광류 제외 34.3012였음 <br />
+그런데 RoboTwin Hard 시뮬레이터의 성공률은<br />
+89.3%에서 77.8%로 내려갔음<br />
+11.5%p 차이임 <br />
+아래 Full w/o flow와 Full objective 행을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 복원 화질과 로봇 정책 성공이 달라지는 제거 실험 (원문 Table 5)"><img src="../assets/posts/lapt-scale/tab5_p7.png" alt="복원 화질과 로봇 정책 성공이 달라지는 제거 실험 (원문 Table 5)" loading="lazy" decoding="async"></button><figcaption>복원 화질과 로봇 정책 성공이 달라지는 제거 실험 (원문 Table 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>앞의 실제 로봇 세 과제와는 다른 실험임 <br />
+예쁜 다음 장면을 만드는 점수와<br />
+과제를 끝내는 점수를 따로 봐야 함</p></section>
+<section class="part" id="part-14"><p>이번엔 실제 로봇의 환경을 바꿔 성공이 남는지 봄</p>
+<p>종이공 버리기·펜 잡기·가려진 지우개 잡기·<br />
+여러 단계로 책 넣기까지 네 과제를 추가함<br />
+과제마다 시연 200개로 공동 정책 하나를 학습함 <br />
+아래는 원래 환경과 바꾼 조명·위치·배경임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 실제 로봇 일반화 평가의 네 환경 (원문 Figure 12)"><img src="../assets/posts/lapt-scale/html_fig12_1.png" alt="실제 로봇 일반화 평가의 네 환경 (원문 Figure 12)" loading="lazy" decoding="async"></button><figcaption>실제 로봇 일반화 평가의 네 환경 (원문 Figure 12)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>익숙한 조건에선 이번 모델과<br />
+비교 로봇 정책 π0.5가<br />
+둘 다 평균 85.0%였음<br />
+낯선 위치·조명·배경에선 이번 모델이 75·70·70%<br />
+π0.5는 50·45·40%였음 </p>
+<p>각 수치는 네 과제의 평균임<br />
+과제·환경마다 20회, 방법당 총 320회 평가임 <br />
+모든 실제 환경에 견딘다는 증거로 넓히면 안 됨</p></section>
+<section class="part" id="part-15"><p>그때 배운 숫자는 장면을 외운 걸까, 변화를 담은 걸까?</p>
+<p>이번엔 실제 로봇을 움직이는 실험 대신<br />
+사람 영상에서 잠재 숫자를 바꿔 봄<br />
+목표 장면은 두고 다른 영상에서 얻은 잠재를 넣음 <br />
+아래 마지막 줄은 목표 장면에<br />
+다른 영상의 잠재행동을 넣은 결과임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 장면은 두고 잠재행동만 바꾼 세 예시 (원문 Figure 6)"><img src="../assets/posts/lapt-scale/html_fig6_1.png" alt="장면은 두고 잠재행동만 바꾼 세 예시 (원문 Figure 6)" loading="lazy" decoding="async"></button><figcaption>장면은 두고 잠재행동만 바꾼 세 예시 (원문 Figure 6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>세 예시에서 전체 장면은 대체로 유지되고<br />
+짧은 구간의 움직임 경향이 달라졌음 <br />
+모양만 외운 표현은 아닐 수 있다는 진단임 </p>
+<p>잠재 축 하나가 로봇 관절 하나에 대응하거나<br />
+영상 속 동작을 어느 로봇에나 그대로 꽂을 수 있음을<br />
+증명한 결과는 아님</p></section>
+<section class="part" id="part-16"><p>이 표현을 얻으려면 학습 연산도 필요했음</p>
+<p>LAM 학습은 H200 GPU 32장으로<br />
+총 4,938 GPU시간이 들었다고 적었음<br />
+GPU시간은 장수와 가동 시간을 곱한 단위임 <br />
+영상에 잠재 라벨을 붙이는 데도<br />
+1,700 H200 GPU시간이 따로 들었음 <br />
+이 숫자에 정책 학습 비용은 포함되지 않음 <br />
+아래 영상 주석과 정책 학습을 나눈 설명을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델 학습·영상 주석·정책 학습을 나눈 비용 설명 (원문 B.2)"><img src="../assets/posts/lapt-scale/q_compute.png" alt="모델 학습·영상 주석·정책 학습을 나눈 비용 설명 (원문 B.2)" loading="lazy" decoding="async"></button><figcaption>모델 학습·영상 주석·정책 학습을 나눈 비용 설명 (원문 B.2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이 팀은 앞서 2026년 9월 14일 공개한<br />
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2609.15870">WLA³</a>에서도 잠재행동을 다뤘음<br />
+확인된 공통 저자는 네 명임 <br />
+이번 논문도 그 전작을 참고문헌에 올렸음</p></section>
+<section class="part" id="part-17"><p>처음의 사람 손 영상으로 돌아오면</p>
+<p>영상에서 배운 변화는 로봇 학습에 보탬이 됐음<br />
+다만 그 사이에 로봇 데이터 250시간과<br />
+과제별 후학습이 있었음 <br />
+아래 not guaranteed와<br />
+one target platform을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 잠재행동·단일 로봇·작은 평가 표본의 한계 (원문 §5)"><img src="../assets/posts/lapt-scale/q_limits.png" alt="잠재행동·단일 로봇·작은 평가 표본의 한계 (원문 §5)" loading="lazy" decoding="async"></button><figcaption>잠재행동·단일 로봇·작은 평가 표본의 한계 (원문 §5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>잠재행동이 로봇의 독립 제어 축과<br />
+맞는다고 보장되지 않아 몸에 맞추는 학습이 필요함 <br />
+실제 검증은 한 로봇의 일곱 과제였고<br />
+조건당 평가도 20회였음 </p>
+<p>컵의 19회→15회를 기억하면 좋겠음<br />
+평균 85% 다음에도 개별 과제와<br />
+다른 로봇을 확인할 일이 남아 있음</p></section>
+<section class="part" id="part-18"><p>다른 로봇에서도 같은 영상의 보탬이 남을까?</p>
+<p>이번 결론 다음에 확인하고 싶은 건<br />
+더 많은 기체와 긴 작업, 반복 학습의 변동임<br />
+이건 해설자의 추가 검증 제안임 </p>
+<p>2026년 10월 16일 확인 기준<br />
+저자 등록상의 CoRL 채택 표기는 확인했지만<br />
+학회 공식 결정문과 직접 후속·독립 재현 원문은<br />
+이번 조사에서 확보하지 못했음 </p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.13732v1">arXiv</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.13732v1">원문 PDF</a><br />
+<a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.13732">arXiv DOI</a><br />
+DOI는 원문 페이지에 등록 대기로 표시됨 </p>
+<p>3줄 요약<br />
+사람 영상은 로봇 학습에 보탬이 됐지만 로봇 정렬·과제 시연도 필요했음 <br />
+세 과제 평균은 상승, 컵은 3천→5천 시간에 95%→75%였음 <br />
+한 로봇·일곱 과제·조건당 20회 결과여서 다른 기체의 검증이 남아 있음</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/lapt-scale/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.13732v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/lapt-scale.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>
