@@ -1,0 +1,14 @@
+Primary paper: BizBench: Unveiling Hidden Challenges in Deploying Long-Horizon Agents for Real-World Business
+Authors: Enhan Zhao, Yongqi Tong, Xuejun Yu, Hang Wang, Pan Wang, Yichao Wang, Di He, Jianshe Li, Wei Wu
+Source: https://arxiv.org/abs/2610.20424v1
+PDF: https://arxiv.org/pdf/2610.20424v1
+First public: 2026-10-14 UTC (2026-10-15 KST). Verified: 2026-10-17 KST.
+License: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
+Changes: source figures, tables and text cropped/resized; Korean explanation and captions added.
+Predecessor title crop: tau-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains
+Shunyu Yao, Noah Shinn, Pedram Razavi, Karthik Narasimhan. https://arxiv.org/pdf/2406.12045v1 p.1, CC BY 4.0.
+Copyright remains with original authors/rightsholders. No endorsement is implied.
+Reconstructed/synthetic business environment, not real customer-account operations or a legal compliance audit.
+Q18 is an actual reserve violation in a benchmark trace; Q13 is a blocked premature request without a transfer.
+Golden traces are feasible, not proven shortest. Table3 call caps are retrospective, not budget-aware reruns.
+Claude Opus5/Muse Spark1.3: one run/task; other8models: three/task. Paper is a preprint; peer-reviewed acceptance unconfirmed.

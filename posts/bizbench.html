@@ -1,0 +1,273 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="마지막에 28.66달러가 남아도 중간에 0달러가 됐다면, 내내 20달러를 유지하라는 조건은 지킨 게 아님. BizBench는 목표 달성과 실행 과정을 따로 검사했음. 실제 계좌가 아닌 재구성한 50개 업무의 결과임.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="잔액을 되돌려 놓고도 실패한 AI 업무 에이전트">
+<meta property="og:description" content="마지막에 28.66달러가 남아도 중간에 0달러가 됐다면, 내내 20달러를 유지하라는 조건은 지킨 게 아님. BizBench는 목표 달성과 실행 과정을 따로 검사했음. 실제 계좌가 아닌 재구성한 50개 업무의 결과임.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/bizbench/html_fig1_1.png">
+<title>잔액을 되돌려 놓고도 실패한 AI 업무 에이전트 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/bizbench.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 에이전트</span><span class="pill">업무 자동화</span><span class="pill">평가</span><span>·</span><time datetime="2026-10-17">2026. 10. 17</time><span>·</span><span>12분 읽기</span></div>
+<h1>잔액을 되돌려 놓고도 실패한 AI 업무 에이전트</h1><p class="lead">마지막에 28.66달러가 남아도 중간에 0달러가 됐다면, 내내 20달러를 유지하라는 조건은 지킨 게 아님. BizBench는 목표 달성과 실행 과정을 따로 검사했음. 실제 계좌가 아닌 재구성한 50개 업무의 결과임.</p>
+
+<div class="article-details"><strong>BizBench: Unveiling Hidden Challenges in Deploying Long-Horizon Agents for Real-World Business</strong><br>Enhan Zhao · Yongqi Tong · Xuejun Yu · Hang Wang · Pan Wang · Yichao Wang · Di He · Jianshe Li · Wei Wu · 2026 · arXiv v1 프리프린트 · 심사 채택 미확인 (2026-10-17)<br>원문 그림과 함께 읽는 18파트 해설 · 판본 및 출처 확인: 2026-10-17</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">마지막 잔액이 맞는데 왜 실패했을까</a><a href="#part-2">재구성한 결제 업무 환경</a><a href="#part-3">정책과 고객을 평가한 전작들</a><a href="#part-4">목표·과정·보호를 모두 확인</a><a href="#part-5">0달러를 거쳐 28.66달러가 된 잔액</a><a href="#part-6">차단된 승인 전 시도</a><a href="#part-7">무료 경로와 심사 마감</a><a href="#part-8">문서의 최신성과 실제 적용 범위</a><a href="#part-9">모델별 실행 수와 실험 조건</a><a href="#part-10">목표 성공과 엄격한 성공</a><a href="#part-11">세 번 모두 성공하는 신뢰성</a><a href="#part-12">정보를 먼저 주는 비교 조건</a><a href="#part-13">길어진 도구 호출과 반복 조회</a><a href="#part-14">사후 호출 한도의 해석</a><a href="#part-15">고객 시뮬레이터도 점검하기</a><a href="#part-16">같은 기관 저자들의 OneModel 전작</a><a href="#part-17">다시 중간 잔액으로</a><a href="#part-18">공개 자료·한계·세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>돈을 다 보내고 잔액도 남겼음<br />
+요구한 20달러보다 많은 28.66달러였음<br />
+그런데 왜 업무 실패로 판정됐을까? </p>
+<p>이번 논문은 <em>BizBench: Unveiling Hidden</em><br />
+<em>Challenges in Deploying Long-Horizon</em><br />
+<em>Agents for Real-World Business</em>임 <br />
+Enhan Zhao, Yongqi Tong, Xuejun Yu,<br />
+Hang Wang, Pan Wang, Yichao Wang,<br />
+Di He, Jianshe Li, Wei Wu의 연구임 <br />
+논문 기준 북경대·Ant International 소속이며<br />
+Zhao와 Tong은 공동기여로 적혀 있음 </p>
+<p>2026년 10월 14일 UTC 공개된 v1임<br />
+한국 시간으로는 10월 15일임<br />
+10월 17일 기준 심사 채택은 확인 못 한<br />
+프리프린트로 읽었음 <br />
+아래 제목과 소속 번호를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: BizBench 제목·저자·소속 (원문 p.1)"><img src="../assets/posts/bizbench/header.png" alt="BizBench 제목·저자·소속 (원문 p.1)" loading="lazy" decoding="async"></button><figcaption>BizBench 제목·저자·소속 (원문 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>그 잔액을 다루는 곳은 재구성한 업무 환경임</p>
+<p>연구진은 결제회사의 업무 규칙을 바탕으로<br />
+문서와 가상 기록, 실행 도구를 맞춰 만들었음<br />
+민감한 내용은 바꾸고 업무 논리를 남긴 것임<br />
+실제 고객 계좌에서 돈을 보내 본 실험은 아님 </p>
+<p>요청 하나를 처리하다 쓴 자금이<br />
+다른 지급에 필요한 잔액을 줄일 수 있음<br />
+먼저 한 결정의 결과가 뒤에도 남음 </p>
+<p>환경에는 과제 50개와 문서 789개가 있음<br />
+에이전트는 상시 도구 9개를 통해<br />
+업무 기능 601개를 발견하고 호출함<br />
+601개를 처음부터 전부 펼쳐 준 건 아님 <br />
+아래 Documents·Records·Tools 줄을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 문서·기록·도구와 실행 검사를 맞춘 구성 (원문 Figure 1)"><img src="../assets/posts/bizbench/html_fig1_1.png" alt="문서·기록·도구와 실행 검사를 맞춘 구성 (원문 Figure 1)" loading="lazy" decoding="async"></button><figcaption>문서·기록·도구와 실행 검사를 맞춘 구성 (원문 Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-3"><p>그 업무를 평가하던 전작부터 보면</p>
+<p>2024년 6월 17일 공개된 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.12045v1">τ-bench</a>는<br />
+업무 기능을 호출하는 API와 정책 문서,<br />
+AI가 맡은 고객을 함께 뒀음<br />
+아래 Sierra 연구진의 전작임 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 정책과 고객 대화를 평가한 전작 (Yao 외, τ-bench v1 p.1)"><img src="../assets/posts/bizbench/prior_tau.png" alt="정책과 고객 대화를 평가한 전작 (Yao 외, τ-bench v1 p.1)" loading="lazy" decoding="async"></button><figcaption>정책과 고객 대화를 평가한 전작 (Yao 외, τ-bench v1 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>근데 전작도 자기 평가의 빈틈을 적었음<br />
+고객의 명시적 승인 없이 반품해도<br />
+거래·잔액 기록을 담은 DB와<br />
+필요한 답변이 마지막에 맞으면<br />
+보상은 통과할 수 있다는 것이었음 </p>
+<p>2026년 3월 4일 공개된 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2603.04370v1">τ-Knowledge</a>는<br />
+문서 검색과 업무 상태 변경을 함께 평가했음<br />
+두 전작은 각각 ICLR 2025·ICML 2026 게재임<br />
+이전 평가에서도 정책 준수와 문서 검색을 다뤘음</p></section>
+<section class="part" id="part-4"><p>이번은 그 실행 기록에 조건을 걸었음</p>
+<p>쉽게 말하면<br />
+일을 마쳤는지와 그동안 조건을 지켰는지를<br />
+따로 확인한 뒤 모두 맞아야 통과시킴</p>
+<p>정확히는<br />
+G는 요청한 결과와 허용된 종료 조건임<br />
+P는 실행 중 지켜야 하는 절차·요건이고<br />
+F는 보호할 대상과 금지된 부작용을 봄<br />
+세 조건을 모두 통과해야 엄격한 성공임 <br />
+아래 식의 세 항 사이 ∧는 모두 참이라는 뜻임 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 목표·과정·보호 조건을 모두 요구하는 성공 정의 (원문 3.3절 식 1)"><img src="../assets/posts/bizbench/q_criteria.png" alt="목표·과정·보호 조건을 모두 요구하는 성공 정의 (원문 3.3절 식 1)" loading="lazy" decoding="async"></button><figcaption>목표·과정·보호 조건을 모두 요구하는 성공 정의 (원문 3.3절 식 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>채점 코드는 기록과 영수증을 조건대로 검사함<br />
+점수를 LLM에게 맡기지는 않았음<br />
+기준 실행과 똑같은 순서를 요구하지도 않음<br />
+기준 실행은 통과 경로가 있음을 확인하는 용도임</p></section>
+<section class="part" id="part-5"><p>그 조건을 맨 앞의 잔액에 대입하면</p>
+<p>부록 Q18의 한 실행은 60달러로 시작함<br />
+착수금 60달러와 나중의 잔금 40달러를 지급하되<br />
+계좌에는 내내 20달러를 남겨야 했음 </p>
+<p>그런데 착수금 60달러를 먼저 보내 잔액이 0이 됨<br />
+뒤에 환급 18.66달러와 조정액 50달러가 들어오고<br />
+잔금 40달러를 보내 최종 28.66달러가 남았음 </p>
+<p>종료 잔액은 20달러를 넘었음<br />
+내내 20달러를 남긴 건 아니었음<br />
+목표는 통과했지만 실행 과정은 실패임 <br />
+아래 leaving zero와 최종 $28.66을 같이 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 종료 잔액 복구로 지워지지 않는 중간 위반 (원문 부록 D.3 Q18)"><img src="../assets/posts/bizbench/q_reserve.png" alt="종료 잔액 복구로 지워지지 않는 중간 위반 (원문 부록 D.3 Q18)" loading="lazy" decoding="async"></button><figcaption>종료 잔액 복구로 지워지지 않는 중간 위반 (원문 부록 D.3 Q18)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>승인 조건에서는 돈이 안 나가도 실패가 남음</p>
+<p>Q13에서는 승인 전에 실행을 요청했음<br />
+도구가 CUSTOMER_APPROVAL_REQUIRED를 반환했고<br />
+지급이나 잔액 변화는 없었음 <br />
+그 뒤 고객이 승인해서 목표는 달성했지만<br />
+승인 전 시도 자체가 이 과제의 절차 위반임 </p>
+<p>쉽게 말하면<br />
+차단 장치는 막았고 에이전트는 순서를 어겼음</p>
+<p>정확히는<br />
+이 실행의 판정은 G=1, P=0, F=1임<br />
+무단 송금이 발생했다는 결과로 읽으면 틀림 <br />
+아래 마지막 No unauthorized transfer를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 차단된 승인 전 시도와 실제 지급의 구별 (원문 부록 D.3 Q13)"><img src="../assets/posts/bizbench/q_approval.png" alt="차단된 승인 전 시도와 실제 지급의 구별 (원문 부록 D.3 Q13)" loading="lazy" decoding="async"></button><figcaption>차단된 승인 전 시도와 실제 지급의 구별 (원문 부록 D.3 Q13)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-7"><p>그 승인을 받아도 기다리다 마감이 끝날 수 있음</p>
+<p>Q03의 기준 실행에서는 예치금 60달러를 풀어<br />
+심사료 50달러를 내야 했음<br />
+논리 시간 8분에 자금 해제가 가능하고<br />
+심사는 10분 걸리는데 마감은 19분임 <br />
+아래 무료인 A와 즉시 받는 B·C를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 같은 예치금의 실수령·수수료·지연 비교 (원문 Table 5)"><img src="../assets/posts/bizbench/tab5_p13.png" alt="같은 예치금의 실수령·수수료·지연 비교 (원문 Table 5)" loading="lazy" decoding="async"></button><figcaption>같은 예치금의 실수령·수수료·지연 비교 (원문 Table 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>A는 무료지만 자금이 늦어 심사가 마감 뒤 끝남<br />
+C는 즉시 받아도 49.99달러라 심사료에 못 미침<br />
+B로 즉시 50달러를 받으면 심사는 18분에 끝남 </p>
+<p>대신 B의 수수료 10달러와 심사료를 합치면<br />
+총 60달러라 기존 한도 50달러를 넘음<br />
+고객이 한도를 올리고 해당 요청도 승인해야 했음 <br />
+이 경로들은 원문의 조건으로 비교한 것임<br />
+관측된 모델 실패와는 구분해야 함<br />
+여기서 분은 실제 대기 시간이 아닌 논리 시간임</p></section>
+<section class="part" id="part-8"><p>그 조건은 검색 결과 첫 줄에 없을 수도 있음</p>
+<p>Q01은 세금 납부를 맞추는 업무였음<br />
+검색 1위와 5위에 나온 문서를 열어 봤지만<br />
+비슷한 용어를 쓰는 다른 제품의 규칙이었음 </p>
+<p>날짜가 최신이라는 이유만으로 고르면 될까?<br />
+논문은 만료된 보험도 과거 사건에는<br />
+여전히 적용될 수 있다는 예를 듦 </p>
+<p>쉽게 말하면<br />
+읽은 문서가 지금 이 거래에 맞는지도 물어야 함</p>
+<p>정확히는<br />
+문서의 권위와 제품·지역·효력 기간을 확인함<br />
+아래 과거 사건을 뜻하는 past incident를 보셈 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 최신 여부와 실제 적용 범위가 다른 업무 규칙 (원문 3.2절)"><img src="../assets/posts/bizbench/q_scope.png" alt="최신 여부와 실제 적용 범위가 다른 업무 규칙 (원문 3.2절)" loading="lazy" decoding="async"></button><figcaption>최신 여부와 실제 적용 범위가 다른 업무 규칙 (원문 3.2절)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>그 실행을 같은 환경에서 반복해 봤음</p>
+<p>모델 10종에 같은 50개 과제를 줬음<br />
+Claude Opus 5와 Muse Spark 1.3은 과제당 1회<br />
+나머지 모델은 3회라 각각 총 150회 실행임<br />
+실행마다 독립 DB에서 다시 시작했음 </p>
+<p>기본 고객 역할은 DeepSeek-V4.1-Flash가 맡음<br />
+고객 사실과 승인을 주며 대화하는 별도 모델임<br />
+에이전트는 기준 실행과 채점 코드를 못 봄 <br />
+아래 기본 조건의 사용자 모델을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 독립 DB와 기본 사용자 시뮬레이터 설정 (원문 5.1절)"><img src="../assets/posts/bizbench/q_setup.png" alt="독립 DB와 기본 사용자 시뮬레이터 설정 (원문 5.1절)" loading="lazy" decoding="async"></button><figcaption>독립 DB와 기본 사용자 시뮬레이터 설정 (원문 5.1절)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>누적 도구 호출·생성량의 상한은 안 뒀지만<br />
+실제 실행 시간과 오류 횟수에는 제한이 있었음<br />
+무한정 실행하도록 둔 실험은 아님</p></section>
+<section class="part" id="part-10"><p>목표 성공과 엄격한 성공은 여기서 갈림</p>
+<p>Qwen3.8-27B의 목표 성공률은 42.0%였음<br />
+과정·보호 조건까지 요구하자 32.7%가 됨<br />
+150회 중 14회가 목표는 이루고도 탈락한 것임 <br />
+아래 Qwen 행의 Goal과 Strict를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 목표·과정·보호와 엄격한 성공의 차이 (원문 Table 1)"><img src="../assets/posts/bizbench/results_table.png" alt="목표·과정·보호와 엄격한 성공의 차이 (원문 Table 1)" loading="lazy" decoding="async"></button><figcaption>목표·과정·보호와 엄격한 성공의 차이 (원문 Table 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>DeepSeek-V4.1-Flash도 그런 실행이 5회 있었음<br />
+4회는 잔액을 중간에 어겼다가 복구했고<br />
+1회는 앞에서 본 차단된 승인 전 시도임 </p>
+<p>엄격한 성공률은 Claude 64.0%, GPT-6 Sol 61.3%임<br />
+Claude는 과제당 1회, GPT는 3회 평균이니<br />
+표본 차이도 같이 둬야 비교가 됨</p></section>
+<section class="part" id="part-11"><p>같은 성공을 세 번 모두 낼 수 있는지도 봄</p>
+<p>한 번 잘한 업무를 다음번에도 맡길 수 있을까?<br />
+GPT-6 Sol의 단일 실행 평균 성공률은 61.3%지만<br />
+같은 과제를 세 번 모두 성공한 비율은 40.0%임 </p>
+<p>쉽게 말하면<br />
+세 번 중 한 번만 잘해도 된다는 채점이 아님</p>
+<p>정확히는<br />
+pass^k는 고른 k회에서 모두 성공한 과제 비율임<br />
+하나라도 성공하면 되는 pass@k와 구별해야 함<br />
+세 번째 실행 자체의 성공률이 떨어졌다는 뜻도 아님 <br />
+아래 파란 선의 k=1과 k=3을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 반복 모두 성공하는 신뢰성과 평균 자원 사용 (원문 Figure 2)"><img src="../assets/posts/bizbench/fig2_p7.png" alt="반복 모두 성공하는 신뢰성과 평균 자원 사용 (원문 Figure 2)" loading="lazy" decoding="async"></button><figcaption>반복 모두 성공하는 신뢰성과 평균 자원 사용 (원문 Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-12"><p>그 성공에 필요한 정보를 먼저 주면 어떨까</p>
+<p>DeepSeek-V4.1-Flash의 세 정보 조건을 비교했음<br />
+기본 엄격한 성공률은 43.3%였고<br />
+맞는 문서를 직접 주면 50.0%였음<br />
+고객이 아는 사실을 처음에 모두 주면 70.0%임 <br />
+아래 세 줄은 정보를 바꾼 조건별 결과임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 문서 제공과 고객 정보 공개 조건의 비교 (원문 Table 2)"><img src="../assets/posts/bizbench/tab2_p8.png" alt="문서 제공과 고객 정보 공개 조건의 비교 (원문 Table 2)" loading="lazy" decoding="async"></button><figcaption>문서 제공과 고객 정보 공개 조건의 비교 (원문 Table 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이건 학습해서 모델 점수가 오른 실험은 아님<br />
+마지막 조건은 사용자 시뮬레이터도 없애므로<br />
+질문 능력만의 효과로 분리할 수는 없음<br />
+필요한 승인은 여전히 요구했음 </p>
+<p>논문은 고객 제약을 얻고 끝까지 유지하는 일이<br />
+특히 어려운 것으로 해석함<br />
+맞는 문서를 주는 것만으로 업무가 끝나진 않았음</p></section>
+<section class="part" id="part-13"><p>그 정보를 찾느라 늘어난 호출도 셌음</p>
+<p>통과 가능한 기준 실행은 평균 111.8회였음<br />
+과제마다 통과 실행 1개씩의 평균임<br />
+DeepSeek-V4.1-Flash는 도구를 191.3회 불렀고<br />
+이쪽은 실패도 포함한 전체 실행의 평균임<br />
+그 비율은 약 1.71배임<br />
+고객 역할의 도구 호출은 따로 센 값임 <br />
+아래 Assistant tool calls와 반복 조회를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델 측 도구 호출과 동일 내용 반복 조회 (원문 Table 8)"><img src="../assets/posts/bizbench/tab8_p15.png" alt="모델 측 도구 호출과 동일 내용 반복 조회 (원문 Table 8)" loading="lazy" decoding="async"></button><figcaption>모델 측 도구 호출과 동일 내용 반복 조회 (원문 Table 8)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>동일 도구·인자·응답을 다시 읽은 DB 호출도<br />
+실행당 평균 16.4회였음<br />
+다만 일부 재확인은 의도된 검증일 수도 있음 </p>
+<p>GLM-5.3-Flash는 평균 118.3회로<br />
+DeepSeek와 같은 엄격한 성공률 43.3%였음<br />
+호출이 많다고 더 잘한 건 아니었음<br />
+기준 실행도 최단 경로라고 증명된 건 아님</p></section>
+<section class="part" id="part-14"><p>그 호출을 나중에 잘라 보면 결과가 달라짐</p>
+<p>여기부터는 예산 실험 해석이라 넘겨도 됨<br />
+과제별 기준 호출 수를 R이라고 두고<br />
+기록을 그 1.2배·1.5배·2배 호출까지만 제한했음<br />
+한도는 평균 111.8회 대신 과제별 R로 정함 <br />
+아래 무상한 행과 나머지 세 행을 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 기준 호출 수에 비례한 사후 한도 분석 (원문 Table 3)"><img src="../assets/posts/bizbench/tab3_p8.png" alt="기준 호출 수에 비례한 사후 한도 분석 (원문 Table 3)" loading="lazy" decoding="async"></button><figcaption>기준 호출 수에 비례한 사후 한도 분석 (원문 Table 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>DeepSeek-V4.1-Flash의 엄격한 성공률은<br />
+무상한 43.3%에서 1.2배 한도 0.7%로 줄었음<br />
+1.5배는 6.7%, 2배여도 26.7%임 </p>
+<p>정확히는 실행 기록을 이용한 사후 분석임<br />
+모델에게 한도를 알려 새로 계획시킨 결과는 아님<br />
+예산을 아는 에이전트의 성능까지 이 표가 답하진 않음</p></section>
+<section class="part" id="part-15"><p>그 결과를 만드는 고객 역할도 점검했음</p>
+<p>고객 모델이 여러 승인을 한꺼번에 처리하거나<br />
+결과를 알리기 전에 도구를 더 쓰면<br />
+평가 대화 자체가 달라질 수 있음 <br />
+같은 50과제에서 고객 지시문을 명료하게 바꾸자<br />
+관측된 규약 위반은 4개 과제에서 0개가 됨<br />
+같은 과제의 변경 전후를 짝지은 검정은 p=0.125임<br />
+위반이 사라졌다고 통계적으로 확정할 근거는 약함 </p>
+<p>고객 모델을 바꾼 별도 비교도 있었음<br />
+과제 수행자는 Qwen3.8-27B로 고정했으며<br />
+네 고객 모델의 3회 평균 성공률은 30.7~36.0%임<br />
+실제 사람 고객이나 모든 모델에 대한 보장은 아님 <br />
+아래 바뀌는 것은 고객 모델 이름임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: Qwen 과제 수행자를 고정한 고객 모델 비교 (원문 Figure 3)"><img src="../assets/posts/bizbench/fig3_p9.png" alt="Qwen 과제 수행자를 고정한 고객 모델 비교 (원문 Figure 3)" loading="lazy" decoding="async"></button><figcaption>Qwen 과제 수행자를 고정한 고객 모델 비교 (원문 Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-16"><p>이제 고객 업무를 설계한 팀의 전작도 봄</p>
+<p>2026년 7월 ACL Industry에 실린 <a target="_blank" rel="noopener" href="https://aclanthology.org/2026.acl-industry.91/">OneModel</a>은<br />
+업무 원리와 절차를 모델에 학습시키고<br />
+변하는 거래 정보는 문맥으로 주는 접근이었음 <br />
+이번 공동기여자 Yongqi Tong과 Jianshe Li가<br />
+Ant International 소속으로 그 전작에도 참여함<br />
+다만 이번 논문이 OneModel 개선판이라는 뜻은 아님 </p>
+<p>이번 논문은 여러 모델을 놓고<br />
+업무 완료와 절차 준수를 함께 측정했음 <br />
+환경에 옮기는 과정에서 추가된 조건도 있음<br />
+아래 원문의 source·interpretations·<br />
+additional 구분을 보셈 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 원래 업무 규칙과 재구성 과정의 해석·추가 조건 (원문 4.1절)"><img src="../assets/posts/bizbench/q_synthetic.png" alt="원래 업무 규칙과 재구성 과정의 해석·추가 조건 (원문 4.1절)" loading="lazy" decoding="async"></button><figcaption>원래 업무 규칙과 재구성 과정의 해석·추가 조건 (원문 4.1절)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-17"><p>맨 앞의 28.66달러로 돌아가면</p>
+<p>종료 잔액 복구와 중간 잔액 위반은 함께 일어났음<br />
+최종 숫자가 맞는다는 이유로<br />
+실행 내내 지킨 조건까지 확인됐다고 볼 수 없음 <br />
+아래 0달러를 뜻하는 leaving zero가 남아 있음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 같은 종료 잔액 뒤에 남은 실행 이력 (원문 부록 D.3 Q18)"><img src="../assets/posts/bizbench/q_reserve.png" alt="같은 종료 잔액 뒤에 남은 실행 이력 (원문 부록 D.3 Q18)" loading="lazy" decoding="async"></button><figcaption>같은 종료 잔액 뒤에 남은 실행 이력 (원문 부록 D.3 Q18)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>개발에 적용한다면 이런 테스트를 더해 보고 싶음<br />
+완료 상태가 같은 두 실행을 준비한 뒤<br />
+승인 순서와 중간 잔액을 따로 검사하는 것임<br />
+이건 논문이 효과를 검증한 개선책이 아닌 제안임 </p>
+<p>차단된 승인 전 시도는 실제 무단 송금과 구별하고<br />
+실제 잔액 위반은 나중의 복구로 덮지 않는 식임</p></section>
+<section class="part" id="part-18"><p>그 실행을 직접 확인할 자료는 공개돼 있음</p>
+<p>2026년 10월 17일 확인 기준<br />
+<a target="_blank" rel="noopener" href="https://github.com/ant-intl/BizBench">공식 코드</a>에 과제·문서·검사 규칙이 있음<br />
+심사 채택과 직접 후속·독립 재현 원문은 확인 못 함 </p>
+<p>한 회사 업무를 바탕으로 재구성한 50과제이며<br />
+고객도 시뮬레이터라는 범위는 남음<br />
+실제 금융 운영의 사고율을 잰 결과가 아님 <br />
+나는 최종 잔액이 같은 두 경로를 검사에 넣었을 때<br />
+중간 위반을 제대로 구분하는지부터 재현해 보고 싶음 </p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.20424v1">arXiv 원문</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.20424v1">PDF</a><br />
+<a target="_blank" rel="noopener" href="https://doi.org/10.48550/arXiv.2610.20424">DOI</a>는 원문 페이지에 등록 대기로 표기됨 </p>
+<p>3줄 요약<br />
+최종 잔액이 28.66달러여도 중간의 0달러는 조건 위반임 <br />
+Qwen의 목표 성공률 42.0%는 과정·보호까지 보면 32.7%임 <br />
+이 결과는 실제 계좌 운영이 아닌 재구성한 50개 업무의 평가임</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/bizbench/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.20424v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/bizbench.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

@@ -1,5 +1,48 @@
 [
   {
+    "slug": "bizbench",
+    "title": "잔액을 되돌려 놓고도 실패한 AI 업무 에이전트",
+    "excerpt": "마지막에 28.66달러가 남아도 중간에 0달러가 됐다면, 내내 20달러를 유지하라는 조건은 지킨 게 아님. BizBench는 목표 달성과 실행 과정을 따로 검사했음. 실제 계좌가 아닌 재구성한 50개 업무의 결과임.",
+    "date": "2026-10-17",
+    "published_at": "2026-10-17T08:26:19+09:00",
+    "verified_date": "2026-10-17",
+    "reading_minutes": 12,
+    "tags": [
+      "AI 에이전트",
+      "업무 자동화",
+      "평가"
+    ],
+    "cover": "assets/posts/bizbench/html_fig1_1.png",
+    "cover_alt": "문서·가상 기록·업무 도구와 실행 검사를 연결한 BizBench 원문 Figure1",
+    "markdown": "bizbench.md",
+    "paper_title": "BizBench: Unveiling Hidden Challenges in Deploying Long-Horizon Agents for Real-World Business",
+    "paper_year": "2026",
+    "venue": "arXiv v1 프리프린트 · 심사 채택 미확인 (2026-10-17)",
+    "authors": "Enhan Zhao · Yongqi Tong · Xuejun Yu · Hang Wang · Pan Wang · Yichao Wang · Di He · Jianshe Li · Wei Wu",
+    "source_url": "https://arxiv.org/abs/2610.20424v1",
+    "chapters": [
+      "마지막 잔액이 맞는데 왜 실패했을까",
+      "재구성한 결제 업무 환경",
+      "정책과 고객을 평가한 전작들",
+      "목표·과정·보호를 모두 확인",
+      "0달러를 거쳐 28.66달러가 된 잔액",
+      "차단된 승인 전 시도",
+      "무료 경로와 심사 마감",
+      "문서의 최신성과 실제 적용 범위",
+      "모델별 실행 수와 실험 조건",
+      "목표 성공과 엄격한 성공",
+      "세 번 모두 성공하는 신뢰성",
+      "정보를 먼저 주는 비교 조건",
+      "길어진 도구 호출과 반복 조회",
+      "사후 호출 한도의 해석",
+      "고객 시뮬레이터도 점검하기",
+      "같은 기관 저자들의 OneModel 전작",
+      "다시 중간 잔액으로",
+      "공개 자료·한계·세 줄 요약"
+    ],
+    "attribution_url": "assets/posts/bizbench/ATTRIBUTION.txt"
+  },
+  {
     "slug": "lapt-scale",
     "title": "사람 영상을 더 봤는데 컵 과제는 오히려 덜 성공했음",
     "excerpt": "사람 영상에서 두 장면 사이의 변화를 배워 로봇 정책의 사전학습에 썼음. 영상1천→5천 시간에서 세 실제 과제 평균은63.3%→85.0%였지만,3천→5천 구간의 컵은95%→75%였음. 로봇 정렬250시간과 과제별 시연도 사용한 결과임.",
