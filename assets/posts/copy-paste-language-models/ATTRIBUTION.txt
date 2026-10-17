@@ -1,0 +1,32 @@
+Copy-Paste Language Models
+Nathan Godey and Yoav Artzi, Cornell University, 2026.
+arXiv:2610.19247v1, first submitted 2026-10-13 UTC.
+Original PDF: https://arxiv.org/pdf/2610.19247v1
+Original HTML: https://arxiv.org/html/2610.19247v1
+License: Creative Commons Attribution-ShareAlike 4.0 International
+https://creativecommons.org/licenses/by-sa/4.0/
+License link checked 2026-10-18.
+
+This Korean commentary and its contribution to adapted graphics/cards/share images
+are distributed under CC BY-SA 4.0. Original figures, tables, equations and short
+passages are attributed individually in their captions. Changes: rectangular crop,
+scale adjustment, Korean commentary/caption and layout. No fabricated paper figures.
+No endorsement by the authors or Cornell is implied.
+
+Minimal prior-work quotations, excluded from the CC license grant above:
+Pointer Sentinel Mixture Models (title, 5 words), Stephen Merity, Caiming Xiong,
+James Bradbury, Richard Socher. https://arxiv.org/abs/1609.07843 , v1 p.1.
+Lost in Backpropagation: The LM Head is a Gradient Bottleneck (title/author block),
+Nathan Godey and Yoav Artzi. https://arxiv.org/abs/2603.10145v2 , p.1.
+Prior arXiv pages use non-exclusive distribution licenses; no broad reuse license
+is asserted. Only minimum identifying title/author blocks are quoted for criticism
+and discussion. Full prior PDFs/text are NOT redistributed in this report package.
+TRIME is discussed by paraphrase and linked to the official source:
+https://aclanthology.org/2022.emnlp-main.382/
+
+Font: Noto Sans KR, Google Fonts official repository; SIL Open Font License 1.1.
+Static instances and Unicode subsets used in rendering. See fonts/OFL.txt.
+Font source: https://github.com/google/fonts/tree/main/ofl/notosanskr
+
+Rendering: WeasyPrint + MuPDF static fallback after Chrome/Chromium unavailable.
+This is not an interactive browser compatibility or interaction test.

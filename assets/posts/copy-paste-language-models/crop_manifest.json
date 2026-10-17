@@ -1,0 +1,123 @@
+{
+  "header": {
+    "page": 1,
+    "bbox_points": [
+      104,
+      77,
+      365,
+      164
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "architecture": {
+    "page": 1,
+    "bbox_points": [
+      106,
+      548,
+      308,
+      668
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "equation_lm": {
+    "page": 2,
+    "bbox_points": [
+      220,
+      597,
+      506,
+      623
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "equation_copy": {
+    "page": 3,
+    "bbox_points": [
+      106,
+      202,
+      506,
+      367
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "equation_mixture": {
+    "page": 3,
+    "bbox_points": [
+      106,
+      574,
+      506,
+      655
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "setup": {
+    "page": 18,
+    "bbox_points": [
+      149,
+      153,
+      463,
+      458
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "table1": {
+    "page": 4,
+    "bbox_points": [
+      108,
+      260,
+      505,
+      372
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "table2": {
+    "page": 6,
+    "bbox_points": [
+      107,
+      80,
+      505,
+      209
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "table12": {
+    "page": 28,
+    "bbox_points": [
+      106,
+      79,
+      506,
+      223
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "table13": {
+    "page": 28,
+    "bbox_points": [
+      106,
+      230,
+      506,
+      376
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  },
+  "quote_training": {
+    "page": 3,
+    "bbox_points": [
+      276,
+      665,
+      484,
+      679
+    ],
+    "source": "paper.pdf",
+    "license": "CC BY-SA 4.0"
+  }
+}
