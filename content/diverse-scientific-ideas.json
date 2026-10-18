@@ -1,0 +1,22 @@
+{
+  "slug": "diverse-scientific-ideas",
+  "title": "좋은 연구 아이디어 세 개가 모두 같은 얘기라면",
+  "excerpt": "각각 좋은 답을 내는 일과 서로 다른 답을 내는 일은 다름. 아이디어의 품질에 앞 답과의 거리를 곱해 학습한 8B 모델은 세트 평가에서 앞섰음. 빈 think 블록의 의외의 성적, 출처 점수의 뜻, 한 사례 차이였던 실행 시험까지 원문으로 나눠 봄.",
+  "date": "2026-10-19",
+  "published_at": "2026-10-19T08:33:11+09:00",
+  "verified_date": "2026-10-19",
+  "reading_minutes": 12,
+  "tags": ["AI 연구", "아이디어 다양성", "강화학습"],
+  "cover": "assets/posts/diverse-scientific-ideas/pipeline.png",
+  "cover_alt": "원문 Figure 1의 품질과 최소 거리를 곱하는 세트 수준 학습",
+  "markdown": "diverse-scientific-ideas.md",
+  "paper_title": "Training Reasoning Models to Generate Diverse Scientific Ideas",
+  "paper_year": "2026",
+  "venue": "arXiv v1 · Under Review, 심사 중 프리프린트 (2026-10-19)",
+  "authors": "Manya Wadhwa · Pranav Narayanan Venkit · Hiroaki Hayashi · Yu Li · Tuhin Chakrabarty · Chien-Sheng Wu",
+  "source_url": "https://arxiv.org/abs/2610.22324v1",
+  "chapters": [
+    "좋은 아이디어 세 개가 겹친다면", "답 하나와 세트의 값", "선행 논문 요약과 네 필드", "CREATE에서 세트 학습으로", "가장 가까운 앞 답과의 거리", "잠재 영향력과 CU 심사", "사후 탐색문과 두 단계 학습", "세 개 쓰라는 프롬프트만으로", "품질만 보상하면 생기는 겹침", "think와 빈 think의 엇갈림", "출처 의존성과 인용 정확도", "세트 밖 전체 유형의 폭", "박사 4명의 파일럿", "90분·30달러·CPU 실행", "한 사례 차이인 성공률", "supports가 가설 확증은 아님", "DARLING 비교의 SFT 차이", "영어 학습과 외부 심사 비용", "다시 세 기회로 돌아가면", "현재 상태와 세 줄 요약"
+  ],
+  "attribution_url": "assets/posts/diverse-scientific-ideas/ATTRIBUTION.txt"
+}

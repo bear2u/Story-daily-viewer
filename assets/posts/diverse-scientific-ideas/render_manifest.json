@@ -1,0 +1,171 @@
+{
+  "engine": "WeasyPrint + MuPDF",
+  "reason": "Skill Chrome/Chromium renderer unavailable; static render fallback, not interactive browser testing",
+  "parts": [
+    {
+      "part": "01",
+      "card_size": [
+        1290,
+        2803
+      ],
+      "social_pages": 2
+    },
+    {
+      "part": "02",
+      "card_size": [
+        1290,
+        1604
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "03",
+      "card_size": [
+        1290,
+        1478
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "04",
+      "card_size": [
+        1290,
+        1592
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "05",
+      "card_size": [
+        1290,
+        1406
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "06",
+      "card_size": [
+        1290,
+        2044
+      ],
+      "social_pages": 2
+    },
+    {
+      "part": "07",
+      "card_size": [
+        1290,
+        2147
+      ],
+      "social_pages": 2
+    },
+    {
+      "part": "08",
+      "card_size": [
+        1290,
+        1855
+      ],
+      "social_pages": 2
+    },
+    {
+      "part": "09",
+      "card_size": [
+        1290,
+        2107
+      ],
+      "social_pages": 2
+    },
+    {
+      "part": "10",
+      "card_size": [
+        1290,
+        2270
+      ],
+      "social_pages": 2
+    },
+    {
+      "part": "11",
+      "card_size": [
+        1290,
+        1607
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "12",
+      "card_size": [
+        1290,
+        2042
+      ],
+      "social_pages": 2
+    },
+    {
+      "part": "13",
+      "card_size": [
+        1290,
+        1689
+      ],
+      "social_pages": 2
+    },
+    {
+      "part": "14",
+      "card_size": [
+        1290,
+        1449
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "15",
+      "card_size": [
+        1290,
+        1794
+      ],
+      "social_pages": 2
+    },
+    {
+      "part": "16",
+      "card_size": [
+        1290,
+        1299
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "17",
+      "card_size": [
+        1290,
+        1427
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "18",
+      "card_size": [
+        1290,
+        1189
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "19",
+      "card_size": [
+        1290,
+        1189
+      ],
+      "social_pages": 1
+    },
+    {
+      "part": "20",
+      "card_size": [
+        1290,
+        1739
+      ],
+      "social_pages": 2
+    }
+  ],
+  "social_size": [
+    1080,
+    1350
+  ],
+  "source_license": "CC BY-NC-SA 4.0; prior CREATE title CC BY 4.0"
+}

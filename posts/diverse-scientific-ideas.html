@@ -1,0 +1,305 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="각각 좋은 답을 내는 일과 서로 다른 답을 내는 일은 다름. 아이디어의 품질에 앞 답과의 거리를 곱해 학습한 8B 모델은 세트 평가에서 앞섰음. 빈 think 블록의 의외의 성적, 출처 점수의 뜻, 한 사례 차이였던 실행 시험까지 원문으로 나눠 봄.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="좋은 연구 아이디어 세 개가 모두 같은 얘기라면">
+<meta property="og:description" content="각각 좋은 답을 내는 일과 서로 다른 답을 내는 일은 다름. 아이디어의 품질에 앞 답과의 거리를 곱해 학습한 8B 모델은 세트 평가에서 앞섰음. 빈 think 블록의 의외의 성적, 출처 점수의 뜻, 한 사례 차이였던 실행 시험까지 원문으로 나눠 봄.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/diverse-scientific-ideas/pipeline.png">
+<title>좋은 연구 아이디어 세 개가 모두 같은 얘기라면 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/diverse-scientific-ideas.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 연구</span><span class="pill">아이디어 다양성</span><span class="pill">강화학습</span><span>·</span><time datetime="2026-10-19">2026. 10. 19</time><span>·</span><span>12분 읽기</span></div>
+<h1>좋은 연구 아이디어 세 개가 모두 같은 얘기라면</h1><p class="lead">각각 좋은 답을 내는 일과 서로 다른 답을 내는 일은 다름. 아이디어의 품질에 앞 답과의 거리를 곱해 학습한 8B 모델은 세트 평가에서 앞섰음. 빈 think 블록의 의외의 성적, 출처 점수의 뜻, 한 사례 차이였던 실행 시험까지 원문으로 나눠 봄.</p>
+
+<div class="article-details"><strong>Training Reasoning Models to Generate Diverse Scientific Ideas</strong><br>Manya Wadhwa · Pranav Narayanan Venkit · Hiroaki Hayashi · Yu Li · Tuhin Chakrabarty · Chien-Sheng Wu · 2026 · arXiv v1 · Under Review, 심사 중 프리프린트 (2026-10-19)<br>원문 그림과 함께 읽는 20파트 해설 · 판본 및 출처 확인: 2026-10-19</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">좋은 아이디어 세 개가 겹친다면</a><a href="#part-2">답 하나와 세트의 값</a><a href="#part-3">선행 논문 요약과 네 필드</a><a href="#part-4">CREATE에서 세트 학습으로</a><a href="#part-5">가장 가까운 앞 답과의 거리</a><a href="#part-6">잠재 영향력과 CU 심사</a><a href="#part-7">사후 탐색문과 두 단계 학습</a><a href="#part-8">세 개 쓰라는 프롬프트만으로</a><a href="#part-9">품질만 보상하면 생기는 겹침</a><a href="#part-10">think와 빈 think의 엇갈림</a><a href="#part-11">출처 의존성과 인용 정확도</a><a href="#part-12">세트 밖 전체 유형의 폭</a><a href="#part-13">박사 4명의 파일럿</a><a href="#part-14">90분·30달러·CPU 실행</a><a href="#part-15">한 사례 차이인 성공률</a><a href="#part-16">supports가 가설 확증은 아님</a><a href="#part-17">DARLING 비교의 SFT 차이</a><a href="#part-18">영어 학습과 외부 심사 비용</a><a href="#part-19">다시 세 기회로 돌아가면</a><a href="#part-20">현재 상태와 세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>AI에게 연구 아이디어 세 개를 부탁했음<br />
+각각 읽어보면 꽤 그럴듯함<br />
+그런데 전부 같은 방향이면<br />
+실험해볼 기회도 세 개 늘어난 걸까?</p>
+<p>이 질문을 학습 보상으로 옮긴 논문임 <br />
+제목부터 서로 다른 과학 아이디어를<br />
+생성하도록 훈련하겠다고 적혀 있음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문 제목·저자란 · Wadhwa 등, arXiv:2610.22324v1 p1"><img src="../assets/posts/diverse-scientific-ideas/header.png" alt="논문 제목·저자란 · Wadhwa 등, arXiv:2610.22324v1 p1" loading="lazy" decoding="async"></button><figcaption>논문 제목·저자란 · Wadhwa 등, arXiv:2610.22324v1 p1</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>Training Reasoning Models to Generate<br />
+Diverse Scientific Ideas <br />
+2026년 10월 15일 UTC 첫 공개<br />
+10월 19일 확인 기준<br />
+심사 중인 프리프린트임 </p>
+<p>저자는 Manya Wadhwa,<br />
+Pranav Narayanan Venkit,<br />
+Hiroaki Hayashi, Yu Li,<br />
+Tuhin Chakrabarty,<br />
+Chien-Sheng Wu임 <br />
+논문 당시 소속은 NYU와<br />
+Salesforce AI Research,<br />
+Stony Brook임 <br />
+Wadhwa의 해당 연구는<br />
+Salesforce 인턴 중 수행됐음</p></section>
+<section class="part" id="part-2"><p>세 개를 썼다는 사실만으로는<br />
+서로 다른 답이 보장되진 않음 </p>
+<p>이번 모델은 한 번의 출력 안에서<br />
+아이디어 세 개를 차례로 작성함<br />
+뒤에 쓰는 답은 앞의 답을 볼 수 있음 </p>
+<p>그림 오른쪽의 곱셈을 보면 됨<br />
+좋은 답인지 매긴 점수에<br />
+앞의 답과 얼마나 다른지를 곱함 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 세트 수준 학습 개요 · 원문 Figure 1, p2. 숫자는 설명용 예시"><img src="../assets/posts/diverse-scientific-ideas/pipeline.png" alt="세트 수준 학습 개요 · 원문 Figure 1, p2. 숫자는 설명용 예시" loading="lazy" decoding="async"></button><figcaption>세트 수준 학습 개요 · 원문 Figure 1, p2. 숫자는 설명용 예시</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그림의 마지막 답은 품질 0.5여도<br />
+거리 0.2를 곱해 보상 0.10만 받음<br />
+답 하나의 값과 세트에 보탠 값이 달라짐</p></section>
+<section class="part" id="part-3"><p>그 서로 다른 답을 내려면<br />
+무엇을 읽고 어떤 답을 쓰는지도 정해야 함</p>
+<p>모델에게 주는 건 선행 논문의 요약 카드임<br />
+그걸 바탕으로 문제의 빈칸을 찾고<br />
+검증할 주장과 실험 방법을 씀<br />
+어느 출처에서 무엇을 가져왔는지도 붙임 </p>
+<p>아래 원문에 네 필드가 한꺼번에 나옴</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 아이디어 카드의 네 필드 · 원문 §3, p3"><img src="../assets/posts/diverse-scientific-ideas/schema.png" alt="아이디어 카드의 네 필드 · 원문 §3, p3" loading="lazy" decoding="async"></button><figcaption>아이디어 카드의 네 필드 · 원문 §3, p3</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>실제 후속 논문의 아이디어는 따로 숨겨 둠<br />
+나중에 좋은 답인지 비교할 기준으로 씀 <br />
+선행 논문으로 후속 통찰을 재구성하던<br />
+GIANTS의 학습 대상 논문 모음을 재사용하되<br />
+입력 출처는 다시 고르고 요약했음</p></section>
+<section class="part" id="part-4"><p>그 답들의 가치를 재던 지표가 있었음 </p>
+<p>제1저자 Manya Wadhwa가 함께 쓴<br />
+2026년 3월의 CREATE를 보면<br />
+개념을 잇는 여러 경로를 만들게 하고<br />
+각 경로의 품질과 겹침을 함께 평가했음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: CREATE 제목 · Wadhwa 등, arXiv:2603.09970v2 p1"><img src="../assets/posts/diverse-scientific-ideas/prior_create.png" alt="CREATE 제목 · Wadhwa 등, arXiv:2603.09970v2 p1" loading="lazy" decoding="async"></button><figcaption>CREATE 제목 · Wadhwa 등, arXiv:2603.09970v2 p1</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그 지표가 Creative Utility, 줄여서 CU임<br />
+좋은 답을 많이 내도 서로 겹치면 덜 쳐줌 <br />
+이번엔 그 값을 학습 보상으로 개조한 것임 </p>
+<p>다양성을 훈련한 선행 방법도 있었음<br />
+2025년 9월 공개된 DARLING은<br />
+별도로 뽑은 응답들 사이의 차이를 보상했음<br />
+이번은 한 출력 안의 세트를 직접 다룸</p></section>
+<section class="part" id="part-5"><p>이 세트 안 보상을 식으로 보면</p>
+<p>쉽게 말하면<br />
+좋은 답을 또 써도 앞의 답과 같으면<br />
+추가 보상이 거의 사라지는 구조임 </p>
+<p>정확히는 각 답의 품질에<br />
+앞의 답 중 가장 가까운 것과의 거리를 곱함<br />
+첫 답의 거리는 1로 둠 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 세트 보상의 핵심 수식 · 원문 식 2, p3"><img src="../assets/posts/diverse-scientific-ideas/reward.png" alt="세트 보상의 핵심 수식 · 원문 식 2, p3" loading="lazy" decoding="async"></button><figcaption>세트 보상의 핵심 수식 · 원문 식 2, p3</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>가령 품질이 1이어도 거리가 0이면<br />
+그 답이 보태는 곱은 0임 <br />
+거리는 문제·주장·방법의 의미를 비교함<br />
+말만 바꿨는지보다 연구 방향이 다른지 묻는 셈임</p></section>
+<section class="part" id="part-6"><p>좋은 답이라는 판정도<br />
+실험 성공과는 구별해야 함</p>
+<p>심사 모델은 새 아이디어와 숨겨 둔 기준을 보고<br />
+어느 쪽이 장기 영향력이 클지 비교함<br />
+실제 미래 인용수나 참일 확률을 잰 게 아님 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 아이디어 품질의 상대 비교 · 원문 식 3, p4"><img src="../assets/posts/diverse-scientific-ideas/quality.png" alt="아이디어 품질의 상대 비교 · 원문 식 3, p4" loading="lazy" decoding="async"></button><figcaption>아이디어 품질의 상대 비교 · 원문 식 3, p4</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>학습 품질은 SciJudge-30B가 매기고<br />
+거리는 gpt-oss-120b가 매김 <br />
+SciJudge는 기존 논문들의 인용 비교로<br />
+상대 영향력을 학습한 선행 심사 모델임 <br />
+평가에선 품질을 GPT-5.4-mini가<br />
+거리와 출처 점수를 Gemini 3.5 Flash가 맡음 </p>
+<p>집계 방식이 궁금하면 여기만 더 보면 됨<br />
+학습 보상은 출력 순서대로 더하지만<br />
+평가 CU는 다음 기여가 큰 답부터 고름<br />
+뒤의 답은 덜 읽을 수 있다고 보고<br />
+인내 할인 0.9를 적용함 <br />
+긴 답이 유리해지는 효과를 보정한 품질 열과<br />
+CU는 집계가 달라 단순 곱으로 재계산하면 안 됨</p></section>
+<section class="part" id="part-7"><p>그 보상을 주기 전에<br />
+모델에게 답의 형식부터 가르쳤음</p>
+<p>Qwen3-8B에 예시 7,172개를 보여주는<br />
+지도 미세조정(SFT)을 먼저 수행함<br />
+그다음 보상으로 출력을 개선하는<br />
+강화학습을 GRPO 방식으로 진행함 </p>
+<p>표의 SFT 다음에 GRPO가 붙는 순서임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 학습 설정 · 원문 Table 7, p16"><img src="../assets/posts/diverse-scientific-ideas/training.png" alt="학습 설정 · 원문 Table 7, p16" loading="lazy" decoding="async"></button><figcaption>학습 설정 · 원문 Table 7, p16</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>교사 Claude는 답을 먼저 만든 뒤<br />
+그 답에 도달하는 탐색문을 사후 작성했음<br />
+실제 비공개 사고 기록을 받은 건 아님 <br />
+이 탐색문을 배우는 think와<br />
+같은 답에 빈 think 블록을 쓰는<br />
+no-think 버전을 나눔 </p>
+<p>실제 보상에는 형식 보너스와 길이 벌점도 있음</p></section>
+<section class="part" id="part-8"><p>그 학습까지 해야 할까<br />
+그냥 서로 다르게 세 개 쓰라고 하면?</p>
+<p>Claude Opus 4.8의 같은 평가에서<br />
+독립적으로 세 번 뽑은 답의 평균 거리는 0.24<br />
+한 번에 세 개를 쓰게 하면 0.80이었음 </p>
+<p>아래 표의 Sampled와 Set을 비교하면 됨</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 독립 샘플링과 세트 생성 비교 · 원문 Table 12, p22"><img src="../assets/posts/diverse-scientific-ideas/promptcontrol.png" alt="독립 샘플링과 세트 생성 비교 · 원문 Table 12, p22" loading="lazy" decoding="async"></button><figcaption>독립 샘플링과 세트 생성 비교 · 원문 Table 12, p22</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>프롬프트만 바꿔도 서로 다른 답이 늘었음<br />
+대신 길이 보정 품질 점수는<br />
+0.33에서 0.21로 내려감 <br />
+세트 CU는 0.34에서 0.38로 올랐지만<br />
+품질과 다양성이 함께 오른 건 아니었음</p></section>
+<section class="part" id="part-9"><p>세 개씩 쓰게 한 같은 조건에서<br />
+학습한 모델은 어디까지 갔을까</p>
+<p>1,740사례의 CU는 Claude가 0.38<br />
+제안한 no-think 모델이 0.64였음 <br />
+이 표에선 작은 8B 모델이 앞섰음<br />
+과학 연구 능력 전체의 서열은 아님 </p>
+<p>품질만 보상한 Impact-only와 맨 아래를 보면 됨</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 품질·거리·CU 비교 · 원문 Table 1, p6"><img src="../assets/posts/diverse-scientific-ideas/results.png" alt="품질·거리·CU 비교 · 원문 Table 1, p6" loading="lazy" decoding="async"></button><figcaption>품질·거리·CU 비교 · 원문 Table 1, p6</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>품질만 보상한 모델은 품질 0.43에<br />
+서로 다른 정도는 0.38이었음<br />
+두 축을 함께 보상한 no-think는<br />
+품질 0.50에 거리 0.88을 기록함 <br />
+보상이 개별 답의 품질뿐 아니라<br />
+세트 안의 겹침도 따지게 됨</p></section>
+<section class="part" id="part-10"><p>그 표에서 think 쪽을 다시 보면<br />
+탐색문을 쓰는 버전의 CU는 0.51임<br />
+빈 think 블록 쪽의 0.64보다 낮음 </p>
+<p>다만 여기선 사후 합성한 탐색문을 배웠음 </p>
+<p>세로축 CU만 보지 말고<br />
+가로축 출처 점수도 같이 보면 됨</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: CU와 출처 의존성의 관계 · 원문 Figure 2, p7"><img src="../assets/posts/diverse-scientific-ideas/tradeoff.png" alt="CU와 출처 의존성의 관계 · 원문 Figure 2, p7" loading="lazy" decoding="async"></button><figcaption>CU와 출처 의존성의 관계 · 원문 Figure 2, p7</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>think의 출처 점수는 0.81<br />
+no-think는 0.61이었음 <br />
+저자들은 최종 답에만 주는 보상이<br />
+중간 탐색에 충분한 영향을 못 줄 가능성과<br />
+적절한 창의 탐색문 설계의 어려움을 추정함<br />
+추론 자체가 불필요하다고 증명한 건 아님</p></section>
+<section class="part" id="part-11"><p>출처 점수 0.81은<br />
+인용 내용이 81% 정확하다는 뜻일까?</p>
+<p>여기서 grounding은 출처 의존성임<br />
+쉽게 말하면 붙여 둔 출처를 지워도<br />
+주장이 그대로 버티는지를 묻는 것임 </p>
+<p>정확히는 주장과 선언된 출처 설명을 보고<br />
+그 출처가 주장에 꼭 필요한지 심사함<br />
+심사자는 원본 출처 문서를 받지 않음 </p>
+<p>프롬프트 제목의 no source documents를 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 출처 의존성 심사의 입력 제한 · 원문 Prompt 8 제목, p42"><img src="../assets/posts/diverse-scientific-ideas/groundingheading.png" alt="출처 의존성 심사의 입력 제한 · 원문 Prompt 8 제목, p42" loading="lazy" decoding="async"></button><figcaption>출처 의존성 심사의 입력 제한 · 원문 Prompt 8 제목, p42</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그래서 실제 원문을 대조하는 인용 검증과 다름 <br />
+사람과의 100아이디어 대조에서도<br />
+순위 상관은 0.46이었음 <br />
+no-think는 강화학습 전 0.90에서 0.61로 내려감<br />
+CU가 오르는 동안 출처 의존성은 내려감</p></section>
+<section class="part" id="part-12"><p>출처를 떠나는 문제 말고도<br />
+서로 다른 답에는 다른 함정이 있음</p>
+<p>한 세트의 세 답이 안 겹쳐도<br />
+수많은 세트를 모으면 몇 가지 유형에 몰릴 수 있음<br />
+논문은 IdeaSeed의 500논문에서<br />
+각각 세 개를 뽑아 이 문제를 따로 살펴봄 </p>
+<p>아래 Hnorm은 방법 유형의 분포임<br />
+유형별 비중이 고를수록 1에 가까움 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전체 아이디어의 방법 유형 다양성 · 원문 Table 3, p7"><img src="../assets/posts/diverse-scientific-ideas/population.png" alt="전체 아이디어의 방법 유형 다양성 · 원문 Table 3, p7" loading="lazy" decoding="async"></button><figcaption>전체 아이디어의 방법 유형 다양성 · 원문 Table 3, p7</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>사람 제안은 0.87, Claude는 0.77<br />
+제안 no-think는 오히려 0.65였음 <br />
+세트 안에서 의미가 다르다는 성적이<br />
+전체 연구 방법의 폭까지 보장하진 않았음</p></section>
+<section class="part" id="part-13"><p>그럼 사람이 고를 때도<br />
+그 세트가 쓸 만해 보였을까</p>
+<p>자연어처리 분야 박사 학위 보유자 4명이<br />
+각자 전문성에 맞는 15사례를 봤음<br />
+모델 이름을 가리고 세 시스템을 비교한<br />
+소규모 파일럿임 </p>
+<p>세 개 중 몇 개나 유망한지 세는 표임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 전문가 파일럿 · 원문 Table 4, p8. Proposed는 no-think"><img src="../assets/posts/diverse-scientific-ideas/human.png" alt="전문가 파일럿 · 원문 Table 4, p8. Proposed는 no-think" loading="lazy" decoding="async"></button><figcaption>전문가 파일럿 · 원문 Table 4, p8. Proposed는 no-think</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>유망한 답은 Claude 평균 2.20개<br />
+제안 모델은 2.17개였음<br />
+서로 다른 답은 각각 2.72개와 2.83개 <br />
+Claude와 유망성은 비슷하고<br />
+고유한 답은 조금 더 많았다는 정도임<br />
+과학자를 이겼다는 시험은 아니었음</p></section>
+<section class="part" id="part-14"><p>좋아 보인 다음에는<br />
+실제로 시험할 수 있느냐가 남음</p>
+<p>아이디어의 주장은 실행 전에 고정해 두고<br />
+Claude Code에 넘겼음<br />
+작은 개념증명 실험을 시켰음<br />
+실행 모델은 Claude Opus 5였음 </p>
+<p>표 설명에 자원 제한이 박혀 있음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 실행 시험의 자원 제한 · 원문 Table 18 설명, p28"><img src="../assets/posts/diverse-scientific-ideas/executioncaption.png" alt="실행 시험의 자원 제한 · 원문 Table 18 설명, p28" loading="lazy" decoding="async"></button><figcaption>실행 시험의 자원 제한 · 원문 Table 18 설명, p28</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>아이디어 하나에 90분, 30달러<br />
+CPU만 쓰며 GPU는 주지 않았음 <br />
+총 132아이디어를 실행했고<br />
+think 모델만 14사례, 나머지는 15사례임 <br />
+대규모 본실험까지 끝내는 시험과는 거리가 있음</p></section>
+<section class="part" id="part-15"><p>그 조건에서 세 개 중 하나라도<br />
+실행 에이전트가 supports라고 판정한 비율임 <br />
+주장의 대부분이나 전부를 뒷받침하는<br />
+양성 결과가 나왔다는 자체 판정임 </p>
+<p>Claude는 27%, 제안 no-think는 33%<br />
+think는 29%였음 </p>
+<p>아래 표에서 k=3 열을 보면 됨</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 세트 안 하나 이상 supports인 비율 · 원문 Table 5, p8"><img src="../assets/posts/diverse-scientific-ideas/execution.png" alt="세트 안 하나 이상 supports인 비율 · 원문 Table 5, p8" loading="lazy" decoding="async"></button><figcaption>세트 안 하나 이상 supports인 비율 · 원문 Table 5, p8</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>no-think는 15사례 중 5사례에 해당함<br />
+Claude는 15사례 중 4사례임 <br />
+숫자 차이가 커 보이더라도<br />
+이 표에선 딱 한 사례 차이임 <br />
+판정도 실행한 에이전트의 자체 보고라<br />
+독립 검증된 발견 확률로 읽으면 안 됨</p></section>
+<section class="part" id="part-16"><p>supports라는 단어가<br />
+얼마나 좁은 뜻인지 보여주는 대목도 있음</p>
+<p>부록에는 AI 메모리를 시험하는<br />
+벤치마크 아이디어의 실행 사례가 나옴<br />
+검사 설계를 바꾸는 과정과 제약을 적고<br />
+저자들이 해석에 선을 그었음 </p>
+<p>그 아래 문장은 이렇게 구분함</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: supports 해석에 대한 저자 경고 · 원문 Appendix F, p28"><img src="../assets/posts/diverse-scientific-ideas/supportsquote.png" alt="supports 해석에 대한 저자 경고 · 원문 Appendix F, p28" loading="lazy" decoding="async"></button><figcaption>supports 해석에 대한 저자 경고 · 원문 Appendix F, p28</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>벤치마크를 만들어볼 가치가 있다는 뜻이지<br />
+그 가설이 확립됐다는 뜻은 아니라는 것임 <br />
+서로 다른 답을 더 많이 얻어도<br />
+그 답이 맞는지 확인하는 일은 남았음</p></section>
+<section class="part" id="part-17"><p>그 실행 판정도 조심스러운데<br />
+앞의 CU에서 DARLING과 비교할 때도<br />
+학습 설정을 한 번 더 봐야 함</p>
+<p>앞에서 나온 DARLING 재구현의 CU는 0.52임<br />
+제안 no-think의 0.64보다 낮지만<br />
+두 방법의 차이가 다양성 위치 하나뿐은 아님 </p>
+<p>부록에는 SFT 출발 조건이 적혀 있음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: DARLING 재구현의 SFT 조건 · 원문 Appendix B.3, p17"><img src="../assets/posts/diverse-scientific-ideas/darling_sft.png" alt="DARLING 재구현의 SFT 조건 · 원문 Appendix B.3, p17" loading="lazy" decoding="async"></button><figcaption>DARLING 재구현의 SFT 조건 · 원문 Appendix B.3, p17</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>DARLING 쪽은 과제용 SFT 없이 시작했고<br />
+제안 모델은 SFT 뒤에 강화학습했음 <br />
+원래 DARLING의 심사 도구도 교체했음 <br />
+그래서 이 비교 하나로<br />
+세트 안 보상만의 효과를 분리할 수는 없음</p></section>
+<section class="part" id="part-18"><p>그 출발 조건을 맞춘다고 해도<br />
+학습 범위와 비용은 따로 남음</p>
+<p>학습 자료는 영어 자연어처리 논문에 한정됨<br />
+평가는 16영역으로 넓혔지만<br />
+모든 분야에 같은 효과가 난다는 보장은 없음 <br />
+새 문헌을 직접 검색하며 발상하는 과정도<br />
+이번 설정에는 들어 있지 않음 </p>
+<p>8B라고 학습까지 가벼운 것은 아님<br />
+H200 8장으로 SFT 한 번에 약 46분<br />
+GRPO 학습은 약 10시간 걸렸음 <br />
+외부 거리 심사 API 비용까지 있으니<br />
+이 시간만으로 전체 비용을 비교할 수는 없음</p></section>
+<section class="part" id="part-19"><p>처음의 세 기회로 돌아가면<br />
+고를 만한 서로 다른 방향을 늘리는 학습은<br />
+이 평가에서 효과를 보였음 </p>
+<p>하지만 세 개를 냈다고<br />
+서로 다른 발견 세 개가 입증된 건 아님<br />
+출처 의존성이나 전체 방법 유형의 폭은<br />
+CU와 반대 방향으로 움직이기도 했음 </p>
+<p>앞의 메모리 벤치마크도<br />
+일단 만들어볼 가치가 있다는 단계였음 <br />
+다음엔 그 출처 의존성을 지키면서<br />
+여러 세트 전체의 탐색 폭도 넓힐 수 있는지<br />
+확인해야 함. 저자들도 남은 과제로 적어둠</p></section>
+<section class="part" id="part-20"><p>그 남은 과제를 둔 채<br />
+2026년 10월 19일 확인 기준으로<br />
+이 결과는 아직 심사 중인 프리프린트임 <br />
+이번 조사에서 독립 재현이나<br />
+정식 채택은 확인하지 못했음 <br />
+저자 코드 주소는 공개됐지만<br />
+이 해설에서 학습을 재실행한 건 아님 </p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.22324v1">원문 PDF</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.22324v1">arXiv</a> · <a target="_blank" rel="noopener" href="https://github.com/ManyaWadhwa/diverge_ideation">저자 코드</a></p>
+<p>그림·표는 Wadhwa 등 원문에서 가져옴<br />
+변경은 크롭·확대이며 내용은 바꾸지 않았음<br />
+원문과 이 해설은 CC BY-NC-SA 4.0 조건임<br />
+CREATE 제목 이미지는 원문 CC BY 4.0임 <br />
+<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">비영리·동일조건 라이선스</a></p>
+<p>3줄 요약<br />
+좋은 연구 아이디어 세 개도 겹치면 선택지가 좁아짐. <br />
+세트 학습은 CU를 높였지만 출처 의존성에 손해가 있었음. <br />
+실행 시험은 초기 가능성 평가이며 과학적 확증은 남았음.</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/diverse-scientific-ideas/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.22324v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/diverse-scientific-ideas.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

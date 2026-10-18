@@ -1,0 +1,10 @@
+Main work: Training Reasoning Models to Generate Diverse Scientific Ideas
+Authors: Manya Wadhwa; Pranav Narayanan Venkit; Hiroaki Hayashi; Yu Li; Tuhin Chakrabarty; Chien-Sheng Wu.
+Source: https://arxiv.org/pdf/2610.22324v1 (2026-10-15; accessed 2026-10-19).
+License: CC BY-NC-SA 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/
+Main-paper images and tables are cropped and raster-enlarged from this work; no scientific contents or numeric values were altered. Korean commentary, layout, and images containing adaptations are distributed noncommercially under the same CC BY-NC-SA 4.0 license. No endorsement by the authors or institutions is implied.
+
+prior_create.png: CREATE: Testing LLMs for Associative Creativity. Manya Wadhwa, Tiasa Singha Roy, Harvey Lederman, Junyi Jessy Li, Greg Durrett. https://arxiv.org/pdf/2603.09970v2 p1. Original license CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ (verified from arXiv official license link 2026-10-19). Title cropped and enlarged only. This underlying original remains CC BY 4.0.
+
+Fonts: Noto Sans KR (static derived instances), SIL Open Font License 1.1; see fonts/OFL.txt. Software-specific licenses are separate from commentary/source figure licenses.
+No claim of verified peer review, independent reproduction, actual future citation success, or proven scientific discoveries is made. Peer-review status and dates were checked 2026-10-19.
