@@ -1,0 +1,13 @@
+Paper: Blind Precise Assembly: Proprioceptive Sim-to-Real Peg-in-Hole for Diverse Parts
+Authors: Antonia Bronars, Younghyo Park, Kushal Kedia, Pulkit Agrawal.
+Source: https://arxiv.org/pdf/2610.23849v1
+First published: 2026-10-16 UTC. Checked: 2026-10-20.
+Status: Preprint, under review according to the author homepage. No acceptance claimed.
+DOI: 10.48550/arXiv.2610.23849 (arXiv marked registration pending on check date).
+Original paper, figure, table and short quotation crops: CC BY 4.0.
+License: https://creativecommons.org/licenses/by/4.0/
+Changes: crops, raster enlargement, placement with Korean explanatory commentary. No data changes. Individual page numbers and figure/table numbers appear in captions; exact bounding boxes in crop_manifest.json.
+Korean commentary and report layout are newly written. Original research claims retain their conditions and preprint status. No endorsement by the original authors is implied.
+Fonts: Noto Sans KR, SIL Open Font License; fonts/OFL.txt included in downloadable report.
+Prior research full PDFs are used for verification, not redistributed in this package. Links and verified relationships in lineage_research.md.
+Code generator mjfit is separately MIT-licensed: https://github.com/younghyopark/mjfit . Its license is not the source paper's license.

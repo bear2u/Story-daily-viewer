@@ -1,0 +1,223 @@
+{
+  "header": {
+    "page": 1,
+    "bbox_points": [
+      106,
+      78,
+      505,
+      161
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "real_sequence": {
+    "page": 2,
+    "bbox_points": [
+      106,
+      80,
+      506,
+      233
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "tasks": {
+    "page": 3,
+    "bbox_points": [
+      106,
+      80,
+      506,
+      291
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "generator": {
+    "page": 4,
+    "bbox_points": [
+      106,
+      80,
+      506,
+      213
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "geometry": {
+    "page": 4,
+    "bbox_points": [
+      312,
+      525,
+      506,
+      645
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "architecture": {
+    "page": 5,
+    "bbox_points": [
+      106,
+      289,
+      506,
+      394
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "deployed_flow": {
+    "page": 5,
+    "bbox_points": [
+      109,
+      338,
+      506,
+      393
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "visual_learning": {
+    "page": 6,
+    "bbox_points": [
+      106,
+      80,
+      506,
+      218
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "search": {
+    "page": 7,
+    "bbox_points": [
+      106,
+      80,
+      506,
+      309
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "probe": {
+    "page": 8,
+    "bbox_points": [
+      106,
+      80,
+      506,
+      204
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "probe_real": {
+    "page": 8,
+    "bbox_points": [
+      263,
+      80,
+      506,
+      204
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "real_rates": {
+    "page": 9,
+    "bbox_points": [
+      107,
+      80,
+      506,
+      226
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "table5": {
+    "page": 18,
+    "bbox_points": [
+      160,
+      295,
+      455,
+      375
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "contact_learning": {
+    "page": 19,
+    "bbox_points": [
+      106,
+      80,
+      506,
+      209
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "ood_table": {
+    "page": 20,
+    "bbox_points": [
+      142,
+      513,
+      468,
+      578
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "deployed_ranges": {
+    "page": 16,
+    "bbox_points": [
+      177,
+      296,
+      435,
+      384
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  },
+  "q_lastmile": {
+    "page": 10,
+    "bbox_points": [
+      186.0896759033203,
+      358.59429931640625,
+      307.267822265625,
+      368.6560363769531
+    ],
+    "source": "paper.pdf",
+    "source_url": "https://arxiv.org/pdf/2610.23849v1",
+    "license": "CC BY 4.0",
+    "changes": "crop, raster enlargement; no data changes"
+  }
+}

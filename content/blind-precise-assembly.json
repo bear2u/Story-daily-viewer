@@ -1,0 +1,22 @@
+{
+  "slug": "blind-precise-assembly",
+  "title": "로봇이 눈을 감고 구멍을 찾는 법",
+  "excerpt": "카메라와 힘 센서 값을 정책에 넣지 않고, 관절의 최근 0.6초 기록으로 접촉을 읽게 했음. 실물 부품 삽입은 237회 중 173회 성공. 가상 구멍의 틈을 보존한 방법부터, 영상 전용 정책과의 비교 조건과 초기 접촉의 한계까지 나눠 봄.",
+  "date": "2026-10-20",
+  "published_at": "2026-10-20T08:29:51+09:00",
+  "verified_date": "2026-10-20",
+  "reading_minutes": 11,
+  "tags": ["로봇", "접촉 조립", "시뮬레이션 학습"],
+  "cover": "assets/posts/blind-precise-assembly/real_sequence.png",
+  "cover_alt": "관절 입력만으로 접촉·탐색·착좌하는 실제 로봇의 원문 Figure 1",
+  "markdown": "blind-precise-assembly.md",
+  "paper_title": "Blind Precise Assembly: Proprioceptive Sim-to-Real Peg-in-Hole for Diverse Parts",
+  "paper_year": "2026",
+  "venue": "arXiv v1 · Under review, 심사 중 프리프린트 (2026-10-20)",
+  "authors": "Antonia Bronars · Younghyo Park · Kushal Kedia · Pulkit Agrawal",
+  "source_url": "https://arxiv.org/abs/2610.23849v1",
+  "chapters": [
+    "눈을 감고 구멍을 찾는 로봇", "움직임에 남은 접촉 흔적", "이미 닿은 상태에서 시작", "보지 않는 조작의 선행 연구", "세 조립 과제의 성공 조건", "가상 구멍을 막은 근사 오차", "틈을 보존하는 mjfit", "최근 0.6초를 읽는 정책", "훈련 때만 알려주는 접촉 정답", "64×64 영상 전용 정책과 비교", "익숙한 부품에선 영상이 더 빨랐음", "나선 탐색보다 짧은 경로", "70% 상태 분류의 뜻", "낯선 형상에서 36.2% 대 3.9%", "통제 연구와 실물 배포 정책의 차이", "실물 173/237회 성공", "시작점·20초·실물 동역학 측정", "정확한 위치 복원은 아님", "현재 공개와 심사 상태", "남은 조립 구간과 세 줄 요약"
+  ],
+  "attribution_url": "assets/posts/blind-precise-assembly/ATTRIBUTION.txt"
+}

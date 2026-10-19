@@ -1,0 +1,290 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="카메라와 힘 센서 값을 정책에 넣지 않고, 관절의 최근 0.6초 기록으로 접촉을 읽게 했음. 실물 부품 삽입은 237회 중 173회 성공. 가상 구멍의 틈을 보존한 방법부터, 영상 전용 정책과의 비교 조건과 초기 접촉의 한계까지 나눠 봄.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="로봇이 눈을 감고 구멍을 찾는 법">
+<meta property="og:description" content="카메라와 힘 센서 값을 정책에 넣지 않고, 관절의 최근 0.6초 기록으로 접촉을 읽게 했음. 실물 부품 삽입은 237회 중 173회 성공. 가상 구멍의 틈을 보존한 방법부터, 영상 전용 정책과의 비교 조건과 초기 접촉의 한계까지 나눠 봄.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/blind-precise-assembly/real_sequence.png">
+<title>로봇이 눈을 감고 구멍을 찾는 법 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/blind-precise-assembly.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">로봇</span><span class="pill">접촉 조립</span><span class="pill">시뮬레이션 학습</span><span>·</span><time datetime="2026-10-20">2026. 10. 20</time><span>·</span><span>11분 읽기</span></div>
+<h1>로봇이 눈을 감고 구멍을 찾는 법</h1><p class="lead">카메라와 힘 센서 값을 정책에 넣지 않고, 관절의 최근 0.6초 기록으로 접촉을 읽게 했음. 실물 부품 삽입은 237회 중 173회 성공. 가상 구멍의 틈을 보존한 방법부터, 영상 전용 정책과의 비교 조건과 초기 접촉의 한계까지 나눠 봄.</p>
+
+<div class="article-details"><strong>Blind Precise Assembly: Proprioceptive Sim-to-Real Peg-in-Hole for Diverse Parts</strong><br>Antonia Bronars · Younghyo Park · Kushal Kedia · Pulkit Agrawal · 2026 · arXiv v1 · Under review, 심사 중 프리프린트 (2026-10-20)<br>원문 그림과 함께 읽는 20파트 해설 · 판본 및 출처 확인: 2026-10-20</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">눈을 감고 구멍을 찾는 로봇</a><a href="#part-2">움직임에 남은 접촉 흔적</a><a href="#part-3">이미 닿은 상태에서 시작</a><a href="#part-4">보지 않는 조작의 선행 연구</a><a href="#part-5">세 조립 과제의 성공 조건</a><a href="#part-6">가상 구멍을 막은 근사 오차</a><a href="#part-7">틈을 보존하는 mjfit</a><a href="#part-8">최근 0.6초를 읽는 정책</a><a href="#part-9">훈련 때만 알려주는 접촉 정답</a><a href="#part-10">64×64 영상 전용 정책과 비교</a><a href="#part-11">익숙한 부품에선 영상이 더 빨랐음</a><a href="#part-12">나선 탐색보다 짧은 경로</a><a href="#part-13">70% 상태 분류의 뜻</a><a href="#part-14">낯선 형상에서 36.2% 대 3.9%</a><a href="#part-15">통제 연구와 실물 배포 정책의 차이</a><a href="#part-16">실물 173/237회 성공</a><a href="#part-17">시작점·20초·실물 동역학 측정</a><a href="#part-18">정확한 위치 복원은 아님</a><a href="#part-19">현재 공개와 심사 상태</a><a href="#part-20">남은 조립 구간과 세 줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>카메라도 힘 센서도 입력에 없는데<br />
+로봇은 부품을 어떻게 끼울까?</p>
+<p>관절이 얼마나 움직였는지<br />
+그 짧은 기록만 읽게 한 연구가 나왔음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문 제목·저자란 · Bronars 등, arXiv:2610.23849v1 p1"><img src="../assets/posts/blind-precise-assembly/header.png" alt="논문 제목·저자란 · Bronars 등, arXiv:2610.23849v1 p1" loading="lazy" decoding="async"></button><figcaption>논문 제목·저자란 · Bronars 등, arXiv:2610.23849v1 p1</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>Blind Precise Assembly:<br />
+Proprioceptive Sim-to-Real Peg-in-Hole<br />
+for Diverse Parts임 </p>
+<p>2026년 10월 16일 UTC 첫 공개<br />
+10월 20일 확인 기준 심사 중인 프리프린트임 <br />
+저자는 Antonia Bronars, Younghyo Park,<br />
+Kushal Kedia, Pulkit Agrawal임<br />
+논문상 소속은 네 명 모두 MIT,<br />
+Bronars와 Park은 공동 기여로 표시됨</p></section>
+<section class="part" id="part-2"><p>힘을 안 재도 움직임에는 흔적이 남음</p>
+<p>빈 공간에서 아래로 움직이라는 명령과<br />
+탁자에 닿은 뒤 같은 명령은<br />
+실제 관절 움직임이 달라짐<br />
+접촉이 팔에 전해지기 때문임 </p>
+<p>이 로봇은 관절 위치·속도와 이전 명령,<br />
+관절에서 계산한 그리퍼 상태를 읽음<br />
+영상이나 힘 측정값은 정책에 넣지 않음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 실행 중 입력과 제어 흐름 · 원문 Figure 7 아래쪽, p5"><img src="../assets/posts/blind-precise-assembly/deployed_flow.png" alt="실행 중 입력과 제어 흐름 · 원문 Figure 7 아래쪽, p5" loading="lazy" decoding="async"></button><figcaption>실행 중 입력과 제어 흐름 · 원문 Figure 7 아래쪽, p5</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>한순간의 관절 각도만 보지 않고<br />
+최근 0.6초의 기록을 함께 봄<br />
+그 차이에서 접촉 단서를 배우는 것임 <br />
+엔코더가 힘 센서로 바뀐다는 뜻은 아님</p></section>
+<section class="part" id="part-3"><p>그 흔적을 읽기 전에 필요한 조건이 있음<br />
+부품은 이미 잡혀 있고<br />
+구멍 주변 표면에 닿은 채 시작함 </p>
+<p>아래 실물 사진도 접촉에서 시작해<br />
+탐색 → 구멍에 걸침 → 착좌로 이어짐 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 실제 로봇의 삽입 과정 · 원문 Figure 1, p2"><img src="../assets/posts/blind-precise-assembly/real_sequence.png" alt="실제 로봇의 삽입 과정 · 원문 Figure 1, p2" loading="lazy" decoding="async"></button><figcaption>실제 로봇의 삽입 과정 · 원문 Figure 1, p2</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>부품을 집고 작업대 어딘가의 구멍까지<br />
+혼자 찾아가는 시스템은 아님<br />
+근처까지 가져온 뒤 남은 오차를 고치는<br />
+마지막 조립 동작을 다룬 연구임</p></section>
+<section class="part" id="part-4"><p>보지 않는 조작 자체가 처음은 아님</p>
+<p>같은 MIT의 Pulkit Agrawal이 참여한<br />
+CoRL 2021 연구는 시뮬레이션에서<br />
+손안의 물체 방향을 바꿨음<br />
+다만 비시각 정책도 물체 위치와<br />
+목표 회전 정보를 입력받았음 </p>
+<p>2026년 8월의 Blind Dexterity는<br />
+다른 연구팀이 휴머노이드의 관절·IMU로<br />
+가방 같은 물체를 조작한 선행 연구임<br />
+부드러운 접촉 작업도 보여줬음 </p>
+<p>이번 질문은 그보다 좁고 까다로움<br />
+구멍 위치나 부품 형상을 입력하지 않고<br />
+맞물림을 구별해 정밀 조립할 수 있느냐임</p></section>
+<section class="part" id="part-5"><p>그 조립 문제를 세 종류로 만들었음<br />
+부품 꽂기, 기어 맞물리기,<br />
+너트의 나사산 물리기임 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 세 시뮬레이션 과제와 부품 · 원문 Figure 2, p3"><img src="../assets/posts/blind-precise-assembly/tasks.png" alt="세 시뮬레이션 과제와 부품 · 원문 Figure 2, p3" loading="lazy" decoding="async"></button><figcaption>세 시뮬레이션 과제와 부품 · 원문 Figure 2, p3</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>너트는 나사산이 잡힌 뒤<br />
+4분의 1바퀴 돌면 성공으로 셈<br />
+끝까지 조여 고정하는 시험은 아님 </p>
+<p>부품 삽입의 학습 조건은<br />
+한쪽 면당 틈 1.0~1.5mm였음<br />
+세 과제 모두 시뮬레이션에서 시험했고<br />
+실물 전이는 부품 꽂기만 수행했음</p></section>
+<section class="part" id="part-6"><p>이 조립을 배우는데 가상 구멍이 막혀 있으면<br />
+아무리 잘 배워도 끼울 수가 없음</p>
+<p>로봇 시뮬레이터는 충돌 계산을 위해<br />
+복잡한 물체를 볼록한 조각들로 나눔<br />
+그 근사가 작은 틈을 먹어버리면<br />
+원래 들어갈 부품도 벽에 부딪힘 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 틈을 잠식한 충돌기하 비교 · 원문 Figure 5, p4"><img src="../assets/posts/blind-precise-assembly/geometry.png" alt="틈을 잠식한 충돌기하 비교 · 원문 Figure 5, p4" loading="lazy" decoding="async"></button><figcaption>틈을 잠식한 충돌기하 비교 · 원문 Figure 5, p4</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>비교 대상 CoACD는 2022년 SIGGRAPH의<br />
+범용 충돌기하 분해 연구임<br />
+이번 설정에선 구멍 안으로 벽이 튀어나왔음 <br />
+작은 조립 틈에 비해<br />
+근사 오차가 커진 사례로 보면 됨</p></section>
+<section class="part" id="part-7"><p>그래서 구멍의 빈 공간부터 보존했음</p>
+<p>공개 생성기 mjfit은 구멍 둘레의 판을<br />
+볼록한 조각으로 쪼개고 두께를 줌<br />
+끼울 부품은 지정한 틈만큼 작게 만듦 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 생성 가능한 충돌기하 예시 · 원문 Figure 4, p4"><img src="../assets/posts/blind-precise-assembly/generator.png" alt="생성 가능한 충돌기하 예시 · 원문 Figure 4, p4" loading="lazy" decoding="async"></button><figcaption>생성 가능한 충돌기하 예시 · 원문 Figure 4, p4</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>곡선은 다각형으로 근사하므로<br />
+모서리에 추가 유격이 생길 수는 있음<br />
+모든 형상 오차가 0인 방법은 아님 </p>
+<p>원문에 나오는 20마이크로미터 틈은<br />
+별도의 충돌기하 벤치마크 조건임<br />
+실물 로봇이 그 정밀도로 조립했다는 뜻도,<br />
+그림의 USB-C를 실물로 꽂았다는 뜻도 아님</p></section>
+<section class="part" id="part-8"><p>그 가상 세계에서 움직임 기록을 배움<br />
+부품 모양, 잡은 자세, 마찰 등을 바꾼<br />
+12,288개 병렬 환경에서 시행착오를 돌림 </p>
+<p>기록을 압축하는 쪽은 비유하면<br />
+최근 동작을 읽는 짧은 메모장임<br />
+지금 눌린 건지, 걸린 건지 구별할<br />
+단서를 남기도록 학습시킴 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 훈련 때와 실행 때의 구조 · 원문 Figure 7, p5"><img src="../assets/posts/blind-precise-assembly/architecture.png" alt="훈련 때와 실행 때의 구조 · 원문 Figure 7, p5" loading="lazy" decoding="async"></button><figcaption>훈련 때와 실행 때의 구조 · 원문 Figure 7, p5</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>정확히는 초당 50번 모은 관측 30개를<br />
+시간 순서대로 읽는 신경망에 넣음<br />
+이게 TCN, 시간 합성곱 신경망임<br />
+그 기록을 32차원 내부 표현으로 압축함<br />
+현재 관측과 함께 정책망에 넣어<br />
+7개 관절의 위치 증분을 출력함 <br />
+관절 제어기가 그 명령을 따라 움직임</p></section>
+<section class="part" id="part-9"><p>이 메모장을 잘 만들도록<br />
+접촉 정답은 훈련 때만 알려줌</p>
+<p>시뮬레이터는 부품 어디가 닿았는지 앎<br />
+내부 표현에서 그 접촉을 맞히게 하되<br />
+맞힌 결과를 정책 입력으로 넣진 않음<br />
+접촉 예측기는 실물 배포 때 버림 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 접촉 보조학습 유무에 따른 학습 곡선 · 원문 Figure 14, p19"><img src="../assets/posts/blind-precise-assembly/contact_learning.png" alt="접촉 보조학습 유무에 따른 학습 곡선 · 원문 Figure 14, p19" loading="lazy" decoding="async"></button><figcaption>접촉 보조학습 유무에 따른 학습 곡선 · 원문 Figure 14, p19</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>보조학습을 빼도 세 과제를 배우긴 했음<br />
+다만 훈련 성공률 90%까지 필요한<br />
+환경 스텝은 부품 꽂기·기어·너트 순으로<br />
+2.7·3.8·5.1배였음<br />
+실제 훈련 시간이나 요금의 배수는 아님 </p>
+<p>훈련용 평가자는 정답 상태를 더 많이 보되<br />
+실제 행동을 고르는 쪽과는 분리했음<br />
+이런 비대칭 actor-critic 구조도 사용함<br />
+Pinto 등의 RSS 2018 연구를 잇는 방식임</p></section>
+<section class="part" id="part-10"><p>그럼 눈으로 보면 더 쉽지 않을까?<br />
+연구진도 손목 카메라 정책과 비교했음 </p>
+<p>단, 비교 대상은 64×64 RGB 영상만 보는 정책임<br />
+영상과 관절을 함께 쓰는 정책이 아님 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 관절 입력과 영상 입력의 학습 곡선 · 원문 Figure 8, p6"><img src="../assets/posts/blind-precise-assembly/visual_learning.png" alt="관절 입력과 영상 입력의 학습 곡선 · 원문 Figure 8, p6" loading="lazy" decoding="async"></button><figcaption>관절 입력과 영상 입력의 학습 곡선 · 원문 Figure 8, p6</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>과제, 시작 조건, 보상, 행동과<br />
+성공 기준은 맞췄음<br />
+둘 다 최근 0.6초 기록을 사용함 <br />
+영상 인코더와 관절 인코더 구조는 다름 </p>
+<p>그러니 아래 결과는 이 두 설계의 비교임<br />
+카메라를 붙이면 성능이 나빠진다거나<br />
+모든 시각 모델보다 낫다는 실험은 아님</p></section>
+<section class="part" id="part-11"><p>익숙한 부품에선 성공률과 속도가 엇갈렸음</p>
+<p>통제 연구용 정책의 분포 내 삽입 시험에서<br />
+성공률은 관절 쪽 99.4%, 영상 쪽 97.2%임<br />
+하지만 착좌까지 시간은 0.80초 대 0.44초였음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 익숙한 삽입 과제의 성공률·시간·경로 · 원문 Table 5, p18"><img src="../assets/posts/blind-precise-assembly/table5.png" alt="익숙한 삽입 과제의 성공률·시간·경로 · 원문 Table 5, p18" loading="lazy" decoding="async"></button><figcaption>익숙한 삽입 과제의 성공률·시간·경로 · 원문 Table 5, p18</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>관절 쪽이 조금 더 자주 성공해도<br />
+영상 쪽이 더 빨리 들어갔음 <br />
+각 학습 시드당 8,192회 시험한 뒤<br />
+두 시드 결과를 평균한 값임<br />
+시간은 중앙값으로 집계함 </p>
+<p>이마저 모든 과제의 속도 순서는 아님<br />
+별도 한 시드의 성공 시험에서<br />
+기어는 관절 쪽 0.58초,<br />
+영상 쪽 0.64초로 순서가 바뀜</p></section>
+<section class="part" id="part-12"><p>그 속도 차이를 경로에서도 살펴봤음</p>
+<p>구멍을 못 보면 나선형으로 훑으면 될 듯함<br />
+하지만 학습 정책은 접촉에 반응하며<br />
+나선 탐색보다 짧게 움직였음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 나선 탐색·관절 정책·영상 정책의 경로 · 원문 Figure 9, p7"><img src="../assets/posts/blind-precise-assembly/search.png" alt="나선 탐색·관절 정책·영상 정책의 경로 · 원문 Figure 9, p7" loading="lazy" decoding="async"></button><figcaption>나선 탐색·관절 정책·영상 정책의 경로 · 원문 Figure 9, p7</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>같은 시작점 중 두 정책이 모두 성공한<br />
+3,964개를 골라 옆으로 이동한 거리를 재니<br />
+중앙값은 관절 37mm, 나선 탐색 95mm였음<br />
+영상 정책은 20mm로 더 짧았음 </p>
+<p>나선 쪽에는 부품 방향과<br />
+유리한 출발 방향까지 알려줬음<br />
+정해진 궤적을 무조건 훑는 것과<br />
+접촉 뒤 다음 행동을 바꾸는 건 달랐던 셈임</p></section>
+<section class="part" id="part-13"><p>그 기록에 접촉 단서가 든 건<br />
+별도 시험으로도 살폈음</p>
+<p>학습된 내부 표현을 고정하고<br />
+‘들림’, ‘부분 삽입’, ‘걸림’ 같은<br />
+7가지 상태를<br />
+간단한 분류기가 읽을 수 있는지 봤음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 삽입 상태 분류와 시간 흐름 예시 · 원문 Figure 10a, p8"><img src="../assets/posts/blind-precise-assembly/probe.png" alt="삽입 상태 분류와 시간 흐름 예시 · 원문 Figure 10a, p8" loading="lazy" decoding="async"></button><figcaption>삽입 상태 분류와 시간 흐름 예시 · 원문 Figure 10a, p8</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>배포용 정책의 시뮬레이션 시험에서<br />
+균형 정확도는 기록 표현 70%,<br />
+현재 관측만 쓰면 56%였음<br />
+무작위 인코더는 33%, 우연 수준은 14%임 </p>
+<p>이 70%는 조립 성공률이 아님<br />
+종류별 적중률을 고르게 반영한 분류 점수임 <br />
+현재 관측은 두고 기록 표현만 바꿔도<br />
+행동이 달라져, 기록이 쓰이는지도 확인했음</p></section>
+<section class="part" id="part-14"><p>그 접촉 기록이 새 형상에서도 통할까?</p>
+<p>통제 연구용 삽입 정책은<br />
+경기장 트랙처럼 생긴 단면으로 훈련했음<br />
+처음 보는 볼록 다각형 단면에선<br />
+관절 36.2%, 영상 3.9%가 성공했음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 새 부품 조건별 삽입 성공률 · 원문 Table 7의 peg 행, p20"><img src="../assets/posts/blind-precise-assembly/ood_table.png" alt="새 부품 조건별 삽입 성공률 · 원문 Table 7의 peg 행, p20" loading="lazy" decoding="async"></button><figcaption>새 부품 조건별 삽입 성공률 · 원문 Table 7의 peg 행, p20</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>36.2%가 3.9%보다 높긴 함<br />
+그래도 관절 정책조차 약 64%는 실패함<br />
+낯선 모양도 안정적으로 해결했다고<br />
+읽으면 과장임 </p>
+<p>이건 두 학습 시드로 시험한<br />
+시뮬레이션의 형상 일반화 결과임<br />
+실물 성공률과는 별개로 봐야 함</p></section>
+<section class="part" id="part-15"><p>실물에는 다른 학습 범위를 쓴 정책을 보냈음</p>
+<p>앞의 통제 연구용 모델보다<br />
+배포용은 다각형·매끈한 곡선·혼합 단면과<br />
+손잡이까지 포함해 더 다양하게 훈련했음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 실물 배포 정책의 부품 학습 범위 일부 · 원문 Table 2, p16"><img src="../assets/posts/blind-precise-assembly/deployed_ranges.png" alt="실물 배포 정책의 부품 학습 범위 일부 · 원문 Table 2, p16" loading="lazy" decoding="async"></button><figcaption>실물 배포 정책의 부품 학습 범위 일부 · 원문 Table 2, p16</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>잡은 자세와 마찰 등의 범위도 넓혔음<br />
+그 뒤 하나의 정책을 고정해 실물에 옮겼음 </p>
+<p>앞의 99.4%와 뒤의 73%를 빼서<br />
+같은 모델이 현실에서 그만큼 떨어졌다고<br />
+계산하면 안 됨<br />
+학습한 부품 분포부터 달랐음</p></section>
+<section class="part" id="part-16"><p>그 한 정책으로 실물 부품 8종을 시험했음<br />
+Flexiv Rizon 4S 팔과<br />
+Robotiq 2F-85 그리퍼에서<br />
+50Hz로 실행한 결과임 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 실물 부품별 성공률·시뮬레이션 대조 · 원문 Figure 12, p9"><img src="../assets/posts/blind-precise-assembly/real_rates.png" alt="실물 부품별 성공률·시뮬레이션 대조 · 원문 Figure 12, p9" loading="lazy" decoding="async"></button><figcaption>실물 부품별 성공률·시뮬레이션 대조 · 원문 Figure 12, p9</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>전체 237회 중 173회 성공,<br />
+반올림하면 73%였음 <br />
+훈련 범위 안 5종의 성공률은 73~80%였음<br />
+더 좁은 틈·큰 부품·큰 손잡이 3종은<br />
+그 순서대로 66%·66%·72%였음 </p>
+<p>좁은 틈은 한쪽 면당 0.5mm였음<br />
+새 부품마다 실물 시연을 모으거나<br />
+정책을 미세조정하지 않고 시험했음</p></section>
+<section class="part" id="part-17"><p>그 73%에는 시작점과 제한시간이 있음</p>
+<p>부품은 이미 표면에 닿아 있고<br />
+구멍 근처에서 시작했음<br />
+착좌 여부는 사람이 판정했고<br />
+20초 안에 못 넣으면 실패로 셈 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 저자가 명시한 적용 범위 · 원문 Limitations, p10의 짧은 인용"><img src="../assets/posts/blind-precise-assembly/q_lastmile.png" alt="저자가 명시한 적용 범위 · 원문 Limitations, p10의 짧은 인용" loading="lazy" decoding="async"></button><figcaption>저자가 명시한 적용 범위 · 원문 Limitations, p10의 짧은 인용</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>원문도 마지막 구간의 조작 기술이라 적음<br />
+잡은 부품이 미끄러져 구멍에서 멀리 떨어지면<br />
+다시 집어 오는 큰 복구는 못 함 </p>
+<p>또 실물 정보를 전혀 안 쓴 건 아님<br />
+팔의 마찰·감쇠 등 동역학은<br />
+실제 측정으로 맞춘 뒤 훈련했음<br />
+과제 시연·정책 미세조정이 없다는 것과<br />
+이 사전 측정은 구분해야 함</p></section>
+<section class="part" id="part-18"><p>관절 기록이 정확한 물체 위치를<br />
+복원한 것도 아님</p>
+<p>실물 추가 시험에서는 손가락 안에서<br />
+부품이 미끄러지고 돌아갔음<br />
+관절과 계획한 잡기 자세로 계산한 위치는<br />
+성공해 끼워진 순간에도<br />
+실제 착좌 위치와 중앙값 6.6mm 차이 났음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 시뮬레이션·실물의 상태 해독 예시 · 원문 Figure 10a 오른쪽, p8"><img src="../assets/posts/blind-precise-assembly/probe_real.png" alt="시뮬레이션·실물의 상태 해독 예시 · 원문 Figure 10a 오른쪽, p8" loading="lazy" decoding="async"></button><figcaption>시뮬레이션·실물의 상태 해독 예시 · 원문 Figure 10a 오른쪽, p8</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>들어갔다는 상태를 읽는 정확도도<br />
+같은 시작점의 시뮬레이션과 실물이 달랐음 <br />
+접촉의 유용한 단서를 배웠다는 증거와<br />
+정확한 위치 추정기가 됐다는 주장은 다름 </p>
+<p>영상과 관절을 합치면 더 좋아질지,<br />
+더 멀리서 시작해도 될지는<br />
+이 비교 실험으로 답할 수 없음</p></section>
+<section class="part" id="part-19"><p>이 한계를 둔 채 공개·검증 상태도 보면<br />
+2026년 10월 20일 기준<br />
+저자 홈페이지는 이 논문을 심사 중으로 표시함<br />
+완료된 동료심사 결과로 소개하진 않겠음 </p>
+<p>MIT 연구진의 논문이며<br />
+감사의 글에는 한국 산업통상자원부와<br />
+KIAT 지원도 명시돼 있음 </p>
+<p>프로젝트 영상과 충돌기하 생성기는 공개됨<br />
+다만 생성기 공개를 전체 학습 코드 공개나<br />
+독립 재현 완료로 넓힐 수는 없음 <br />
+이번 검색 범위에서 확인 가능한<br />
+독립 후속 검증 논문은 찾지 못했음 </p>
+<p>arXiv DOI는 등록 대기로 표시돼 있어<br />
+아래 고정 버전 PDF를 원문으로 연결함</p></section>
+<section class="part" id="part-20"><p>처음 질문의 답은 관절 움직임에 있었음<br />
+안 보이는 접촉도 움직임을 바꾸고<br />
+그 짧은 기록이 다음 행동의 단서가 됐음 </p>
+<p>가상 구멍의 틈부터 보존한 뒤<br />
+현실의 마지막 몇 동작까지 옮긴 연구였음 <br />
+그 앞의 찾기·집기, 그 뒤의 큰 실패 복구는<br />
+아직 별도 문제로 남음 </p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.23849v1">원문 PDF</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.23849v1">arXiv</a><br />
+<a target="_blank" rel="noopener" href="https://younghyopark.me/blind-proprioceptive-assembly/">저자 프로젝트</a> · <a target="_blank" rel="noopener" href="https://github.com/younghyopark/mjfit">mjfit</a><br />
+<a target="_blank" rel="noopener" href="https://proceedings.mlr.press/v164/chen22a.html">Chen 등 선행 연구</a> · <a target="_blank" rel="noopener" href="https://www.roboticsproceedings.org/rss14/p08.html">Pinto 등</a><br />
+<a target="_blank" rel="noopener" href="https://doi.org/10.1145/3528223.3530103">CoACD</a> · <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2608.29487v1">Blind Dexterity</a><br />
+그림·표·짧은 인용: Bronars 등, 원문 v1에서 크롭·확대.<br />
+<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. 수치·그림 내용 변경 없음.</p>
+<p>관절의 최근 0.6초 기록으로 접촉 조립을 배우는 연구임.<br />
+실물 삽입은 초기 접촉·20초 조건에서 173/237회 성공했음.<br />
+영상 전용 정책과의 비교로, 보편적 관절 우위의 입증은 아님.</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/blind-precise-assembly/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.23849v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/blind-precise-assembly.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>
