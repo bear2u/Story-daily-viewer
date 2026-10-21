@@ -1,0 +1,234 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="49개 코딩 에이전트 스킬을 565개 과제에 넣어 봤더니 39개는 성공률을 못 올렸고 평균 이득은 +1.2%p였음. 성공률 100% 그대로인데 토큰이 450.8% 늘어난 사례와 오래된 Linkerd 예시가 답을 망친 장면까지 따라감.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="전문가 매뉴얼이 AI 코딩을 망친 경우 나옴">
+<meta property="og:description" content="49개 코딩 에이전트 스킬을 565개 과제에 넣어 봤더니 39개는 성공률을 못 올렸고 평균 이득은 +1.2%p였음. 성공률 100% 그대로인데 토큰이 450.8% 늘어난 사례와 오래된 Linkerd 예시가 답을 망친 장면까지 따라감.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/swe-skills-bench/fig05_interference.png">
+<title>전문가 매뉴얼이 AI 코딩을 망친 경우 나옴 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/swe-skills-bench.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 에이전트</span><span class="pill">개발자 도구</span><span class="pill">벤치마크</span><span>·</span><time datetime="2026-10-22">2026. 10. 22</time><span>·</span><span>8분 읽기</span></div>
+<h1>전문가 매뉴얼이 AI 코딩을 망친 경우 나옴</h1><p class="lead">49개 코딩 에이전트 스킬을 565개 과제에 넣어 봤더니 39개는 성공률을 못 올렸고 평균 이득은 +1.2%p였음. 성공률 100% 그대로인데 토큰이 450.8% 늘어난 사례와 오래된 Linkerd 예시가 답을 망친 장면까지 따라감.</p>
+
+<div class="article-details"><strong>SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?</strong><br>Tingxu Han · Yi Zhang · Wei Song · Chunrong Fang · Zhenyu Chen · Youcheng Sun · Lijie Hu · 2026 · arXiv:2603.15401v1 · 예비 결과 프리프린트 · 동료평가 채택 미확인 (2026-10-22)<br>원문 그림과 함께 읽는 17파트 해설 · 판본 및 출처 확인: 2026-10-22</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">매뉴얼은 자산인가 버그인가</a><a href="#part-2">스킬은 추론 때 넣는 절차서</a><a href="#part-3">SWE-bench에서 SkillsBench까지</a><a href="#part-4">84,192개에서 49개로</a><a href="#part-5">요구사항과 pytest 판정</a><a href="#part-6">실제 저장소와 생성 과제</a><a href="#part-7">평균 +1.2%p의 속내</a><a href="#part-8">도움도 비용이 다름</a><a href="#part-9">성공률 100%, 토큰 +450.8%</a><a href="#part-10">성능을 깎은 세 스킬</a><a href="#part-11">Linkerd의 오래된 예시</a><a href="#part-12">앵커링·환각·개념 번짐</a><a href="#part-13">실무에서 어떻게 볼까</a><a href="#part-14">단일 모델과 한 스킬 한계</a><a href="#part-15">실패 307건을 분해한 후속</a><a href="#part-16">스킬을 고쳐 쓰는 SkillMorph</a><a href="#part-17">프리프린트 상태와 3줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>코딩 에이전트한테<br />
+전문가 절차서를 넣어 줬는데<br />
+오히려 정답률이 떨어지면 어떡함?</p>
+<p>그 절차서는 자산임<br />
+아니면 문맥에 심은 버그임?</p>
+<p>이번 논문은 그 질문을<br />
+49개 공개 스킬로 시험했음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 핵심 결과를 적은 원문 초록"><img src="../assets/posts/swe-skills-bench/q_abstract.png" alt="핵심 결과를 적은 원문 초록" loading="lazy" decoding="async"></button><figcaption>핵심 결과를 적은 원문 초록</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>먼저 여기서 스킬은<br />
+새 모델을 학습시키는 게 아님</p>
+<p>코딩 규칙, 명령, 예시를 묶은<br />
+SKILL.md 같은 절차서임</p>
+<p>요구사항이 들어오면<br />
+관련 스킬을 골라 문맥에 넣고<br />
+코드 작성과 테스트에 쓰게 함</p>
+<p>쉽게 말하면 참고 매뉴얼임<br />
+정확히는 추론 때 주입하는<br />
+구조화된 절차 지식임 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 스킬을 골라 개발 작업에 넣는 흐름, 원문 Figure 1"><img src="../assets/posts/swe-skills-bench/fig01_workflow.png" alt="스킬을 골라 개발 작업에 넣는 흐름, 원문 Figure 1" loading="lazy" decoding="async"></button><figcaption>스킬을 골라 개발 작업에 넣는 흐름, 원문 Figure 1</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-3"><p>근데 스킬 평가는 원래 애매했음</p>
+<p>SWE-bench는 실제 GitHub 이슈를<br />
+코딩 에이전트가 고치는지 봤지만<br />
+스킬 유무는 비교하지 않았음 </p>
+<p>SkillsBench가 처음으로<br />
+스킬 있음과 없음을 짝지었음 </p>
+<p>다만 이번 논문은<br />
+SWE가 84개 중 16개라고 적었음 </p>
+<p>SkillsBench v1 초록은 전체 86개라<br />
+두 원문의 규모 표기가 맞지 않음 </p>
+<p>이번 팀은 그 질문을<br />
+소프트웨어 개발에만 좁혔음</p>
+<p>같은 저자 Wei Song은<br />
+2025년 MCPGauge에서도<br />
+외부 문맥의 도움과 비용을 쟀음 </p>
+<p>팀은 Nanjing·SCUT·UNSW·MBZUAI임 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 스킬과 과제의 분야별 분포, 원문 Figure 2"><img src="../assets/posts/swe-skills-bench/fig02_distribution.png" alt="스킬과 과제의 분야별 분포, 원문 Figure 2" loading="lazy" decoding="async"></button><figcaption>스킬과 과제의 분야별 분포, 원문 Figure 2</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-4"><p>그래서 공개 스킬 84,192개를<br />
+세 단계로 걸렀음 </p>
+<p>분야가 맞는지 보고<br />
+내용이 겹치는 걸 솎고<br />
+실험 가능한지 확인함</p>
+<p>그 끝에 49개가 남았음<br />
+각 스킬마다 실제 저장소를 고정하고<br />
+요구사항 약 11개씩을 붙였음 </p>
+<p>초록과 결과표는 565개 과제임 </p>
+<p>그런데 아래 Figure 3 상자는<br />
+550개라고 적었음<br />
+원문 내부 숫자 불일치임 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 스킬 선별부터 짝지은 평가까지, 원문 Figure 3"><img src="../assets/posts/swe-skills-bench/fig03_pipeline.png" alt="스킬 선별부터 짝지은 평가까지, 원문 Figure 3" loading="lazy" decoding="async"></button><figcaption>스킬 선별부터 짝지은 평가까지, 원문 Figure 3</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-5"><p>이제 과제 하나를 열어 보셈</p>
+<p>고정 커밋의 저장소<br />
+Ubuntu 컨테이너<br />
+요구사항 문서<br />
+선택적인 스킬이 한 묶음임 </p>
+<p>요구사항의 합격 조건마다<br />
+pytest 검증기를 붙였음 </p>
+<p>판정은 LLM 심사위원이 아니라<br />
+실행되는 테스트가 맡았음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 저장소 선택과 요구사항 작성, 스킬 배치, 원문 Figure 4"><img src="../assets/posts/swe-skills-bench/fig04_taskgen.png" alt="저장소 선택과 요구사항 작성, 스킬 배치, 원문 Figure 4" loading="lazy" decoding="async"></button><figcaption>저장소 선택과 요구사항 작성, 스킬 배치, 원문 Figure 4</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>그런데 완전한 실제 이슈는 아님</p>
+<p>저장소는 실제 공개 프로젝트지만<br />
+요구사항은 정해진 프롬프트로 만들었음<br />
+검증기도 모델이 작성했음 </p>
+<p>실행 판정은 결정적이어도<br />
+무엇을 과제로 만들었는지는<br />
+연구 설계의 영향을 받음</p>
+<p>또 논문 안에서 스킬 위치가<br />
+프로젝트 루트와 ~/.claude로 갈림 </p>
+<p>재현할 땐 코드 기준으로<br />
+주입 위치부터 확인해야 함</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 과제 요구사항 생성 파이프라인, 원문 Figure 4"><img src="../assets/posts/swe-skills-bench/fig04_taskgen.png" alt="과제 요구사항 생성 파이프라인, 원문 Figure 4" loading="lazy" decoding="async"></button><figcaption>과제 요구사항 생성 파이프라인, 원문 Figure 4</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-7"><p>이 조건에서 평균은<br />
+스킬 없음 89.8%<br />
+스킬 있음 91.0%였음 </p>
+<p>차이는 +1.2%p임</p>
+<p>반면 평균 토큰은<br />
+303K에서 335K로 늘었음<br />
+증가율은 +10.5%였음 </p>
+<p>39개 스킬은 성공률 변화가 0이었고<br />
+그중 24개는 양쪽 다 100%였음 </p>
+<p>스킬이 무효인 경우와<br />
+시험이 너무 쉬운 경우가 섞여 있음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 49개 스킬 결과표 앞부분, 원문 Table 2"><img src="../assets/posts/swe-skills-bench/tab02_top.png" alt="49개 스킬 결과표 앞부분, 원문 Table 2" loading="lazy" decoding="async"></button><figcaption>49개 스킬 결과표 앞부분, 원문 Table 2</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>그 평균 아래가 더 중요함</p>
+<p>risk-metrics-calculation은<br />
+70%에서 100%로 올랐음 </p>
+<p>토큰도 778K에서 507K로<br />
+34.8% 줄었음 </p>
+<p>반대로 tdd-workflow는<br />
+21.4%에서 28.6%로 올랐지만<br />
+토큰은 78.6% 늘었음 </p>
+<p>성공률만 보면 둘 다 도움임<br />
+비용까지 보면 성격이 다름</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 개선과 악화 사례가 있는 결과표 뒷부분, 원문 Table 2"><img src="../assets/posts/swe-skills-bench/tab02_bottom.png" alt="개선과 악화 사례가 있는 결과표 뒷부분, 원문 Table 2" loading="lazy" decoding="async"></button><figcaption>개선과 악화 사례가 있는 결과표 뒷부분, 원문 Table 2</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>여기서 제일 이상한 줄이 나옴</p>
+<p>service-mesh-observability는<br />
+양쪽 모두 성공률 100%였음</p>
+<p>그런데 토큰은<br />
+133K에서 733K가 됐음<br />
++450.8%임 </p>
+<p>python-resilience도 100% 대 100%인데<br />
+529K에서 119K로 줄었음 </p>
+<p>같은 0%p라도 하나는 낭비고<br />
+하나는 큰 효율 개선임</p>
+<p>결과에 비용 내용 추가하면<br />
+성공률 표 하나로는 부족하단 뜻임</p></section>
+<section class="part" id="part-10"><p>그러다 세 스킬은<br />
+성공률까지 깎았음</p>
+<p>springboot-tdd는<br />
+80%에서 70%로 내려감 </p>
+<p>linkerd-patterns는<br />
+100%에서 90.9%로 내려가고<br />
+토큰도 50.3% 늘었음 </p>
+<p>django-patterns도<br />
+90.9%에서 81.8%로 내려감 </p>
+<p>스킬은 그냥 무시되지 않았음<br />
+잘못 참고돼 실제 답을 망쳤음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 스킬이 답을 망친 Linkerd 사례, 원문 Figure 5"><img src="../assets/posts/swe-skills-bench/fig05_interference.png" alt="스킬이 답을 망친 Linkerd 사례, 원문 Figure 5" loading="lazy" decoding="async"></button><figcaption>스킬이 답을 망친 Linkerd 사례, 원문 Figure 5</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>그중 Linkerd 장면이 선명함</p>
+<p>과제는 gRPC 서비스에<br />
+mTLS 신원 검증을 요구했음 </p>
+<p>mTLS는 통신 양쪽이<br />
+서로 신원을 확인하는 방식임</p>
+<p>스킬 없이 풀 때는<br />
+v1beta3, gRPC,<br />
+meshTLS.serviceAccounts를 썼음 </p>
+<p>스킬 템플릿은 v1beta1과<br />
+HTTP/1 예시를 담고 있었음 </p>
+<p>v1beta1과 v1beta3은<br />
+Linkerd 설정 문법의 다른 버전임</p>
+<p>에이전트는 가까워 보이는 예시를<br />
+그대로 붙잡아 버렸음</p></section>
+<section class="part" id="part-12"><p>이제 방해 과정을 세 단계로 봄</p>
+<p>첫째, 오래된 값을 복사함<br />
+연구진은 surface anchoring이라 부름</p>
+<p>둘째, 존재하지 않는<br />
+rules/metricsServers를 지어냄</p>
+<p>셋째, 요구하지 않은<br />
+NetworkPolicy까지 붙였음 </p>
+<p>저자 표현으로는<br />
+anchoring, hallucination,<br />
+concept bleed임</p>
+<p>관련 예시라서 더 위험했음<br />
+틀린 답을 그럴듯하게 좁혀 줬기 때문임</p></section>
+<section class="part" id="part-13"><p>그래서 논문의 실무 결론은<br />
+스킬 많이 넣기가 아님</p>
+<p>구체 값이 박힌 긴 템플릿보다<br />
+프로젝트에서 다시 확인할<br />
+추상 원칙이 안전할 수 있음 </p>
+<p>그리고 성공률과 함께<br />
+토큰 비용을 같이 봐야 함 </p>
+<p>스킬 선택 전에는<br />
+버전, 프레임워크, 범위를 확인하고<br />
+적용 뒤에는 테스트로 반증해야 함</p>
+<p>이 마지막 세 문장은<br />
+결과에서 끌어낸 실무 해석임<br />
+논문이 직접 검증한 규칙은 아님</p></section>
+<section class="part" id="part-14"><p>한편 이 결과를 일반 법칙으로<br />
+받아들이면 안 됨</p>
+<p>실험 에이전트는 Claude Code 하나<br />
+모델은 Claude Haiku 4.5 하나였음 </p>
+<p>다른 모델은 이미 절차를 알 수도 있고<br />
+약한 모델은 스킬을 못 쓸 수도 있음 </p>
+<p>CPU 전용 Ubuntu 24.04였고<br />
+각 과제엔 스킬 하나만 미리 놨음 </p>
+<p>검색, 여러 스킬 조합,<br />
+모호한 선택 상황은 시험하지 않았음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 단일 모델 실험이라는 원문 한계"><img src="../assets/posts/swe-skills-bench/q_single_model.png" alt="단일 모델 실험이라는 원문 한계" loading="lazy" decoding="async"></button><figcaption>단일 모델 실험이라는 원문 한계</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-15"><p>그 뒤 후속 연구는<br />
+이 빈틈을 파고들었음</p>
+<p>8월의 실패 분석은<br />
+두 벤치에서 307건을 찾았음<br />
+기능 실패 125건<br />
+효율 회귀 182건이었음 </p>
+<p>웹개발 벤치는 네 모델 모두에서<br />
+Pass@2가 1.3~4.2% 내려가고<br />
+토큰이 72~394% 늘었다고 보고함 </p>
+<p>Pass@2는 두 번 시도 안에<br />
+통과했는지 보는 지표임</p>
+<p>둘 다 프리프린트라<br />
+확정된 보편 법칙은 아님</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 스킬 하나를 미리 놓은 설정이라는 원문 한계"><img src="../assets/posts/swe-skills-bench/q_one_skill.png" alt="스킬 하나를 미리 놓은 설정이라는 원문 한계" loading="lazy" decoding="async"></button><figcaption>스킬 하나를 미리 놓은 설정이라는 원문 한계</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-16"><p>반대로 10월의 SkillMorph는<br />
+나쁜 스킬을 고쳐 쓰는 쪽으로 감</p>
+<p>SWE-Skills-Bench에서<br />
+원본 스킬의 pass@3 82.45%를<br />
+95.51%로 올렸다고 보고함 </p>
+<p>pass@3는 세 번 중 한 번이라도<br />
+성공한 과제 비율임</p>
+<p>이것도 arXiv 프리프린트임</p>
+<p>고정 매뉴얼을 믿는 문제에서<br />
+실행 흔적으로 매뉴얼을 고치는 문제로<br />
+연구 질문이 이동한 셈임</p>
+<p>결국 스킬은 설치 파일보다<br />
+테스트하고 폐기할 코드에 가까움</p></section>
+<section class="part" id="part-17"><p>그렇게 나온 논문은<br />
+2026년 3월 16일 공개된<br />
+arXiv v1 프리프린트임 </p>
+<p>저자도 preliminary results와<br />
+work in progress라고 적었음 </p>
+<p>동료평가 채택은<br />
+2026년 10월 22일 기준 미확인임</p>
+<p>원문: https://arxiv.org/abs/2603.15401<br />
+PDF: https://arxiv.org/pdf/2603.15401<br />
+DOI: https://doi.org/10.48550/arXiv.2603.15401<br />
+코드: https://github.com/ControllableModel/SWE-Skills-Bench</p>
+<p>3줄 요약</p>
+<p>그 매뉴얼은 자산도 버그도 될 수 있음<br />
+49개 중 39개는 성공률을 못 올렸음<br />
+평균 +1.2%p, 토큰은 +10.5%였음</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/swe-skills-bench/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2603.15401v1" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/swe-skills-bench.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

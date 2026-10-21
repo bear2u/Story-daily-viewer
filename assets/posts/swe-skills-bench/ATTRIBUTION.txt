@@ -1,0 +1,16 @@
+Paper: SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?
+Authors: Tingxu Han, Yi Zhang, Wei Song, Chunrong Fang, Zhenyu Chen, Youcheng Sun, Lijie Hu
+Source: https://arxiv.org/abs/2603.15401v1
+PDF: https://arxiv.org/pdf/2603.15401
+DOI: https://doi.org/10.48550/arXiv.2603.15401
+Verified: 2026-10-22
+
+fig01_workflow.png: Figure 1 from the paper.
+fig02_distribution.png: Figure 2 from the paper.
+fig03_pipeline.png: Figure 3 from the paper.
+fig04_taskgen.png: Figure 4 from the paper.
+fig05_interference.png: Figure 5 from the paper.
+tab02_top.png, tab02_bottom.png: Table 2 from the paper.
+q_abstract.png, q_single_model.png, q_one_skill.png: short excerpts from the paper.
+
+The figures and excerpts are reproduced for scholarly commentary and criticism with source attribution. Rights remain with the paper authors and applicable publisher/license terms.
