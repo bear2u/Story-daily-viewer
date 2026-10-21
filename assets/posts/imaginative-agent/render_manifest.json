@@ -1,0 +1,10 @@
+{
+  "engine": "WeasyPrint 70 + Poppler pdftoppm",
+  "reason": "The skill's Chrome/Chromium renderer was unavailable; static 4:5 rendering fallback was used.",
+  "part_count": 15,
+  "part_size": [1080, 1350],
+  "social_size": [1080, 1350],
+  "long_image_size": [1080, 20250],
+  "source_figure_count": 10,
+  "source_license": "No general reuse license verified; see ATTRIBUTION.txt"
+}

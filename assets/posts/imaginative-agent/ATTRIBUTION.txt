@@ -1,0 +1,11 @@
+Paper: Train An Imaginative Agent
+Authors: Jiaxin Ge, Junyi Zhang, Tianning Chai, Hanjun Yoo, Chenyang Wang, Xiuyu Li, Weijia Shi, XuDong Wang, Sewon Min, Luke Zettlemoyer, Trevor Darrell, Haiwen Feng.
+Source PDF: https://arxiv.org/pdf/2610.26845v1
+First published: 2026-10-19 UTC. Checked: 2026-10-21.
+Status: arXiv v1 preprint. No peer-reviewed acceptance or venue was verified on the check date.
+DOI: https://doi.org/10.48550/arXiv.2610.26845
+Original paper figures and tables are reproduced as explanatory crops with figure/table labels and this attribution. The arXiv record uses arXiv's non-exclusive distribution license; that is not a general reuse license. Reusers must verify the authors' copyright terms for their own use.
+Changes: crop, raster sizing, placement, and Korean explanatory commentary. No values in tables or figures were altered.
+Korean commentary and report layout are newly written. Original research claims retain their experimental conditions and preprint status. No endorsement by the authors is implied.
+Project page: https://agima.net/
+Code: https://github.com/Agentic-Imagination/Agima (repository marked Apache-2.0 on 2026-10-21; that code license does not license the paper figures).
