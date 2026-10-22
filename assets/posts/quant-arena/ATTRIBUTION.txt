@@ -1,0 +1,16 @@
+Paper: Quant-Arena: Benchmarking LLM Agents for Quantitative Trading Research
+Authors: Houde Qian, Zheng Jiang, Wenyi Li, Chenxi Xu, Xinjie Lin, Yuzhao Peng, Ruoyu Han, Youjie Zheng, Kaisen Yang, Qinhuai Na, You Fu, Calvin Xiao
+Source: https://arxiv.org/abs/2610.30113v1
+PDF: https://arxiv.org/pdf/2610.30113
+DOI: https://doi.org/10.48550/arXiv.2610.30113
+Project: https://lab.einsia.ai/quant-arena
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+Verified: 2026-10-23
+
+html_fig2_1.png through html_fig8_1.png: Figures 2 through 8 from the paper.
+table2_all_runs.png, table3_iteration.png, table4_protocol.png: Tables 2, 3, and 4 from the paper.
+q_abstract_claim.png, q_conclusion.png: Short excerpts from pages 1 and 11 of the paper.
+parts/*.webp: rendered Korean commentary cards containing text and the cited paper figures.
+share-4x5.png: a 4:5 commentary card derived from the Korean report and Table 2.
+
+The paper figures and excerpts are reproduced under CC BY 4.0 for scholarly commentary and criticism. Attribution to the original paper and authors is retained here and in the captions.
