@@ -1,0 +1,24 @@
+BixBench3 그림 출처와 이용 조건
+
+논문: BixBench3: Benchmarking AI agents on research-study-scale computational biology tasks
+저자: Zane Koch, Asmamaw T. Wassie, Javier Valdes-Aleman, Jason Lee, Michaela M. Hinks, Samuel G. Rodriques, Andrew D. White, Jon M. Laurent
+판본: arXiv:2608.25286v2 (2026-09-22)
+원문: https://arxiv.org/abs/2608.25286
+PDF: https://arxiv.org/pdf/2608.25286
+라이선스: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+라이선스 URL: https://creativecommons.org/licenses/by-sa/4.0/
+확인일: 2026-10-24
+
+수록 파일:
+- fig1_workflow.png — 원문 Figure 1에서 크롭
+- fig2_composition.png — 원문 Figure 2에서 크롭
+- fig3_performance.png — 원문 Figure 3에서 크롭
+- fig4_cost.png — 원문 Figure 4에서 크롭
+- fig5_failures.png — 원문 Figure 5에서 크롭
+- fig6_grading.png — 원문 Figure 6에서 크롭
+- p1_header.png — 원문 p.1 제목·저자부에서 크롭
+- q_format_error.png — 원문 p.21 Appendix A.2에서 크롭
+- q_limit_prescribed.png — 원문 p.8 §3.2에서 크롭
+
+변경 사항: 설명에 필요한 영역만 잘라냈고, 내용 자체는 바꾸지 않았음. 해설의 캡션과 한국어 설명은 Story Daily에서 추가했음.
+공유 조건: 원 저자·논문을 표시하고, 이 그림을 수정·재배포할 때 CC BY-SA 4.0의 동일조건변경허락을 따라야 함.
