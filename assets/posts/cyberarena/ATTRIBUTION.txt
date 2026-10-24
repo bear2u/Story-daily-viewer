@@ -1,0 +1,12 @@
+CyberArena 원문 그림·표 크롭
+
+원 논문: CyberArena: Benchmarking AI Agents in Live Symmetric Attack-and-Defense Combat
+저자: Bangya Liu, Jianhong Tu, Yueyang Pan, Hanhong Zhao 외 18명
+arXiv: https://arxiv.org/abs/2610.19005v2
+PDF: https://arxiv.org/pdf/2610.19005
+DOI: https://doi.org/10.48550/arXiv.2610.19005
+확인일: 2026-10-25
+라이선스: CC BY-NC-SA 4.0
+라이선스 원문: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+이 폴더의 PNG는 위 논문의 Figure 1, 2, 4, 7, 8, 10, 11, Table 2, 3, 4와 본문·부록 문단을 읽기 좋은 범위로 자른 것임. 각 이미지의 캡션과 게시글 본문에 원문 위치를 표시함. 원 논문의 라이선스와 저자 표시를 유지하며, 이 저장소가 별도 재사용 라이선스를 부여하지 않음.
