@@ -1,0 +1,13 @@
+Paper: Act on Your Behalf, Beyond Your Authorization: Benchmarking LLM Agent Authorization Alignment
+Authors: Zhiping Zhang, Franklin Mingzhe Li, Raio Zihao Huang, Tianshi Li
+Version used: arXiv:2610.27548v2 (2026-10-21)
+Original PDF: https://arxiv.org/pdf/2610.27548
+Abstract page: https://arxiv.org/abs/2610.27548
+DOI: https://doi.org/10.48550/arXiv.2610.27548
+Code and data: https://github.com/PEACH-Research-Lab/AuthorizationBench
+
+The paper is licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
+Figures, tables, title block, and quotation crops in this folder were extracted from the paper for explanatory use.
+Source page or figure/table number is included in each caption.
+
+Report verification date: 2026-10-26 KST
