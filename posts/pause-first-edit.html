@@ -1,0 +1,357 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="500개 실행에서 첫 소스 편집은 중앙값 60% 지점에 나왔음. 그 직전 계획 하나를 넣자 Verified 해결률이 50.2%에서 65.0%로 올랐지만, 최적 시점을 증명한 건 아니었음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="코딩 에이전트를 첫 수정 전에 한 번 멈추니 성적이 올랐음">
+<meta property="og:description" content="500개 실행에서 첫 소스 편집은 중앙값 60% 지점에 나왔음. 그 직전 계획 하나를 넣자 Verified 해결률이 50.2%에서 65.0%로 올랐지만, 최적 시점을 증명한 건 아니었음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/pause-first-edit/fig2_p5.webp">
+<title>코딩 에이전트를 첫 수정 전에 한 번 멈추니 성적이 올랐음 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/pause-first-edit.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 에이전트</span><span class="pill">코딩 에이전트</span><span class="pill">개발자 도구</span><span class="pill">SWE-bench</span><span>·</span><time datetime="2026-10-27">2026. 10. 27</time><span>·</span><span>8분 읽기</span></div>
+<h1>코딩 에이전트를 첫 수정 전에 한 번 멈추니 성적이 올랐음</h1><p class="lead">500개 실행에서 첫 소스 편집은 중앙값 60% 지점에 나왔음. 그 직전 계획 하나를 넣자 Verified 해결률이 50.2%에서 65.0%로 올랐지만, 최적 시점을 증명한 건 아니었음.</p>
+
+<div class="article-details"><strong>PAUSE: Search-Free Steering of Coding Agents Before Their First Source-Code Edit</strong><br>Viral Patel · Boyin Tan · Jason Xue · Youcheng Sun · 2026 · arXiv:2610.29870v1 · 프리프린트 · 확인 가능한 동료평가·게재 정보 없음<br>원문 그림과 함께 읽는 19파트 해설 · 판본 및 출처 확인: 2026-10-27</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">언제 멈춰 세워야 함?</a><a href="#part-2">첫 편집은 중앙값 60% 지점</a><a href="#part-3">코드를 고치기 전까지 한 일</a><a href="#part-4">LivePlan은 이상 행동을 기다렸음</a><a href="#part-5">같은 저자 둘의 SWE-Manager</a><a href="#part-6">첫 편집을 막고 계획 하나를 넣음</a><a href="#part-7">search-free의 정확한 뜻</a><a href="#part-8">500개와 300개 과제의 실험 조건</a><a href="#part-9">50.2%에서 65.0%로</a><a href="#part-10">유의성보다 선명했던 비용 차이</a><a href="#part-11">어려운 과제와 Rust의 예외</a><a href="#part-12">Planner가 바뀌자 회복률이 갈림</a><a href="#part-13">재개가 33% 덜 쓴 조건</a><a href="#part-14">첫 편집이 최적점인지는 아직 모름</a><a href="#part-15">생각 기록을 빼도 총합은 안 줄었음</a><a href="#part-16">편집기 밖으로 나가면 못 잡음</a><a href="#part-17">60%보다 사건 경계가 중요함</a><a href="#part-18">프리프린트와 남은 재현</a><a href="#part-19">원문과 비교 대상</a></aside><article class="article-body"><section class="part" id="part-1"><p>코딩 에이전트를<br />
+언제 멈춰 세워야 함?</p>
+<p>계속 감시하면 돈이 많이 들고<br />
+사고가 난 뒤에 잡으면 늦음</p>
+<p>이번 논문은 500개 실행을 펼쳐놓고<br />
+개입할 경계를 하나 골라봄 </p>
+<p>PAUSE: Search-Free Steering<br />
+of Coding Agents<br />
+Before Their First Source-Code Edit</p>
+<p>Viral Patel, Boyin Tan,<br />
+Jason Xue, Youcheng Sun</p>
+<p>네 저자 모두 논문 기준<br />
+MBZUAI 소속임 </p>
+<p>2026년 10월 21일 공개된<br />
+arXiv v1 프리프린트임 </p>
+<p>제목과 저자란은 여기임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: PAUSE 제목과 저자, 초록 첫부분 (원문 p.1)"><img src="../assets/posts/pause-first-edit/p1_header.webp" alt="PAUSE 제목과 저자, 초록 첫부분 (원문 p.1)" loading="lazy" decoding="async"></button><figcaption>PAUSE 제목과 저자, 초록 첫부분 (원문 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>이 질문이 이상한 이유는<br />
+에이전트가 생각보다 늦게<br />
+첫 코드를 고치기 때문임</p>
+<p>Qwen3-coder 실행 500개를 보니<br />
+소스 편집 요청이 있던 건 476개였음 </p>
+<p>첫 편집 위치의 중앙값은<br />
+전체 행동의 60.0% 지점이었음 </p>
+<p>80.5%는 절반을 넘긴 뒤였음 </p>
+<p>아래 빨간 선이<br />
+각 실행의 첫 편집 위치임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 500개 실행에서 첫 소스 편집 위치 (Figure 1)"><img src="../assets/posts/pause-first-edit/fig1_p2.webp" alt="500개 실행에서 첫 소스 편집 위치 (Figure 1)" loading="lazy" decoding="async"></button><figcaption>500개 실행에서 첫 소스 편집 위치 (Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>이 60%는 뒤에서 다시 나옴</p></section>
+<section class="part" id="part-3"><p>60%까지 이미 한 일이 많음</p>
+<p>코드를 읽고<br />
+명령을 실행하고<br />
+버그를 재현해 봄</p>
+<p>편집 전 행동 가운데<br />
+파일 읽기가 31%였음 </p>
+<p>쉽게 말하면<br />
+진단은 꽤 해놓고<br />
+메스를 대려는 순간임</p>
+<p>정확히는<br />
+저자들은 저장소의 소스 경로에 대한<br />
+첫 편집기 요청을 경계로 잡았음 </p>
+<p>24개 실행은 끝까지<br />
+소스 편집 요청이 없었음 </p>
+<p>그 실행에는 개입도 안 들어감</p></section>
+<section class="part" id="part-4"><p>그래서 전작은<br />
+이상 행동을 찾는 쪽으로 갔음</p>
+<p>2026년 8월 공개된 LivePlan은<br />
+반복, 정체, 단계 건너뛰기를<br />
+규칙으로 감시했음 </p>
+<p>경보가 울리면<br />
+그때 조언 모델을 불렀음 </p>
+<p>아래 그림에서<br />
+가운데의 규칙 감시기가<br />
+오른쪽 조언기를 깨우는 구조임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: LivePlan의 규칙 감시와 조언 구조 (Liu 외 2026, Figure 3)"><img src="../assets/posts/pause-first-edit/prior_liveplan_fig3.webp" alt="LivePlan의 규칙 감시와 조언 구조 (Liu 외 2026, Figure 3)" loading="lazy" decoding="async"></button><figcaption>LivePlan의 규칙 감시와 조언 구조 (Liu 외 2026, Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>근데 얌전히 틀린 길을 가면<br />
+경보가 안 울릴 수 있음 </p>
+<p>PAUSE가 바꾼 건<br />
+조언 내용보다 먼저<br />
+조언 시점이었음</p></section>
+<section class="part" id="part-5"><p>그 타이밍을 보기 전에<br />
+같은 연구진 둘이 냈던 전작을 봐야 함<br />
+이들은 이미 코딩 전 계획을 파고 있었음</p>
+<p>Boyin Tan과 Youcheng Sun은<br />
+SWE-Manager에도 함께 이름을 올렸음 </p>
+<p>그 논문은 여러 수리 제안을 비교해<br />
+구현용 계획 하나를 합성했음 </p>
+<p>그 계획을 쓴 P2A는<br />
+SWE-Lancer IC에서 55.6%를 풀었음</p>
+<p>계획 없는 mini-SWE-agent보다<br />
+7.1%포인트 높았음 </p>
+<p>아래가 후보 제안을 골라<br />
+구현으로 넘기는 흐름임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: SWE-Manager가 후보 제안을 고르는 구조 (Tan 외 2026, Figure 1)"><img src="../assets/posts/pause-first-edit/prior_swemanager_fig1.webp" alt="SWE-Manager가 후보 제안을 고르는 구조 (Tan 외 2026, Figure 1)" loading="lazy" decoding="async"></button><figcaption>SWE-Manager가 후보 제안을 고르는 구조 (Tan 외 2026, Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>계획을 코딩보다 앞에 둔다는 생각이<br />
+이번엔 실행 중간으로 들어옴</p></section>
+<section class="part" id="part-6"><p>이번엔 후보 계획을 고르는 대신<br />
+실행 중 쌓인 조사 기록을 씀</p>
+<p>첫 소스 편집 요청이 나오면<br />
+그 요청을 실행하지 않고 막음 </p>
+<p>별도 Planner가<br />
+이슈와 편집 전 기록을 읽고<br />
+수리 계획 하나를 씀 </p>
+<p>그 계획을 같은 Executor에게 넣음</p>
+<p>대화 문맥과 작업공간은<br />
+그대로 보존됨 </p>
+<p>아래에서 주황색 PAUSE 뒤<br />
+보라색 계획이 끼어드는 걸 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 첫 편집을 막고 계획을 넣는 PAUSE (Figure 2)"><img src="../assets/posts/pause-first-edit/fig2_p5.webp" alt="첫 편집을 막고 계획을 넣는 PAUSE (Figure 2)" loading="lazy" decoding="async"></button><figcaption>첫 편집을 막고 계획을 넣는 PAUSE (Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>새 에이전트가 처음부터<br />
+저장소를 다시 읽는 방식이 아님</p></section>
+<section class="part" id="part-7"><p>검색이 없다는 말은<br />
+웹 검색을 안 한다는 뜻이 아님</p>
+<p>개입 지점을 찾으려고<br />
+후보 체크포인트를 뒤지지 않음</p>
+<p>감시 모델을 따로 부르지도 않음 </p>
+<p>편집기 요청인지<br />
+대상이 소스 경로인지<br />
+두 조건만 실행 전에 확인함 </p>
+<p>쉽게 말하면<br />
+문을 통과하기 직전<br />
+문손잡이 자체가 신호임</p>
+<p>정확히는<br />
+행동 유형과 대상 경로로<br />
+첫 소스 편집을 판정함 </p>
+<p>표 맨 아래 PAUSE 행은<br />
+타이밍 모델 호출 없음,<br />
+문제 감지 필요 없음,<br />
+개입 1회로 적혀 있음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 온라인 조향 방식의 개입 조건 비교 (Table 1)"><img src="../assets/posts/pause-first-edit/tab1_p2.webp" alt="온라인 조향 방식의 개입 조건 비교 (Table 1)" loading="lazy" decoding="async"></button><figcaption>온라인 조향 방식의 개입 조건 비교 (Table 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>이제 숫자로 확인함</p>
+<p>SWE-bench Verified 500개와<br />
+Multilingual 300개를 썼음 </p>
+<p>SWE-bench는 실제 GitHub 이슈를<br />
+에이전트가 고치게 하는 시험임</p>
+<p>여기서 해결률은 공식 테스트를<br />
+통과한 과제 비율임 </p>
+<p>Multilingual은 9개 언어 과제임 </p>
+<p>Executor는 Qwen3-coder와<br />
+Devstral-small 두 종류였음 </p>
+<p>하네스는 SWE-agent, Pi,<br />
+OpenHands 세 종류였음 </p>
+<p>하네스는 모델에 읽기와 편집,<br />
+실행 도구를 연결하는 틀임</p>
+<p>주 온라인 비교는<br />
+Qwen3-coder Executor와<br />
+GPT-5.6 Sol Planner 조합임 </p>
+<p>온도와 호출 예산은<br />
+아래 표처럼 고정했음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델 디코딩 설정과 실행 예산 (Table 2)"><img src="../assets/posts/pause-first-edit/tab2_p9.webp" alt="모델 디코딩 설정과 실행 예산 (Table 2)" loading="lazy" decoding="async"></button><figcaption>모델 디코딩 설정과 실행 예산 (Table 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>여기부터는 퍼센트와<br />
+퍼센트포인트를 구분해서 봐야 함</p></section>
+<section class="part" id="part-9"><p>그 퍼센트포인트부터 보면<br />
+PAUSE를 넣자 Verified가<br />
+50.2%에서 65.0%로 올랐음</p>
+<p>500개 중 251개에서<br />
+325개로 늘어난 것임 </p>
+<p>차이는 14.8%포인트임 </p>
+<p>Multilingual은 28.3%에서<br />
+43.0%로 올랐음 </p>
+<p>300개 중 44개를 더 푼 셈임 </p>
+<p>Executor 토큰은 오히려<br />
+Verified에서 595.5M에서 564.2M,<br />
+Multilingual에서 469.3M에서<br />
+459.9M으로 줄었음 </p>
+<p>대신 Planner 토큰 9.0M과<br />
+8.5M이 추가됐음 </p>
+<p>표의 PAUSE 행을<br />
+각 baseline과 비교하면 됨</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 주 실험 표와 난이도·언어별 결과 (Table 3, Figures 3–4)"><img src="../assets/posts/pause-first-edit/tab3_p10.webp" alt="주 실험 표와 난이도·언어별 결과 (Table 3, Figures 3–4)" loading="lazy" decoding="async"></button><figcaption>주 실험 표와 난이도·언어별 결과 (Table 3, Figures 3–4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-10"><p>비싼 감시가 완패한 건 아님</p>
+<p>LivePlan보다 PAUSE 관측값이<br />
+Verified에서 3.2%포인트 높았음</p>
+<p>논문은 같은 과제의 성공과 실패가<br />
+바뀐 방향을 McNemar 검정으로 비교함 </p>
+<p>하지만 p값은 0.11이라<br />
+유의한 차이라고 못 함 </p>
+<p>Multilingual의 3.7%포인트 차이도<br />
+p=0.18이었음 </p>
+<p>SICA는 오히려 PAUSE보다<br />
+Verified에서 2.6%포인트 높았음</p>
+<p>그 차이도 p=0.18로<br />
+유의하지 않았음 </p>
+<p>대신 Planner 비용은<br />
+$231.71 대 $26.13이었음 </p>
+<p>Multilingual에서도<br />
+$159.63 대 $23.68이었음 </p>
+<p>저자들이 말하는 11~15% 비용은<br />
+이 Planner 비용 비교임 </p>
+<p>"한 번이 더 정확하다"가 아니라<br />
+관측 성능 차이는 확인되지 않았고<br />
+Planner 비용은 훨씬 작았음</p></section>
+<section class="part" id="part-11"><p>그 Planner 비용 옆에서<br />
+어려운 과제 45개만 떼면<br />
+방법들의 순서가 달라짐</p>
+<p>Verified의 어려운 45개 과제에서<br />
+기본 성공률은 11.1%였음</p>
+<p>사람 기준 한 시간 이상 걸리는<br />
+hard 그룹 45개였음 </p>
+<p>LivePlan은 15.6%,<br />
+SICA는 17.8%였음</p>
+<p>PAUSE는 26.7%였음 </p>
+<p>다만 45개짜리 부분집합이라<br />
+일반 법칙으로 올리면 안 됨</p>
+<p>언어별로는 더 고르지 않았음</p>
+<p>9개 중 Rust만<br />
+기본 19/43보다 낮은 16/43이었음 </p>
+<p>LivePlan과 SICA도 Rust에서는<br />
+각각 18개와 17개로 내려갔음 </p>
+<p>외부 조언이 언제나 이득이라는<br />
+깔끔한 이야기는 여기서 깨짐</p></section>
+<section class="part" id="part-12"><p>실패 회복에서는<br />
+Planner에 따라 차이가 크게 벌어짐</p>
+<p>OpenHands에서 되살릴 수 있던<br />
+Qwen3-coder 실패 223개를<br />
+같은 지점과 남은 예산으로 비교했음 </p>
+<p>같은 체크포인트에서<br />
+계획 없이 계속하면 9/223을 회복함</p>
+<p>스스로 다시 생각하라는 말만 주면<br />
+13/223이었음 </p>
+<p>Executor 모델을 Planner로 다시 불러도<br />
+12/223에 그쳤음 </p>
+<p>Gemini 3.8 Flash는 31/223,<br />
+GPT-5.6 Sol은 79/223이었음 </p>
+<p>35.4%라는 큰 회복률은<br />
+아무 Planner나 붙인 결과가 아님</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: Planner별 실패 회복률 (Table 4)"><img src="../assets/posts/pause-first-edit/tab4_p12.webp" alt="Planner별 실패 회복률 (Table 4)" loading="lazy" decoding="async"></button><figcaption>Planner별 실패 회복률 (Table 4)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>역할을 나눴다는 사실보다<br />
+누가 계획했는지가 더 중요했음</p></section>
+<section class="part" id="part-13"><p>그 GPT-5.6 Sol 계획으로<br />
+아예 재시작하면<br />
+두 과제를 더 풀긴 했음</p>
+<p>GPT-5.6 Sol 기준<br />
+resume은 291/500,<br />
+restart는 293/500이었음 </p>
+<p>그 대신 Executor 토큰은<br />
+347.4M 대 519.1M이었음 </p>
+<p>기존 실패 실행이 이미 있다면<br />
+재개가 33% 덜 쓴 셈임 </p>
+<p>다만 이 33%에는<br />
+처음 실패 실행 비용이 빠져 있음</p>
+<p>33% 절감은 실패 궤적이 이미 있을 때의<br />
+추가 실행 비용 비교임</p>
+<p>원 실행 791.9M까지 더하면<br />
+resume 총량은 1,139.3M이 됨 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 실패 궤적 재개와 처음부터 재시작 비교 (Table 5)"><img src="../assets/posts/pause-first-edit/tab5_p13.webp" alt="실패 궤적 재개와 처음부터 재시작 비교 (Table 5)" loading="lazy" decoding="async"></button><figcaption>실패 궤적 재개와 처음부터 재시작 비교 (Table 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>또 GPT-5.6 Sol 계획의 회귀 10건은<br />
+계획 없이 재개했을 때도 10건이었음 </p>
+<p>약한 Planner는 회귀를 26건 만들었음</p></section>
+<section class="part" id="part-14"><p>이제 그 첫 편집 경계를 따져봄<br />
+논문도 거기까지는 못 감</p>
+<p>공통 161개 실패에서<br />
+기본 PAUSE 체크포인트는<br />
+56개를 회복했음 </p>
+<p>행동 20% 뒤는 43개,<br />
+편집 바로 직전은 50개,<br />
+행동 90% 뒤도 50개였음 </p>
+<p>수치상 첫 편집 경계가 가장 높았음</p>
+<p>하지만 짝지은 비교의 p값은<br />
+0.12, 0.39, 0.62였음 </p>
+<p>어느 차이도 0.05 아래가 아니었음</p>
+<p>각 지점은 자기 기록으로 계획을 새로 받고<br />
+같은 수의 새 Executor 호출을 받았음 </p>
+<p>성공 실행의 지침을 가져온 실험에서는<br />
+97쌍 중 64쌍이 세 번 안에 성공했음 </p>
+<p>경계에서 방향을 바꿀 수는 있었지만<br />
+최적점 증명은 아직 아님</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 개입 시점별 실패 회복 비교 (Table 7)"><img src="../assets/posts/pause-first-edit/tab7_p16.webp" alt="개입 시점별 실패 회복 비교 (Table 7)" loading="lazy" decoding="async"></button><figcaption>개입 시점별 실패 회복 비교 (Table 7)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-15"><p>그럼 Planner가 실제로 본 증거 중<br />
+생각 기록이 꼭 필요했냐 하면 아니었음</p>
+<p>OpenHands에서 전체 think를 준 PAUSE는<br />
+311/500을 풀었음</p>
+<p>Planner 입력에서 think를 빼니<br />
+318/500을 풀었음 </p>
+<p>둘이 다른 결과를 낸 과제는 71개였지만<br />
+총합 차이는 p=0.48이었음 </p>
+<p>논문은 코드 읽기와 명령 출력만으로도<br />
+유용한 계획을 만들 증거가<br />
+있었을 수 있다고 봄</p>
+<p>무엇이 실제로 중요한지는 아직 모름 </p>
+<p>세 하네스에서는 모두 개선됐지만<br />
+폭은 6.0~16.8%포인트로 달랐음 </p>
+<p>아래 표에서 Pi의 이득이<br />
+가장 작은 걸 볼 수 있음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 세 하네스와 think 제거 비교 (Table 6)"><img src="../assets/posts/pause-first-edit/tab6_p14.webp" alt="세 하네스와 think 제거 비교 (Table 6)" loading="lazy" decoding="async"></button><figcaption>세 하네스와 think 제거 비교 (Table 6)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-16"><p>이 방식이 못 보는 길도 있음</p>
+<p>Planner는 작업공간을 직접 못 열고<br />
+명령도 실행하지 못함 </p>
+<p>편집 전 조사에 빠진 증거가 있으면<br />
+계획도 그 빈칸을 그대로 안고 감</p>
+<p>계획은 한 번뿐이라<br />
+새 테스트 결과가 나와도 갱신되지 않음 </p>
+<p>셸 명령으로 소스를 바꾸면<br />
+편집기 요청 자체가 없을 수 있음 </p>
+<p>공개 벤치마크 문제가<br />
+모델 학습 데이터에 있었는지도<br />
+완전히 판별하지 못함 </p>
+<p>Verified 밖 장기 개발 작업으로의<br />
+전이도 아직 확인되지 않았음 </p>
+<p>원문의 외적 타당도 문단도<br />
+같은 범위를 적어둠</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 평가 범위를 제한한 원문 문단 (원문 5.2.2절)"><img src="../assets/posts/pause-first-edit/q_external_validity.webp" alt="평가 범위를 제한한 원문 문단 (원문 5.2.2절)" loading="lazy" decoding="async"></button><figcaption>평가 범위를 제한한 원문 문단 (원문 5.2.2절)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-17"><p>처음 질문으로 돌아가면<br />
+언제 멈춰야 가장 싸고 잘 고치냐였음</p>
+<p>이 실험 안에서는<br />
+첫 소스 편집 직전이 실용적이었음</p>
+<p>조사 증거가 이미 쌓였고<br />
+원래 수정을 실행하기 전이라<br />
+계획을 바꿀 여지가 남아 있었음 </p>
+<p>주 실험에서는 성공률이 올랐고<br />
+반복 감시보다 Planner 비용이 작았음 </p>
+<p>하지만 정확한 답은<br />
+"항상 60%에서 멈춰라"가 아님</p>
+<p>첫 편집은 실행 길이를 미리 몰라도<br />
+잡을 수 있는 사건 경계였음</p>
+<p>다른 경계보다 유의하게 낫다는 증거는<br />
+이번 비교에선 나오지 않았음 </p>
+<p>60이라는 숫자보다 중요한 건<br />
+실행 길이를 몰라도 잡히고<br />
+실행 전에 막을 수 있는 사건을 썼다는 점임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: PAUSE가 한 번 계획을 삽입하는 구조 (Figure 2)"><img src="../assets/posts/pause-first-edit/html_fig2_1.webp" alt="PAUSE가 한 번 계획을 삽입하는 구조 (Figure 2)" loading="lazy" decoding="async"></button><figcaption>PAUSE가 한 번 계획을 삽입하는 구조 (Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-18"><p>그리고 이 결론에는<br />
+v1 프리프린트라는 제한도 붙음</p>
+<p>2026년 10월 27일 기준<br />
+확인 가능한 학회·저널 게재 정보가 없음 </p>
+<p>OpenAlex 피인용도 0이라<br />
+확인 가능한 후속 피인용 연구가 없음 </p>
+<p>저자들은 코드와 Planner 프롬프트,<br />
+과제별 결과와 전체 궤적을<br />
+공개하겠다고 적었음 </p>
+<p>문장이 "공개했다"가 아니라<br />
+"공개할 것"인 점을 봐야 함</p>
+<p>다음 검증은 공개 자료로<br />
+표를 재현할 수 있는지,<br />
+셸 편집 같은 다른 인터페이스에서도<br />
+경계가 잡히는지에 달려 있음 </p>
+<p>3줄 요약</p>
+<p>이번 실험의 코딩 에이전트는<br />
+첫 소스 편집 직전 계획 한 번으로 개선됐음 </p>
+<p>PAUSE는 Verified에서 14.8%포인트를 올리고<br />
+SICA의 11~15% Planner 비용을 썼음 </p>
+<p>아직 프리프린트이며 최적 시점 증명과<br />
+다른 환경 재현은 남아 있음</p></section>
+<section class="part" id="part-19"><p>v1에서 확인한 원문은 여기임 </p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.29870">PAUSE arXiv 원문</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.29870">PAUSE PDF</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2608.06701">LivePlan 원문</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2601.22956">SWE-Manager 원문</a></p>
+<p>심사 여부와 후속작은<br />
+2026년 10월 27일 기준으로 확인했음 </p>
+<p>수치는 읽은 v1 표와 본문 기준임 </p>
+<p>내용 추가하면<br />
+원문 버전과 확인 날짜도 같이 갱신함</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/pause-first-edit/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.29870" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/pause-first-edit.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

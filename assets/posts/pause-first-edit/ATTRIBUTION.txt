@@ -1,0 +1,21 @@
+PAUSE paper figures and tables
+Source: Viral Patel, Boyin Tan, Jason Xue, Youcheng Sun,
+"PAUSE: Search-Free Steering of Coding Agents Before Their First Source-Code Edit",
+arXiv:2610.29870v1, 2026.
+https://arxiv.org/abs/2610.29870
+
+LivePlan Figure 3
+Source: Shuyang Liu et al.,
+"Online Monitoring and Corrective Steering of Programming Agents",
+arXiv:2608.06701v1, 2026.
+https://arxiv.org/abs/2608.06701
+
+SWE-Manager Figure 1
+Source: Boyin Tan et al.,
+"SWE-Manager: Selecting and Synthesizing Golden Proposals Before Coding",
+arXiv:2601.22956v2, 2026.
+https://arxiv.org/abs/2601.22956
+
+Figures are reproduced for research explanation with source labels.
+Rights remain with the original authors and applicable publishers.
+Check each paper's current license before reuse or redistribution.
