@@ -1,0 +1,29 @@
+Developers as Managers of AI Agents: A Workplace Shadowing Study
+Yi-Hung Chou, June Hyung Kim, Vasisht Kartik, Victoria Jackson,
+Tobias Schimmer, Thomas Zimmermann, James A. Jones
+arXiv:2610.33588v1 (2026-10-24)
+https://arxiv.org/abs/2610.33588
+https://arxiv.org/pdf/2610.33588
+
+Paper license shown by arXiv on 2026-10-28:
+Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
+https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+Quoted/excerpted for noncommercial criticism and research commentary with
+the paper title, figure/table number or page, and source shown. No endorsement
+by the authors or their institutions is implied. Reuse outside this context
+requires a separate rights review.
+
+Prior-study excerpts:
+
+1. Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity
+Joel Becker et al., arXiv:2507.09089
+https://arxiv.org/abs/2507.09089
+Figure 1 excerpted with attribution for comparison and commentary.
+
+2. Professional Software Developers Don't Vibe, They Control
+Alexandre Huang et al., arXiv:2512.14012
+https://arxiv.org/abs/2512.14012
+Figure 1 excerpted with attribution for comparison and commentary.
+
+All Korean commentary and page layout: Story Daily, 2026-10-28.
