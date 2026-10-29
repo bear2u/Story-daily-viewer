@@ -1,0 +1,12 @@
+AuRA: From Atoms to Bits through Autonomous Robot Interaction
+Xinchen Yu, Yoonkyo Jung, Haoran Chen, Zikui Cai, Aayush Talreja,
+Seungjae Lee, Hyunjin Kim, and Furong Huang
+arXiv:2610.34452v1 (2026-10-25)
+https://arxiv.org/abs/2610.34452
+https://arxiv.org/pdf/2610.34452
+
+Figures, tables, and quoted text crops in this report come from the paper above.
+The arXiv record links to Creative Commons Attribution 4.0 International:
+https://creativecommons.org/licenses/by/4.0/
+
+Korean explanatory text and card layout: generated 2026-10-29.
