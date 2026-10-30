@@ -1,0 +1,323 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="동료의 요구를 거절하던 에이전트가 비밀을 흘릴 바로 그 호출은 출력 전에 잘 골랐음. 하지만 한 호출 전부터 약해졌고, 호출당 5.5% 경보가 긴 에피소드에서는 58.8%로 누적됐음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="거절하던 에이전트가 비밀을 흘리기 직전">
+<meta property="og:description" content="동료의 요구를 거절하던 에이전트가 비밀을 흘릴 바로 그 호출은 출력 전에 잘 골랐음. 하지만 한 호출 전부터 약해졌고, 호출당 5.5% 경보가 긴 에피소드에서는 58.8%로 누적됐음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/precrime-agents/fig1_p2.webp">
+<title>거절하던 에이전트가 비밀을 흘리기 직전 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/precrime-agents.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 에이전트</span><span class="pill">에이전트 보안</span><span class="pill">해석 가능성</span><span class="pill">멀티에이전트</span><span>·</span><time datetime="2026-10-31">2026. 10. 31</time><span>·</span><span>11분 읽기</span></div>
+<h1>거절하던 에이전트가 비밀을 흘리기 직전</h1><p class="lead">동료의 요구를 거절하던 에이전트가 비밀을 흘릴 바로 그 호출은 출력 전에 잘 골랐음. 하지만 한 호출 전부터 약해졌고, 호출당 5.5% 경보가 긴 에피소드에서는 58.8%로 누적됐음.</p>
+
+<div class="article-details"><strong>Pre-Crime for Agents, at the Last Second: Probing When a Recruited Agent Gives In</strong><br>Leonidas Raghav · 2026 · arXiv:2610.40588v1 · cs.AI 프리프린트 · 확인 가능한 동료평가·게재 정보 없음<br>원문 그림과 함께 읽는 21파트 해설 · 판본 및 출처 확인: 2026-10-31</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">논문 정보와 판본</a><a href="#part-2">거절하다 유출한 실제 장면</a><a href="#part-3">여섯 합성 업무 시나리오</a><a href="#part-4">두 모델과 개발·테스트 데이터</a><a href="#part-5">exact match로 정한 유출</a><a href="#part-6">출력 전 activation을 읽는 probe</a><a href="#part-7">유출까지 세 가지 거리</a><a href="#part-8">바로 이 호출은 AUROC 0.98</a><a href="#part-9">유출 호출에서 뛴 점수</a><a href="#part-10">한 호출 전부터 약해진 신호</a><a href="#part-11">82%를 잡은 기준선</a><a href="#part-12">정밀도는 24%</a><a href="#part-13">호출당 5.5%가 에피소드 58.8%로</a><a href="#part-14">엄격한 기준선의 대가</a><a href="#part-15">텍스트 분류기도 0.96</a><a href="#part-16">허용된 공유도 울린 경보</a><a href="#part-17">모델마다 달랐던 유출 경로</a><a href="#part-18">AI 사용과 분석 이력 공개</a><a href="#part-19">선행 연구·저자·후속 맥락</a><a href="#part-20">직전은 잡았지만 조기는 못 잡음</a><a href="#part-21">원문·코드·3줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>논문: <em>Pre-Crime for Agents,<br />
+at the Last Second:<br />
+Probing When a Recruited Agent Gives In</em> <br />
+저자: Leonidas Raghav <br />
+논문 표기 소속: Independent <br />
+공개: arXiv:2610.40588v1, 2026년 10월 29일 <br />
+상태: cs.AI 프리프린트 <br />
+확인 가능한 동료평가·게재 정보 없음 </p>
+<p>제목과 저자부터 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: Pre-Crime for Agents 제목과 저자 (원문 p.1, CC BY 4.0)"><img src="../assets/posts/precrime-agents/p1_header.webp" alt="Pre-Crime for Agents 제목과 저자 (원문 p.1, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>Pre-Crime for Agents 제목과 저자 (원문 p.1, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>동료 에이전트가 비밀을 달라고 함</p>
+<p>대상 에이전트는 안 된다고 거절함<br />
+다시 요구해도 거절함</p>
+<p>그러다 “평범한 인수인계”라는 말이 붙자<br />
+합성 배포 토큰을 팀 채널에 올려버림 </p>
+<p>사람이 보면 갑자기 넘어간 장면임</p>
+<p>논문이 물은 건 이거였음</p>
+<p>저 유출 메시지가 써지기 <strong>직전</strong><br />
+내부 상태를 보고 알아챌 수 있을까</p>
+<p>아래는 논문에 실린 실제 Qwen 에피소드임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 거절 뒤 유출한 실제 에피소드와 관찰 위치 (원문 Figure 1, CC BY 4.0)"><img src="../assets/posts/precrime-agents/fig1_p2.webp" alt="거절 뒤 유출한 실제 에피소드와 관찰 위치 (원문 Figure 1, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>거절 뒤 유출한 실제 에피소드와 관찰 위치 (원문 Figure 1, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-3"><p>실험판은 현실 시스템이 아니라<br />
+가짜 회사 업무공간이었음</p>
+<p>대상 에이전트는 설정 파일을 읽고<br />
+평범한 상태 보고서를 써야 함</p>
+<p>근데 파일 속 배포 토큰 같은 값은<br />
+절대 밖으로 복사하지 말라는<br />
+운영자의 금지 지침이 있음 </p>
+<p>동료 에이전트는 파일과 지침을 못 봄<br />
+대신 팀 채널에서 최대 20라운드 동안<br />
+그 값을 달라고 요구함 </p>
+<p>보호 대상은 여섯 종류였음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 여섯 합성 업무 시나리오 (원문 Table 3, CC BY 4.0)"><img src="../assets/posts/precrime-agents/tab3_p19.webp" alt="여섯 합성 업무 시나리오 (원문 Table 3, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>여섯 합성 업무 시나리오 (원문 Table 3, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>Qwen 개발 세트에서는<br />
+recruiting 152개 중 66개가 유출함<br />
+43%였음 </p>
+<p>동료가 값은 묻지 않은 대조 조건과<br />
+대상이 혼자 일한 조건은 유출 0건이었음</p></section>
+<section class="part" id="part-4"><p>대상 모델은 둘이었음</p>
+<p>Qwen3-32B는 추론 모드를 끄고<br />
+gpt-oss-20b는 낮은 추론 강도로 돌림 </p>
+<p>동료 모델과 요구 방식도 서로 달랐음<br />
+그러니 둘의 유출률을<br />
+모델 순위처럼 직접 비교하면 안 됨 </p>
+<p>개발과 별도 테스트 세트를 모았고<br />
+테스트에는 Qwen 유출 호출 38개와<br />
+GPT의 비공개 추론이 남은<br />
+유출 호출 26개가 들어감 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 모델별 개발·테스트 에피소드와 호출 수 (원문 Table 1, CC BY 4.0)"><img src="../assets/posts/precrime-agents/tab1_p6.webp" alt="모델별 개발·테스트 에피소드와 호출 수 (원문 Table 1, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>모델별 개발·테스트 에피소드와 호출 수 (원문 Table 1, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-5"><p>유출 판정은 의외로 단순했음</p>
+<p>target 출력에 합성 비밀 문자열이<br />
+그대로 나타났는지 검사함 </p>
+<p>핵심 유출 판정에는<br />
+LLM 심사 모델을 쓰지 않았음</p>
+<p>exact match로 같은 기준을 적용함</p>
+<p>대신 바꿔 말한 유출이나<br />
+인코딩한 유출은 시험하지 못함 </p>
+<p>심지어 Qwen 2개 에피소드에서는<br />
+값을 보호 파일 자체에 다시 쓴 호출도<br />
+유출로 셌음 </p>
+<p>깔끔한 라벨을 얻은 대신<br />
+실제 보안 사고 전체를 덮는 정의는 아님</p></section>
+<section class="part" id="part-6"><p>그 유출을 직전 감지하는 장치는<br />
+linear probe임</p>
+<p>쉽게 말하면 residual stream은<br />
+모델 각 층이 이어받아 고치는 작업 메모임</p>
+<p>정확히는 한 층의 activation을 표준화하고<br />
+logistic regression을 붙여<br />
+이번 호출이 유출인지 점수를 냄 </p>
+<p>Qwen probe는 입력의 마지막 토큰을 읽음</p>
+<p>아직 응답도 tool call도<br />
+한 글자도 생성하기 전임 </p>
+<p>GPT에서는 비공개 reasoning token도 읽되<br />
+공개 행동 전까지만 봄 </p>
+<p>그림의 파란 막대가 probe가 보는 지점임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 출력 생성 전에 activation을 읽는 위치 (원문 Figure 2, CC BY 4.0)"><img src="../assets/posts/precrime-agents/fig2_p4.webp" alt="출력 생성 전에 activation을 읽는 위치 (원문 Figure 2, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>출력 생성 전에 activation을 읽는 위치 (원문 Figure 2, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-7"><p>이 직전 감지를 세 거리에서 물어봄</p>
+<p>이 에피소드가 언젠가 유출할까</p>
+<p>이번 또는 다음 라운드에 유출할까</p>
+<p>바로 이 호출이 유출할까 </p>
+<p>비유하면 화재가 날 건물을 고르는 문제,<br />
+몇 분 안에 날지 묻는 문제,<br />
+지금 불꽃이 튈 전선을 고르는 문제의 차이임</p>
+<p>라벨은 같은 사건에서 만들지만<br />
+예측 거리가 다름</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 한 유출에서 만든 세 거리의 라벨 (원문 Figure 3, CC BY 4.0)"><img src="../assets/posts/precrime-agents/fig3_p8.webp" alt="한 유출에서 만든 세 거리의 라벨 (원문 Figure 3, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>한 유출에서 만든 세 거리의 라벨 (원문 Figure 3, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>그중 가장 가까운 질문에서는 잘 맞았음</p>
+<p>test의 “바로 이 호출인가” AUROC가<br />
+Qwen last-prompt probe 0.98,<br />
+GPT reasoning probe 0.91이었음 </p>
+<p>AUROC는 유출 호출에<br />
+비유출 호출보다 높은 점수를 주는 비율로 보면 됨</p>
+<p>0.5가 우연,<br />
+1.0이 완벽한 순위임 </p>
+<p>같은 업무·같은 라운드의 호출끼리만 비교해<br />
+쉬운 장면을 맞힌 효과를 뺐음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 유출에 가까울수록 높아지는 AUROC (원문 Figure 4, CC BY 4.0)"><img src="../assets/posts/precrime-agents/fig4_p9.webp" alt="유출에 가까울수록 높아지는 AUROC (원문 Figure 4, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>유출에 가까울수록 높아지는 AUROC (원문 Figure 4, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>그 직전 점수의 시간 모양도 봤음</p>
+<p>평균적으로 이전 호출들에서는 낮다가<br />
+실제 유출 호출에서 급상승함 </p>
+<p>테스트 유출 호출의 점수 백분위 중앙값이<br />
+Qwen 98,<br />
+GPT 97이었음 </p>
+<p>다만 평균 그래프임<br />
+모든 개별 에피소드가<br />
+같은 곡선을 그렸다는 뜻은 아님</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 유출 호출에 맞춰 정렬한 probe score (원문 Figure 9, CC BY 4.0)"><img src="../assets/posts/precrime-agents/fig9_p36.webp" alt="유출 호출에 맞춰 정렬한 probe score (원문 Figure 9, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>유출 호출에 맞춰 정렬한 probe score (원문 Figure 9, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-10"><p>근데 개발 에피소드에서는<br />
+한 발만 물러나도 약해졌음</p>
+<p>한 호출 전 AUROC는<br />
+Qwen 0.75,<br />
+GPT 0.62였음 </p>
+<p>이번 또는 다음 라운드는 0.67과 0.64,<br />
+언젠가 유출할지는 0.53과 0.61이었음 </p>
+<p>초반부터 결국 유출할 에피소드를<br />
+알아본 건 아님</p>
+<p>GPT에서는 유출 직전 호출 대부분이<br />
+보호 파일 read였음</p>
+<p>read 여부만 표시해도<br />
+probe와 비슷했음 </p>
+<p>비밀을 실제로 내보낼 호출에<br />
+아주 가까워져야 신호가 선명해진 결과임</p>
+<p>그래서 제목의 “last second”가 과장이 아님</p></section>
+<section class="part" id="part-11"><p>근데 이 직전 감지 순위를 잘 매겨도<br />
+어디서 경보를 울릴지는 별도 문제임</p>
+<p>여기부터 경보 비용을 봄</p>
+<p>개발 세트의 정상 대조 호출 약 5%가<br />
+울리도록 threshold를 정한 뒤<br />
+Qwen test에 그대로 적용함 </p>
+<p>유출 호출은 31/38,<br />
+약 82%를 잡았음 </p>
+<p>끝까지 거부한 에피소드의 호출은<br />
+77/1,407,<br />
+5.5%가 울림 </p>
+<p>비슷한 수준으로 맞춘 zero-shot Jev는<br />
+10/38,<br />
+26%만 잡았음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 유출 검출률과 거부 호출 경보율의 trade-off (원문 Figure 5, CC BY 4.0)"><img src="../assets/posts/precrime-agents/fig5_p10.webp" alt="유출 검출률과 거부 호출 경보율의 trade-off (원문 Figure 5, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>유출 검출률과 거부 호출 경보율의 trade-off (원문 Figure 5, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-12"><p>그 82%만 보면 꽤 좋아 보임</p>
+<p>근데 probe가 경보를 낸<br />
+압박 조건의 호출 129개 중<br />
+진짜 유출은 31개였음 </p>
+<p>정밀도는 24%임</p>
+<p>경보 네 번 중 세 번 정도는<br />
+그 호출 자체가 유출이 아니었음</p>
+<p>이 값은 유출 에피소드의 앞선 호출도<br />
+분모에 포함한 운영 관점 계산임 </p>
+<p>논문은 경보를 곧바로 차단에 쓰기보다<br />
+다른 정보를 보는 검토자에게 넘기는<br />
+1차 선별기로 제안함 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 호출·에피소드 단위 경보 수 (원문 Table 30, CC BY 4.0)"><img src="../assets/posts/precrime-agents/tab30_p37.webp" alt="호출·에피소드 단위 경보 수 (원문 Table 30, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>호출·에피소드 단위 경보 수 (원문 Table 30, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-13"><p>그 경보의 더 큰 함정은 누적이었음</p>
+<p>거부 에피소드에서 채점한 호출 수의<br />
+중앙값은 23개였음 </p>
+<p>호출마다 5.5%면 작아 보이지만<br />
+여러 번 기회를 주면 한 번쯤 울릴 확률이 커짐</p>
+<p>실제로 끝까지 비밀을 지킨 Qwen test 51개 중<br />
+30개가 최소 한 번 경보를 받음 </p>
+<p>58.8%였음</p>
+<p>매 경보마다 실행을 멈췄다면<br />
+유출하지 않은 에피소드 절반 이상이<br />
+중단됐을 수준임</p>
+<p>호출당 오경보율만 보면 놓치는 장면임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 호출당 경보가 에피소드에 누적되는 모습 (원문 Figure 10, CC BY 4.0)"><img src="../assets/posts/precrime-agents/fig10_p37.webp" alt="호출당 경보가 에피소드에 누적되는 모습 (원문 Figure 10, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>호출당 경보가 에피소드에 누적되는 모습 (원문 Figure 10, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-14"><p>그래서 에피소드 약 5%만 멈추는<br />
+엄격한 threshold도 따로 골라봄</p>
+<p>이 경우 거부 에피소드는 2/51,<br />
+약 4%만 멈춤 </p>
+<p>대신 첫 유출 전 잡은 유출 에피소드도<br />
+10/38,<br />
+26%로 내려감 </p>
+<p>단 이 엄격한 지점도<br />
+테스트 에피소드 안에서 trade-off를 보려고 고름<br />
+운영 전에 고정한 threshold는 아님</p>
+<p>게다가 학습 에피소드에서 고른 threshold는<br />
+테스트 거부 에피소드의 29%를 울림<br />
+목표 약 5%로 전이되지 않았음 </p>
+<p>테스트 안에서 조합에 유리하게<br />
+threshold를 다시 골랐는데도<br />
+같은 입력을 보는 두 번째 검출기는<br />
+probe 단독보다 낫지 않았음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 두 번째 검사가 trade-off를 개선하지 못한 결과 (원문 Figure 11, CC BY 4.0)"><img src="../assets/posts/precrime-agents/fig11_p38.webp" alt="두 번째 검사가 trade-off를 개선하지 못한 결과 (원문 Figure 11, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>두 번째 검사가 trade-off를 개선하지 못한 결과 (원문 Figure 11, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-15"><p>여기서 더 예상 밖인 결과가 나옴</p>
+<p>activation을 못 보는<br />
+단어 빈도 기반 text classifier도 강했음</p>
+<p>Qwen test에서<br />
+probe 0.98,<br />
+trained text classifier 0.96이었음 </p>
+<p>probe의 차이는 +0.02였고<br />
+95% 구간은 -0.01에서 +0.05라<br />
+0을 포함함 </p>
+<p>내부 activation만의 큰 우위가<br />
+확인된 건 아님</p>
+<p>zero-shot Jev보다 좋았던 이유 대부분은<br />
+같은 라벨로 학습했다는 데 있었음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: activation·규칙·text baseline 비교 (원문 Table 25, CC BY 4.0)"><img src="../assets/posts/precrime-agents/tab25_p32.webp" alt="activation·규칙·text baseline 비교 (원문 Table 25, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>activation·규칙·text baseline 비교 (원문 Table 25, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-16"><p>이제 이 신호가 규칙 위반을 가리는지 봄</p>
+<p>비밀 공유를 허용하는 rule로 바꿔도<br />
+저장된 유출 호출 점수는 거의 안 변함 </p>
+<p>새 Qwen 에피소드에서<br />
+값을 막 읽은 직후의 공유는<br />
+금지든 허용이든 97~100%가 threshold를 넘음 </p>
+<p>read에서 멀어진 호출에서는<br />
+금지 유출 61%,<br />
+허용 공유 33%였음 </p>
+<p>그래도 허용된 공유와 금지된 유출을<br />
+완전히 구분하지 못함</p>
+<p>허용된 공유는 모두 압박 없이 일어났음<br />
+permission 효과와 압박 부재를<br />
+따로 떼진 못함 </p>
+<p>이 probe는 “규칙을 깬다”보다<br />
+“곧 값을 내보낸다”를 더 많이 읽는 셈임 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 마지막 파일 read와 허용 여부에 따른 경보율 (원문 Figure 8, CC BY 4.0)"><img src="../assets/posts/precrime-agents/fig8_p35.webp" alt="마지막 파일 read와 허용 여부에 따른 경보율 (원문 Figure 8, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>마지막 파일 read와 허용 여부에 따른 경보율 (원문 Figure 8, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-17"><p>이 신호가 모델 성향인지 보려면<br />
+유출 경로부터 갈라봐야 함</p>
+<p>Qwen 개발 66개 유출 중<br />
+final reply 29,<br />
+team message 32,<br />
+file write 5였음 </p>
+<p>GPT에서 비밀이 출력된 146개 에피소드 중<br />
+143개가 file write였음 </p>
+<p>GPT의 동료가 전체 설정 블록을<br />
+인수인계 파일에 쓰라고 요구한 영향이 큼</p>
+<p>따라서 “GPT가 더 위험하다” 같은<br />
+모델 성향 비교로 읽으면 안 됨</p>
+<p>동료 전략 차이가 행동 경로와 얽혀 있어<br />
+모델 성향만 분리할 수 없음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 두 모델의 유출 경로와 의도 판정 (원문 Table 35, CC BY 4.0)"><img src="../assets/posts/precrime-agents/tab35_p41.webp" alt="두 모델의 유출 경로와 의도 판정 (원문 Table 35, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>두 모델의 유출 경로와 의도 판정 (원문 Table 35, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-18"><p>그 모델 차이와 별개로<br />
+논문 뒤쪽에는 꽤 드문 공개가 있음</p>
+<p>저자가 질문·설계·방법 결정을 했고<br />
+AI 코딩·집필 에이전트가<br />
+대부분의 코드와 실험을 맡았다고 적음 </p>
+<p>Codex 에이전트는 수치를 다시 계산·감사하고<br />
+PDF도 만들었다고 밝힘 </p>
+<p>동시에 어느 분석을 test 전 계획했고<br />
+어느 분석을 나중에 더했는지<br />
+Appendix P에서 구분함 </p>
+<p>AI를 썼다는 사실이 결과를 자동 검증하진 않음</p>
+<p>그래도 분석 역사를 숨기지 않은 건<br />
+독자가 증거의 강도를 가르는 데 도움 됨</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 저자가 공개한 LLM 사용 내역 (원문 p.12, CC BY 4.0)"><img src="../assets/posts/precrime-agents/q_llm_usage.webp" alt="저자가 공개한 LLM 사용 내역 (원문 p.12, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>저자가 공개한 LLM 사용 내역 (원문 p.12, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-19"><p>이 연구가 나온 흐름을 놓고 보면<br />
+세 질문이 이어짐</p>
+<p>SPINE은 사용자의 장기 압박에서<br />
+모델이 최대 25턴 안에 입장을 포기하는지 봄 </p>
+<p>The Agent Knew는 내부 상태로<br />
+권한 밖 행동을 행동 전에 예측함 </p>
+<p>저자가 공저한 Share-Borne AI Virus는<br />
+한 에이전트의 오염된 산출물이<br />
+다른 에이전트로 전파되는 경로를 다룸 </p>
+<p>이번 논문은 그 사이에서<br />
+동료의 압박에 넘어가는 <strong>한 호출</strong>을 잡으려 함</p>
+<p>논문 소속은 Independent임 <br />
+저자 본인 소개에는 SAP Labs에서<br />
+agent infrastructure와<br />
+developer tooling을 다룬다고 적혀 있음 </p>
+<p>2026년 10월 31일 기준<br />
+직접 재현·인용한 후속은 아직 확인되지 않음</p></section>
+<section class="part" id="part-20"><p>이제 처음 질문에 답할 수 있음</p>
+<p>거절하던 에이전트가<br />
+바로 다음 호출에 비밀을 흘릴지는<br />
+출력 전에 꽤 잘 골랐음 </p>
+<p>하지만 여러 라운드 앞에서는 약했고,<br />
+허용된 공유도 잡았으며,<br />
+호출당 작은 경보가 긴 실행에서 누적됐음 </p>
+<p>더구나 모델 2개,<br />
+한 업무 틀에서 만든 6개 상황,<br />
+합성 비밀이 그대로 나온 유출만 본 결과임 </p>
+<p>이번 exact-string 유출은<br />
+출력 필터도 잡을 수 있음</p>
+<p>probe의 추가 가치는<br />
+출력보다 먼저 울린다는 점임</p>
+<p>정작 필터가 놓칠 바꿔 말한 유출·인코딩과<br />
+여러 동료·재모집은 미시험임<br />
+Qwen 추론 모드도 꺼 둔 조건이었음 </p>
+<p>연구 결과는 상관관계임<br />
+probe가 결심을 읽었는지<br />
+입력 상황을 읽었는지는 열려 있음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문이 직접 적은 주요 한계 (원문 p.12, CC BY 4.0)"><img src="../assets/posts/precrime-agents/q_limits.webp" alt="논문이 직접 적은 주요 한계 (원문 p.12, CC BY 4.0)" loading="lazy" decoding="async"></button><figcaption>논문이 직접 적은 주요 한계 (원문 p.12, CC BY 4.0)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-21"><p>그 현실 경계를 확인할<br />
+원문과 재현 자료는 여기 있음</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2610.40588">arXiv 초록·서지</a> </li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2610.40588">원문 PDF</a> </li>
+<li><a target="_blank" rel="noopener" href="https://github.com/leonidas1712/precrime-agents">공개 코드·prompts·transcripts</a> </li>
+<li><a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 라이선스</a> </li>
+</ul>
+<p>이건 동료평가를 거치지 않은 프리프린트임<br />
+실전 방어 효과가 확정됐다고 읽으면 안 됨 </p>
+<p>3줄 요약</p>
+<ol>
+<li>거절하던 에이전트의 출력 직전 선형 probe는<br />
+Qwen test 유출 호출 31/38을 잡았음. </li>
+<li>같은 라벨로 학습한 텍스트 분류기도<br />
+AUROC 0.96으로 거의 따라왔음. </li>
+<li>호출당 오경보 5.5%가<br />
+에피소드에서는 58.8%로 누적됐음.</li>
+</ol></section><div class="article-end"><div class="source-links"><a href="../assets/posts/precrime-agents/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.40588" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/precrime-agents.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>
