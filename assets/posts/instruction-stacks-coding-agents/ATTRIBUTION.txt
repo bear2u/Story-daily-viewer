@@ -1,0 +1,10 @@
+Paper: Hidden in Plain Sight: an Empirical Study about The Instruction Stacks of Coding Agents
+Authors: Felipe de Sant'Anna Paixão, Dhyego Tavares, Eduardo Almeida, Iftekhar Ahmed
+Source: https://arxiv.org/abs/2610.37332
+PDF: https://arxiv.org/pdf/2610.37332
+License shown by arXiv: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License: https://creativecommons.org/licenses/by/4.0/
+
+The figures, tables, and quoted paper passages in this post were cropped from the public paper PDF for explanatory use. Captions identify the original figure, table, section, or page. Korean commentary and card layout are original to Story Daily.
+
+Metadata, peer-review status, affiliations, figures, and numerical claims were checked on 2026-10-30.
