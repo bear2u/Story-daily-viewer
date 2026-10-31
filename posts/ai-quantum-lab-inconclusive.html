@@ -1,0 +1,349 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="AI 에이전트 팀은 숨긴 양자 실험값을 맞혔지만 대조군 실패 때문에 첫 결과를 스스로 보류했음. 드리프트를 찾아 수집 순서를 고친 뒤 6시간 재실험에서만 새 법칙의 예측을 지지했음.">
+<meta name="theme-color" content="#faf9f6">
+<meta property="og:title" content="예측 10개가 다 맞았는데 AI 과학자 팀은 결론을 보류했음">
+<meta property="og:description" content="AI 에이전트 팀은 숨긴 양자 실험값을 맞혔지만 대조군 실패 때문에 첫 결과를 스스로 보류했음. 드리프트를 찾아 수집 순서를 고친 뒤 6시간 재실험에서만 새 법칙의 예측을 지지했음.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://bear2u.github.io/Story-daily-viewer/assets/posts/ai-quantum-lab-inconclusive/fig5_p8.webp">
+<title>예측 10개가 다 맞았는데 AI 과학자 팀은 결론을 보류했음 · Story Daily</title>
+<link rel="canonical" href="https://bear2u.github.io/Story-daily-viewer/posts/ai-quantum-lab-inconclusive.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css?v=9349a539e4">
+<link rel="alternate" type="application/rss+xml" title="Story Daily" href="../feed.xml">
+<script src="../assets/site.js?v=2cbf34ad29" defer></script></head><body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">s</span>Story Daily<small>하루 한 편의 발견</small></a><nav class="header-nav" aria-label="주 메뉴"><a href="../index.html#archive">모든 글</a><a href="https://github.com/bear2u/Story-daily-viewer" target="_blank" rel="noopener">GitHub ↗</a></nav></div></header>
+<div class="reading-progress" aria-hidden="true"></div>
+<main id="main"><div class="article-heading"><a class="back-link" href="../index.html#archive">← 모든 글로 돌아가기</a><div class="meta"><span class="pill">AI 에이전트</span><span class="pill">과학 자동화</span><span class="pill">양자 센싱</span><span class="pill">재현성</span><span>·</span><time datetime="2026-11-01">2026. 11. 01</time><span>·</span><span>12분 읽기</span></div>
+<h1>예측 10개가 다 맞았는데 AI 과학자 팀은 결론을 보류했음</h1><p class="lead">AI 에이전트 팀은 숨긴 양자 실험값을 맞혔지만 대조군 실패 때문에 첫 결과를 스스로 보류했음. 드리프트를 찾아 수집 순서를 고친 뒤 6시간 재실험에서만 새 법칙의 예측을 지지했음.</p>
+
+<div class="article-details"><strong>Collaborative AI agents for autonomous experimental research with solid-state quantum spins</strong><br>El Mustapha Mansouri, Eikichi Kimura, Masato Koga, Keigo Arai · 2026 · arXiv:2610.40589v1 · cs.AI/quant-ph 프리프린트 · 확인 가능한 동료평가·게재 정보 없음<br>원문 그림과 함께 읽는 20파트 해설 · 판본 및 출처 확인: 2026-11-01</div></div>
+<div class="article-layout"><aside class="toc" aria-label="글 목차"><p class="toc-title">이 글의 흐름</p><a href="#part-1">논문 정보와 판본</a><a href="#part-2">예측을 맞히고도 결론 보류</a><a href="#part-3">단일 에이전트 선행 연구</a><a href="#part-4">생성과 평가를 나눈 역할 구조</a><a href="#part-5">75개 제안을 버린 과정</a><a href="#part-6">거절 기록이 바꾼 탐색</a><a href="#part-7">91개 보정에서 시작한 질문</a><a href="#part-8">정확한 최소 보정 L²+1</a><a href="#part-9">정리가 성립하는 조건</a><a href="#part-10">계산 인증과 1.2도 문턱</a><a href="#part-11">보간도 맞혀 버린 첫 설계</a><a href="#part-12">숨긴 표적 네 개와 사전 규칙</a><a href="#part-13">대조군 실패로 결론 불가</a><a href="#part-14">방 조명이 드러낸 드리프트</a><a href="#part-15">720개 블록으로 바꾼 수집</a><a href="#part-16">예측 39.7과 측정 40.0</a><a href="#part-17">오버플로까지 포함한 오류 처리</a><a href="#part-18">사람 저자와 AI의 책임 경계</a><a href="#part-19">공개되지 않은 자료와 한계</a><a href="#part-20">전작·저자 맥락과 3줄 요약</a></aside><article class="article-body"><section class="part" id="part-1"><p>논문: <em>Collaborative AI agents for</em><br />
+<em>autonomous experimental research with</em><br />
+<em>solid-state quantum spins</em> <br />
+저자: El Mustapha Mansouri,<br />
+Eikichi Kimura, Masato Koga,<br />
+Keigo Arai <br />
+소속: 도쿄과학대 공학원 <br />
+공개: arXiv:2610.40589v1, 2026년 10월 29일 <br />
+상태: 동료평가·학회나 저널 게재가 확인되지 않은 프리프린트임 <br />
+원문 DOI: 10.48550/arXiv.2610.40589 </p>
+<p>제목 아래 날짜와 소속부터 보셈</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 논문 제목·저자·소속·공개일 (원문 p.1)"><img src="../assets/posts/ai-quantum-lab-inconclusive/p1_header.webp" alt="논문 제목·저자·소속·공개일 (원문 p.1)" loading="lazy" decoding="async"></button><figcaption>논문 제목·저자·소속·공개일 (원문 p.1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-2"><p>근데 첫 본실험은<br />
+정답처럼 보였음</p>
+<p>미리 정한 정확도 기준 10개를<br />
+전부 통과했음 </p>
+<p>그래도 총괄책임자 역할의 AI는<br />
+결론을 지지로 쓰지 않았음 </p>
+<p>대조군 두 종류가 실패했기 때문임 </p>
+<p>원문 판정은<br />
+결론 불가(inconclusive)였음 </p>
+<p>예측이 다 맞았는데<br />
+왜 결론을 거둔 걸까</p>
+<p>그 판정이 적힌 원문 문단임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 정확도 기준을 통과하고도 결론 불가로 분류한 문단 (원문 5절)"><img src="../assets/posts/ai-quantum-lab-inconclusive/q_inconclusive.webp" alt="정확도 기준을 통과하고도 결론 불가로 분류한 문단 (원문 5절)" loading="lazy" decoding="async"></button><figcaption>정확도 기준을 통과하고도 결론 불가로 분류한 문단 (원문 5절)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-3"><p>이 질문 전에 같은 NV 플랫폼에서<br />
+단일 에이전트를 시험한 연구가 있었음</p>
+<p>NV 센터는 다이아몬드 결정 안의 결함 스핀임<br />
+빛으로 읽고 마이크로파로 조절할 수 있음 </p>
+<p>2026년 7월 MIT 팀은<br />
+LLM 에이전트가 NV 하나를 고르고<br />
+측정 계획을 바꾸는 흐름을 보였음 </p>
+<p>다만 한 사례에서는 사람 조언이 있어야<br />
+보정 오차 가설을 찾았음 </p>
+<p>오프라인 판정에서는<br />
+추론을 더 세게 할수록<br />
+실제로 없는 공명을 있다고 판정하는<br />
+거짓 양성이 늘어난 조건도 있었음 </p>
+<p>예상 신호 계산을 요구하자<br />
+그 거짓 양성이 낮게 유지됐음 </p>
+<p>선행 연구도 장비 직접 제어는<br />
+결정적 코드에 맡겼음</p></section>
+<section class="part" id="part-4"><p>이번 팀은 생성과 평가 역할을<br />
+서로 다른 대화로 분리했음</p>
+<p>질문은 제안자에게서<br />
+총괄책임자 역할로 넘어감 </p>
+<p>증명은 계산 연구자가 따로 확인함 <br />
+장비 프로그램과 측정은 실험자가 맡음 </p>
+<p>매니저는 문서를 나르고<br />
+독립 리뷰어는 마지막 원고만 봄 </p>
+<p>안전 에이전트 승인도<br />
+실험 전에 따로 필요했음 </p>
+<p>결과는 다음 단계로<br />
+자동 통과하지 않았음</p>
+<p>다른 역할이 거절하거나<br />
+수정을 요구할 수 있었음 </p>
+<p>그림의 점선 화살표가<br />
+거절 뒤 되돌아가는 길임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 거절과 수정을 포함한 AI 연구실 역할 구조 (Figure 1)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig1_p3.webp" alt="거절과 수정을 포함한 AI 연구실 역할 구조 (Figure 1)" loading="lazy" decoding="async"></button><figcaption>거절과 수정을 포함한 AI 연구실 역할 구조 (Figure 1)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-5"><p>역할을 나누자 첫 단계부터<br />
+엄청 많이 버림</p>
+<p>약 30시간 동안<br />
+질문 제안 75개가 거절됨 </p>
+<p>첫 17개 배치에서는<br />
+채택이 하나도 없었음 </p>
+<p>이미 알려진 답이거나<br />
+논리가 틀렸거나<br />
+중요성이 부족하거나<br />
+실험으로 가를 수 없는 제안들이었음 </p>
+<p>주황색 채택 표시는<br />
+맨 끝에만 나옴</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 75개 제안 거절과 최종 수정안 채택 과정 (Figure 2)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig2_p4.webp" alt="75개 제안 거절과 최종 수정안 채택 과정 (Figure 2)" loading="lazy" decoding="async"></button><figcaption>75개 제안 거절과 최종 수정안 채택 과정 (Figure 2)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-6"><p>그 질문 거절만 반복하니<br />
+질문들이 같은 데로 몰렸음</p>
+<p>앞선 신규 제안 56개 중 52개가<br />
+되풀이된 실패 방향에 속했음 </p>
+<p>매니저 역할은 거절 기록을 읽고<br />
+그 방향을 다음 지시에서 제외함 </p>
+<p>그러자 새 제안 9개가<br />
+이전에는 없던 방향 7개를 탐색함 </p>
+<p>거절 기록은 다음 제안에서<br />
+무엇을 제외할지까지 바꿈</p>
+<p>52와 56이 나오는 원문임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 반복된 실패 방향을 제외해 탐색을 바꾼 문단 (원문 2절)"><img src="../assets/posts/ai-quantum-lab-inconclusive/q_proposals.webp" alt="반복된 실패 방향을 제외해 탐색을 바꾼 문단 (원문 2절)" loading="lazy" decoding="async"></button><figcaption>반복된 실패 방향을 제외해 탐색을 바꾼 문단 (원문 2절)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-7"><p>거절 끝에 채택된 건<br />
+다이아몬드 스핀 보정 질문이었음</p>
+<p>스핀마다 마이크로파 펄스를 받는 오차가 다름<br />
+측정값은 그 분포를 섞은 평균임 </p>
+<p>이산 위상 선택지가 고정돼도<br />
+펄스를 이어 붙이면 가능한 조합은<br />
+지수적으로 늘어남 </p>
+<p>그럼 모든 조합을 재지 않고도<br />
+나머지 응답을 예측할 수 있을까</p>
+<p>제안자는 최대 L개 펄스에서<br />
+8L²+6L+1개면 충분하다는<br />
+상한을 먼저 냈음 </p>
+<p>L이 3이면 91개임 </p>
+<p>그림 a의 연한 파란 선이<br />
+그 첫 상한임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 제안 상한과 정확한 보정 개수 (Figure 3)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig3_p6.webp" alt="제안 상한과 정확한 보정 개수 (Figure 3)" loading="lazy" decoding="async"></button><figcaption>제안 상한과 정확한 보정 개수 (Figure 3)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-8"><p>그 첫 상한을 줄인 최소 보정은<br />
+L²+1이었음 </p>
+<p>쉽게 말하면<br />
+길이 3까지인 모든 표적을 매번 재는 대신<br />
+서로 독립인 기준 응답 10개를 재고<br />
+나머지를 그 조합으로 계산하는 방식임 </p>
+<p>정확히는<br />
+고정된 펄스 모양과 지속 오차 가정 아래<br />
+가능한 평균 응답 함수 공간의 차원이<br />
+L²+1이라는 정리임 </p>
+<p>더 적은 보정으로는 보장할 수 없다는<br />
+하한도 함께 증명함</p>
+<p>그보다 적으면 같은 보정값을 내면서<br />
+안 잰 표적에서는 달라지는<br />
+물리적으로 가능한 앙상블이 생김 </p>
+<p>그래서 L²+1은<br />
+필요하면서 충분한 최소임 </p>
+<p>그림 b에서 회색은 가능한 펄스열임<br />
+파란색은 필요한 보정 수임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 펄스열은 지수 증가하고 보정은 이차 증가하는 비교 (Figure 3b)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig3_p6.webp" alt="펄스열은 지수 증가하고 보정은 이차 증가하는 비교 (Figure 3b)" loading="lazy" decoding="async"></button><figcaption>펄스열은 지수 증가하고 보정은 이차 증가하는 비교 (Figure 3b)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-9"><p>여기부터 한 파트는 전문가용임<br />
+수식이 싫으면 다음으로 넘겨도 됨</p>
+<p>이 정리는 펄스의 길이·진폭·모양을 고정하고<br />
+위상만 따로 조절함 </p>
+<p>한 스핀의 오차 매개변수는<br />
+한 시퀀스 동안 같다고 둠 </p>
+<p>응답 함수 L²+1개를 선형 기저로 잡으면<br />
+안 잰 표적도 기저 응답의<br />
+실수 계수 합으로 나타낼 수 있음 </p>
+<p>여기서 10개는<br />
+서로 독립인 보정 설정 수임</p>
+<p>각 설정을 몇 번 반복할지는<br />
+원하는 정밀도에 따라 따로 늘어남 </p>
+<p>오차가 펄스 사이에서 변하면<br />
+정리의 보장이 그대로 가지 않음</p>
+<p>그래서 다음 역할이<br />
+그 가정을 일부러 흔들었음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 지속 오차 가정과 위상 교란의 영향 (Figure 3c)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig3_p6.webp" alt="지속 오차 가정과 위상 교란의 영향 (Figure 3c)" loading="lazy" decoding="async"></button><figcaption>지속 오차 가정과 위상 교란의 영향 (Figure 3c)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-10"><p>증명만으로 끝내지 않고<br />
+계산 역할이 따로 흔듦</p>
+<p>최대 5개와 6개 펄스의 응답 공간을<br />
+독립적으로 다시 만들었음</p>
+<p>차원은 각각 26과 37이었음 </p>
+<p>숨은 위상 회전을 넣고<br />
+짧은 보정은 같으며 전체 보정에서도<br />
+통계적으로 구별되지 않는데<br />
+표적만 달라질 수 있는지 시험함 </p>
+<p>TSUBAME 4.0에서<br />
+연속 오차 범위에서 예측 오차 상한이<br />
+성립함을 확인한 정확 인증서<br />
+252,620개를 만들었음 </p>
+<p>지정된 6펄스 시험에서는<br />
+숨은 회전이 약 1.2도 이하일 때<br />
+인증 예측 오차가 광자 잡음 수준에 머묾 </p>
+<p>보장은 논문이 정한<br />
+교란과 통계 조건까지임</p>
+<p>주황 점이 1.2도 문턱임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 위상 교란 크기별 인증 오차 경계 (Figure 3c)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig3_p6.webp" alt="위상 교란 크기별 인증 오차 경계 (Figure 3c)" loading="lazy" decoding="async"></button><figcaption>위상 교란 크기별 인증 오차 경계 (Figure 3c)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-11"><p>그 인증 계산을 통과해도<br />
+가르는 실험의 첫 설계는 거절당함</p>
+<p>처음엔 3펄스 보정점 9개와<br />
+더 짧은 보정 5개를 쓰고<br />
+표적 4개를 숨기려 했음 </p>
+<p>근데 그 9점만 있으면<br />
+평범한 푸리에 보간도<br />
+숨긴 표적을 알아낼 수 있었음 </p>
+<p>새 법칙이 맞아서 예측한 건지<br />
+기존 보간이 맞힌 건지 가를 수 없음</p>
+<p>예측 적중만으로는<br />
+새 이론의 지지가 되지 않는 설계였음</p>
+<p>그래서 PI 역할이 거절함 </p>
+<p>왼쪽 격자가 거절된 설계임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 보간과 새 법칙을 가르지 못해 거절된 실험 (Figure 4a)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig4_p7.webp" alt="보간과 새 법칙을 가르지 못해 거절된 실험 (Figure 4a)" loading="lazy" decoding="async"></button><figcaption>보간과 새 법칙을 가르지 못해 거절된 실험 (Figure 4a)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-12"><p>거절된 설계 대신<br />
+길이가 다른 보정을 섞음</p>
+<p>3펄스 보정 5개와<br />
+0~2펄스 보정 5개를 묶음 </p>
+<p>그 열 개로<br />
+숨긴 3펄스 표적 4개를 예측함 </p>
+<p>숨긴 표적 네 개에 부호를 달리해 합치면<br />
+공통 형광 배경이 지워짐 </p>
+<p>이 조합이 표적 대조량임<br />
+보간 대안 두 개는 이를 0으로,<br />
+새 법칙은 0이 아닌 값으로 예측함 </p>
+<p>측정 전에 전달 규칙과 허용치,<br />
+대조군과 판정 규칙을 고정함 </p>
+<p>최종 run에서는 데이터 수집을 끝낸 뒤<br />
+표적 평균을 계산하기 전에<br />
+숫자 예측을 고정하고 해시했음 </p>
+<p>오른쪽 격자의 빈 원 네 개가<br />
+끝까지 숨긴 표적임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 길이가 다른 보정을 섞은 승인 설계 (Figure 4b,c)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig4_p7.webp" alt="길이가 다른 보정을 섞은 승인 설계 (Figure 4b,c)" loading="lazy" decoding="async"></button><figcaption>길이가 다른 보정을 섞은 승인 설계 (Figure 4b,c)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-13"><p>그렇게 잠근 첫 실험에서<br />
+자기 결과 거절이 실제로 나옴</p>
+<p>표적 네 개와 그 조합을 보는<br />
+사전 정확도 기준 10개가 모두 맞았음 </p>
+<p>하지만 모든 펄스 위상을 같이 옮겨도<br />
+응답이 같아야 한다는 대조군이 실패함 </p>
+<p>128ns 기준 펄스의 전역 위상 복제값<br />
+여섯 개를 비교한 대조군도 실패함 </p>
+<p>PI 역할은 지지로 쓰지 않고<br />
+결론 불가 판정을 유지했음 </p>
+<p>예측을 맞혔다는 사실보다<br />
+그 예측을 믿어도 되는 조건을 먼저 본 것임</p>
+<p>원문도 agreement alone은<br />
+충분하지 않다고 못 박음 </p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 예측 일치만으로 지지를 선언하지 않은 원문 (원문 5절)"><img src="../assets/posts/ai-quantum-lab-inconclusive/q_inconclusive.webp" alt="예측 일치만으로 지지를 선언하지 않은 원문 (원문 5절)" loading="lazy" decoding="async"></button><figcaption>예측 일치만으로 지지를 선언하지 않은 원문 (원문 5절)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-14"><p>그 대조군이 잡은 건<br />
+오전 내내 오른 신호였음</p>
+<p>첫 실험 신호가 오전 동안<br />
+7.6% 상승했음 </p>
+<p>오전 11시 48분에는<br />
+2.9%가 한 번 더 뛰었음 </p>
+<p>그때 실험실 사람이<br />
+방 조명을 켰음 </p>
+<p>서로 다른 전역 위상을 담은 프로그램 A와 B가<br />
+흔들리는 신호를 다른 시간에 읽었음 </p>
+<p>원래 같아야 할 값에<br />
+시간 차이 오프셋이 생긴 것임</p>
+<p>그림 a의 점선이 11시 48분임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 첫 실험의 신호 상승과 방 조명 시점 (Figure 5a)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig5_p8.webp" alt="첫 실험의 신호 상승과 방 조명 시점 (Figure 5a)" loading="lazy" decoding="async"></button><figcaption>첫 실험의 신호 상승과 방 조명 시점 (Figure 5a)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-15"><p>시간 드리프트를 본 뒤<br />
+수집 순서를 바꿈</p>
+<p>첫 파일럿은 프로그램 전환을<br />
+30초 블록으로 줄였지만 대조군을 못 넘음 </p>
+<p>두 번째 파일럿은<br />
+한 프로그램 안에서 위상을 번갈아 바꿨고<br />
+대조군을 통과함 </p>
+<p>사전 지정 순서 3개를<br />
+무작위 6블록 그룹 120개에 배치해<br />
+30초 블록 720개를 구성함 </p>
+<p>총 6시간이었음 </p>
+<p>정확도 허용치도<br />
+대조군 문턱도 낮추지 않았음 </p>
+<p>그림 b에서 첫 run과 pilot 1은 실패 영역,<br />
+pilot 2와 final은 아래로 내려옴</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 수집 절차를 바꾼 뒤 대조군이 통과한 과정 (Figure 5b)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig5_p8.webp" alt="수집 절차를 바꾼 뒤 대조군이 통과한 과정 (Figure 5b)" loading="lazy" decoding="async"></button><figcaption>수집 절차를 바꾼 뒤 대조군이 통과한 과정 (Figure 5b)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-16"><p>그 6시간 재실험을 같은 기준으로 돌리자<br />
+숫자가 갈림</p>
+<p>최종 실험은 유효한 1초 기록<br />
+21,600개를 모았음 </p>
+<p>표적 대조량 측정은 샷당 가중 카운트<br />
+40.0±0.4×10⁻³이었음 </p>
+<p>새 법칙의 잠근 예측은 샷당 가중 카운트<br />
+39.7±1.3×10⁻³이었음 </p>
+<p>보간 대안 두 개는<br />
+0을 예측했음 </p>
+<p>측정값은 예측의 ±20% 창 안에 들었고<br />
+나머지 사전 기준과 대조군도 통과함 </p>
+<p>그래서 논문은 이 조건에서<br />
+새 법칙의 예측을 지지한다고 씀 </p>
+<p>회색 0, 파란 39.7, 주황 40.0이 나란히 있음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 보간 0과 법칙·측정값의 비교 (Figure 5d)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig5_p8.webp" alt="보간 0과 법칙·측정값의 비교 (Figure 5d)" loading="lazy" decoding="async"></button><figcaption>보간 0과 법칙·측정값의 비교 (Figure 5d)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-17"><p>이제 맨 앞 질문에<br />
+정확히 답할 수 있음</p>
+<p>첫 실험은 표적 예측을 맞혔지만<br />
+독립 대조군을 통과하지 못했음 </p>
+<p>그 상태에서는 신호 드리프트가<br />
+적중을 흉내 냈을 가능성을 버릴 수 없음 </p>
+<p>그래서 미리 정한 규칙대로<br />
+결론 불가를 유지한 것임 </p>
+<p>이 과정이 실수 없는 자동화를 뜻하진 않음</p>
+<p>최종 실험 전 진단에서는<br />
+32비트 정수 오버플로도 났음 </p>
+<p>실험자 역할이 부동소수점 계산으로 고친 뒤<br />
+같은 데이터와 같은 문턱으로 다시 판정함 </p>
+<p>오류를 고친 뒤에도<br />
+데이터와 판정 문턱은 그대로였음</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 첫 실험 실패와 최종 지지를 한 장에 놓은 결과 (Figure 5)"><img src="../assets/posts/ai-quantum-lab-inconclusive/fig5_p8.webp" alt="첫 실험 실패와 최종 지지를 한 장에 놓은 결과 (Figure 5)" loading="lazy" decoding="async"></button><figcaption>첫 실험 실패와 최종 지지를 한 장에 놓은 결과 (Figure 5)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-18"><p>다만 이 연구실에<br />
+사람이 없었던 건 아님</p>
+<p>사람 연구자가 장비를 조립하고<br />
+운용 한계를 정해 안전 역할을 설정함 </p>
+<p>Mansouri는 연구 구상과 틀,<br />
+실험 플랫폼 통합·분석·초안을 맡았음 </p>
+<p>Kimura와 Koga는 장비 구축에 기여했고<br />
+Arai는 자금·감독·원고 수정을 맡음 </p>
+<p>AI는 과학 추론과 계산,<br />
+실험 계획·실행·초안에 쓰였음 </p>
+<p>최종 과학 주장과 데이터 무결성 책임은<br />
+인간 저자들이 진다고 명시함 </p>
+<p>사람 기여 문단이 먼저 나옴</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 사람 저자들의 구체적 기여 (원문 Author Contributions)"><img src="../assets/posts/ai-quantum-lab-inconclusive/q_author_contrib.webp" alt="사람 저자들의 구체적 기여 (원문 Author Contributions)" loading="lazy" decoding="async"></button><figcaption>사람 저자들의 구체적 기여 (원문 Author Contributions)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure>
+<p>그다음 AI 사용 공개 문단임</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: AI 사용 범위와 인간의 최종 책임 (원문 AI Use Disclosure)"><img src="../assets/posts/ai-quantum-lab-inconclusive/q_ai_disclosure.webp" alt="AI 사용 범위와 인간의 최종 책임 (원문 AI Use Disclosure)" loading="lazy" decoding="async"></button><figcaption>AI 사용 범위와 인간의 최종 책임 (원문 AI Use Disclosure)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-19"><p>사람 기여를 밝혔어도<br />
+공개되지 않은 자료가 남음</p>
+<p>에이전트 조사 중 원시 광자 카운트는<br />
+장비 컴퓨터에 남았음 </p>
+<p>PI·계산 역할은 실험 보고서만 봤음 </p>
+<p>실험 데이터와 분석 코드는<br />
+책임저자에게 요청해야 함 </p>
+<p>Auctopus 워크플로 코드는 공개됐지만<br />
+이 연구의 실제 프롬프트는 빠졌음 </p>
+<p>템플릿만 들어 있음 </p>
+<p>다른 연구실·다른 장비에서도<br />
+같이 작동한다고 보인 연구가 아님</p>
+<p>저자들도 더 큰 자율성에는<br />
+장비 진단·조정·안전 개선이 필요하다고 씀 </p>
+<p>2026년 11월 1일 현재<br />
+직접 인용한 후속 연구는 확인되지 않음 </p>
+<p>첫 공개 뒤 사흘째라 당연히 이른 시점임</p>
+<p>한계 문단에서 진단과 안전을 직접 언급함</p>
+<figure><button class="figure-button" type="button" data-zoom aria-label="그림 크게 보기: 더 큰 자율성에 필요한 진단·조정·안전 (원문 Discussion)"><img src="../assets/posts/ai-quantum-lab-inconclusive/q_limits.webp" alt="더 큰 자율성에 필요한 진단·조정·안전 (원문 Discussion)" loading="lazy" decoding="async"></button><figcaption>더 큰 자율성에 필요한 진단·조정·안전 (원문 Discussion)</figcaption><div class="zoom-hint">그림을 누르면 크게 볼 수 있음 ↗</div></figure></section>
+<section class="part" id="part-20"><p>Mansouri와 Arai의 2026년 5월 논문도<br />
+점수와 실제 판단을 따로 봤음</p>
+<p>그 논문은 점수가 기록한 응답만으로<br />
+실제 행동을 정당화할 수 있는지<br />
+따로 검사해야 한다는 논문을 냈음 </p>
+<p>이번 논문이 그 전작을 인용하진 않음<br />
+두 논문의 직접 계보도 확인되지 않음 <br />
+여기서는 주제만 연결함</p>
+<p>표적 예측 점수는 통과했지만<br />
+대조군까지 통과해야 지지 판정을 내렸음 </p>
+<p>Arai는 도쿄과학대 공학원 부교수로 NV 센터를 연구함 </p>
+<p>확인 가능한 동료평가·게재 정보가 없음 <br />
+Auctopus 코드는 MIT 라이선스로 공개됨 <br />
+원문 그림은 CC BY 4.0 조건으로 인용함 </p>
+<p>원문: https://arxiv.org/abs/2610.40589 <br />
+코드: https://github.com/E-zClap/auctopus </p>
+<p>내용 추가하면 외부 재현 결과와 공개 원시 데이터부터 붙이겠음</p>
+<p>3줄 요약</p>
+<p>예측 10개가 맞아도 대조군이 실패하면 과학적 지지를 말할 수 없었음 <br />
+AI 역할은 L²+1 정리를 만들고 네 표적 예측을 재실험에서 지지했음 <br />
+사람이 장비·안전·책임을 맡았고 실제 프롬프트는 공개물에서 빠졌음</p></section><div class="article-end"><div class="source-links"><a href="../assets/posts/ai-quantum-lab-inconclusive/ATTRIBUTION.txt">그림 출처·이용 조건 ↗</a><a href="https://arxiv.org/abs/2610.40589" target="_blank" rel="noopener">논문 원문 ↗</a><a href="../galleries/ai-quantum-lab-inconclusive.html">이미지로 보기 →</a><a href="../index.html#archive">다른 글 보기 →</a></div><p>해설 속 논문 그림과 연구 결과의 권리는 각 원 저자에게 있습니다. 그림은 연구 내용을 설명하기 위해 출처와 함께 수록했습니다.</p></div></article></div></main>
+<button class="top-button" type="button" data-top hidden>맨 위로 ↑</button><dialog class="image-dialog" aria-label="논문 그림 확대"><button class="dialog-close" type="button">닫기 ×</button><img src="" alt=""><p class="dialog-caption"></p></dialog>
+<footer class="site-footer"><div>Story Daily · 호기심이 이어지는 기록<br>논문과 이야기, 쉽게 읽고 오래 기억하기.</div><div><a href="../feed.xml">RSS 구독</a> &nbsp; · &nbsp; <a href="https://github.com/bear2u/Story-daily-viewer">소스 코드 ↗</a></div></footer>
+</body></html>

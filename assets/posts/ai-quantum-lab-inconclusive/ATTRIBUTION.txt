@@ -1,0 +1,17 @@
+Source paper
+Title: Collaborative AI agents for autonomous experimental research with solid-state quantum spins
+Authors: El Mustapha Mansouri, Eikichi Kimura, Masato Koga, Keigo Arai
+Version: arXiv:2610.40589v1, 29 October 2026
+URL: https://arxiv.org/abs/2610.40589
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+
+Figures used from the source paper
+- Figure 1: scientific workflow and coordination
+- Figure 2: proposal rejection and selection
+- Figure 3: minimal calibration law and computational verification
+- Figure 4: rejected and approved experimental designs
+- Figure 5: drift, controls, withheld targets and final contrast
+- Quoted passages from pages 4, 7, 9 and 15
+
+This report and its Korean commentary were prepared on 1 November 2026.
